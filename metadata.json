@@ -1,0 +1,6 @@
+{
+  "name": "Menú Digital",
+  "description": "Menú digital interactivo de Guateque Manduca con viandas, empanadas, postres y pedidos directos por WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
