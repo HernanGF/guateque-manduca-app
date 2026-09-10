@@ -66,6 +66,7 @@ export interface MenuData {
   categories: Category[];
   products: Product[];
   modifierGroups: ModifierGroup[];
+  updatedAt?: number;
 }
 
 export interface SelectedModifier {

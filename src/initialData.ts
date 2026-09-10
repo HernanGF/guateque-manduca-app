@@ -1296,5 +1296,6 @@ export const INITIAL_MENU_DATA: MenuData = {
       "isFeatured": false,
       "order": 3
     }
-  ]
+  ],
+  "updatedAt": 1789001494836
 };
