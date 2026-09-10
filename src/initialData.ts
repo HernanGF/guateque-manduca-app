@@ -8,8 +8,8 @@ export const INITIAL_MENU_DATA: MenuData = {
     "bannerUrl": "https://assets.olaclick.app/companies/backgrounds/df048b41-5640-4334-887e-ac3d93aa45a7.jpeg",
     "logoUrl": "https://assets.olaclick.app/companies/logos/36302785-857e-485f-840b-5ca9e02dea35.jpeg",
     "whatsappPhone": "5491134501611",
-    "address": "Av. Corrientes 3420, Buenos Aires",
-    "hours": "Martes a Domingo: 11:30 a 15:00 y 19:30 a 23:30",
+    "address": "Villa Madero",
+    "hours": "Lunes a Domingo: 08 a 23:30",
     "currency": "$",
     "deliveryAvailable": true,
     "takeawayAvailable": true

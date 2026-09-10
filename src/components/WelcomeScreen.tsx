@@ -1,6 +1,15 @@
 import React from 'react';
 import { BusinessInfo } from '../types';
-import { Utensils, Clock, MapPin, Phone, ArrowRight, Lock, ShoppingBag, Bike } from 'lucide-react';
+import {
+  Utensils,
+  Clock,
+  MapPin,
+  ArrowRight,
+  Lock,
+  ShoppingBag,
+  Bike,
+  MessageCircle,
+} from 'lucide-react';
 
 interface WelcomeScreenProps {
   business: BusinessInfo;
@@ -13,8 +22,13 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   onEnterMenu,
   onOpenAdmin,
 }) => {
+  const cleanPhone = (business.whatsappPhone || '5491134501611').replace(/[^0-9]/g, '');
+  const whatsappChatUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
+    `¡Hola ${business.name}! Tengo una consulta.`
+  )}`;
+
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col justify-between selection:bg-amber-500 selection:text-black">
+    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col justify-between selection:bg-amber-500 selection:text-black relative">
       {/* 1. Full-Width Panoramic Hero Banner (Occupy entire width of screen) */}
       <div className="relative w-full h-56 sm:h-72 md:h-80 lg:h-96 overflow-hidden bg-neutral-900 select-none">
         <img
@@ -88,10 +102,17 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                 Retiro en Local
               </span>
             )}
-            <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300">
-              <Phone className="w-4 h-4 text-green-400" />
-              Pedidos por WhatsApp
-            </span>
+            <a
+              id="btn-whatsapp-badge"
+              href={whatsappChatUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-green-500/40 text-neutral-300 hover:text-white transition-all cursor-pointer"
+              title="Abrir chat de WhatsApp"
+            >
+              <MessageCircle className="w-4 h-4 text-[#25D366]" />
+              <span>Consultas por WhatsApp</span>
+            </a>
           </div>
 
           {/* Prominent CTA Button */}
@@ -123,6 +144,19 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           </div>
         </div>
       </main>
+
+      {/* Floating WhatsApp Quick Chat Button (Always Accessible) */}
+      <a
+        id="btn-whatsapp-floating-welcome"
+        href={whatsappChatUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white flex items-center justify-center shadow-2xl shadow-green-500/40 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer group"
+        title="Hacer una consulta por WhatsApp"
+        aria-label="Hacer una consulta por WhatsApp"
+      >
+        <MessageCircle className="w-7 h-7 fill-white/20 transition-transform group-hover:scale-110" />
+      </a>
 
       {/* Footer */}
       <footer className="w-full max-w-5xl mx-auto px-4 py-4 text-center text-xs text-neutral-500 border-t border-neutral-900">

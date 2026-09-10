@@ -20,14 +20,25 @@ interface ShareAndQRTabProps {
 }
 
 export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
-  const OFFICIAL_PUBLIC_URL =
-    'https://ai.studio/apps/c5f84eb9-726f-4d94-961c-01dc9d406739?fullscreenApplet=true';
+  const OFFICIAL_PUBLIC_URL = 'https://guateque-manduca-app.vercel.app';
 
   // Determine public customer URL
   const getInitialUrl = () => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('guateque_share_url');
-      if (saved && saved.trim()) return saved;
+      // If user saved a custom domain or custom URL (and it's not the old preview link), use it
+      if (saved && saved.trim() && !saved.includes('ai.studio/apps/')) {
+        return saved;
+      }
+      // If currently running in production on Vercel or a custom domain, use current origin
+      if (
+        window.location.origin &&
+        !window.location.hostname.includes('run.app') &&
+        !window.location.hostname.includes('google.com') &&
+        !window.location.hostname.includes('localhost')
+      ) {
+        return window.location.origin;
+      }
     }
     return OFFICIAL_PUBLIC_URL;
   };

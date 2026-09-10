@@ -418,6 +418,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Main Content Area based on Tab */}
       <main className="max-w-6xl mx-auto px-4 pt-6">
         
+        {/* Direct Sync & Publish Helper Banner */}
+        <div className="mb-5 bg-gradient-to-r from-blue-950/60 to-indigo-950/40 border border-blue-800/40 rounded-xl p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-blue-200 shadow-sm">
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="w-4 h-4 text-blue-400 shrink-0" />
+            <span>
+              <strong>Edición directa habilitada:</strong> Todo cambio que hagas en el catálogo (precios, fotos, platos) se guarda en tu código. Al finalizar, solo ve a la pestaña <strong>GitHub</strong> arriba y presiona <strong>«Push changes to GitHub»</strong> para publicar en Vercel.
+            </span>
+          </div>
+        </div>
+        
         {/* ================= PRODUCTS TAB ================= */}
         {activeTab === 'products' && (
           <div className="space-y-4">
