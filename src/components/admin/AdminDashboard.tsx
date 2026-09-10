@@ -179,15 +179,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   // --- Modifier Handlers ---
-  const handleSaveModifierGroup = (savedGroup: ModifierGroup) => {
+  const handleSaveModifierGroup = (
+    savedGroup: ModifierGroup,
+    associatedProductIds?: string[]
+  ) => {
     const exists = modifierGroups.some((g) => g.id === savedGroup.id);
     const updatedGroups = exists
       ? modifierGroups.map((g) => (g.id === savedGroup.id ? savedGroup : g))
       : [...modifierGroups, savedGroup];
 
+    let updatedProducts = products;
+    if (associatedProductIds) {
+      updatedProducts = products.map((p) => {
+        const isAssociated = associatedProductIds.includes(p.id);
+        const currentMods = p.modifierGroupIds || [];
+        if (isAssociated) {
+          return currentMods.includes(savedGroup.id)
+            ? p
+            : { ...p, modifierGroupIds: [...currentMods, savedGroup.id] };
+        } else {
+          return currentMods.includes(savedGroup.id)
+            ? { ...p, modifierGroupIds: currentMods.filter((id) => id !== savedGroup.id) }
+            : p;
+        }
+      });
+    }
+
     onUpdateMenuData({
       ...menuData,
       modifierGroups: updatedGroups,
+      products: updatedProducts,
     });
   };
 
@@ -1012,6 +1033,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {editingModifierGroup && (
         <ModifierGroupModal
           group={editingModifierGroup === 'new' ? null : editingModifierGroup}
+          products={products}
           currency={business.currency}
           onClose={() => setEditingModifierGroup(null)}
           onSave={handleSaveModifierGroup}

@@ -395,42 +395,73 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             <div className="space-y-2">
               {modifierGroups.map((group) => {
                 const isAttached = selectedModifierGroupIds.includes(group.id);
+                const optionsSummary = group.options
+                  .slice(0, 4)
+                  .map((o) => o.name)
+                  .join(', ') + (group.options.length > 4 ? ` (+${group.options.length - 4} más)` : '');
+
                 return (
                   <div
                     key={group.id}
                     onClick={() => handleToggleModifierGroup(group.id)}
-                    className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer select-none ${
+                    className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer select-none ${
                       isAttached
-                        ? 'bg-blue-600/15 border-blue-500/80 text-white'
+                        ? 'bg-blue-600/15 border-blue-500 text-white shadow-sm'
                         : 'bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-neutral-700'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className={`w-4 h-4 rounded border flex items-center justify-center ${
-                          isAttached ? 'border-blue-500 bg-blue-600 text-white' : 'border-neutral-600'
+                        className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
+                          isAttached ? 'border-blue-500 bg-blue-600 text-white' : 'border-neutral-600 bg-neutral-950'
                         }`}
                       >
-                        {isAttached && <Check className="w-3 h-3 stroke-[3]" />}
+                        {isAttached && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
-                      <div>
-                        <span className="text-xs font-semibold text-white block">
-                          {group.name}
-                        </span>
-                        <span className="text-[10px] text-neutral-400">
-                          {group.condition === 'required' ? 'Obligatorio' : 'Opcional'} •{' '}
-                          {group.selectionType === 'single' ? 'Sólo uno' : 'Varios'} •{' '}
-                          {group.options.length} opciones
-                        </span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-bold text-white block">
+                            {group.name}
+                          </span>
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
+                              group.condition === 'required'
+                                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                : 'bg-neutral-800 text-neutral-400'
+                            }`}
+                          >
+                            {group.condition === 'required' ? 'Obligatorio' : 'Opcional'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-neutral-400 truncate mt-0.5">
+                          {optionsSummary || `${group.options.length} opciones`}
+                        </p>
                       </div>
                     </div>
 
-                    <span className="text-xs text-blue-400 font-medium">
+                    <span
+                      className={`text-xs font-semibold px-2.5 py-1 rounded-lg shrink-0 ml-2 ${
+                        isAttached
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                      }`}
+                    >
                       {isAttached ? 'Asociado' : 'Asociar'}
                     </span>
                   </div>
                 );
               })}
+
+              {modifierGroups.length === 0 && (
+                <div className="p-4 rounded-xl bg-neutral-900/50 border border-neutral-800 text-center">
+                  <p className="text-xs text-neutral-400">
+                    No tienes categorías de modificadores creadas todavía.
+                  </p>
+                  <p className="text-[11px] text-neutral-500 mt-1">
+                    Puedes crearlas desde la pestaña &quot;Modificadores&quot; del administrador.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 

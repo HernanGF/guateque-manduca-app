@@ -298,6 +298,12 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                             Con opciones
                           </span>
                         )}
+                        {product.modifierGroupIds && product.modifierGroupIds.length > 0 && !isDiscontinued && (
+                          <span className="bg-blue-950/70 text-blue-300 border border-blue-800/80 text-[10px] font-medium px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <Sparkles className="w-2.5 h-2.5 text-blue-400" />
+                            Salsas / Extras
+                          </span>
+                        )}
                       </div>
 
                       <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-amber-400 transition-colors line-clamp-1 sm:line-clamp-2">
@@ -327,7 +333,13 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                           className="flex items-center gap-1 px-3 py-1.5 bg-neutral-800 group-hover:bg-amber-500 group-hover:text-neutral-950 text-neutral-200 text-xs font-bold rounded-lg transition-colors cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5" />
-                          <span>{product.priceType === 'variants' ? 'Opciones' : 'Pedir'}</span>
+                          <span>
+                            {product.priceType === 'variants'
+                              ? 'Opciones'
+                              : product.modifierGroupIds && product.modifierGroupIds.length > 0
+                              ? 'Personalizar'
+                              : 'Pedir'}
+                          </span>
                         </button>
                       ) : (
                         <span className="text-xs text-neutral-500 font-medium">Agotado</span>
@@ -403,12 +415,20 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                       </div>
                     )}
 
-                    {/* Price Type Badge */}
-                    {product.priceType === 'variants' && !isDiscontinued && (
-                      <div className="absolute bottom-2.5 left-2.5 bg-neutral-950/80 backdrop-blur-sm text-neutral-300 text-[11px] font-medium px-2 py-0.5 rounded-md border border-neutral-700">
-                        Con opciones
-                      </div>
-                    )}
+                    {/* Price Type & Modifier Badges */}
+                    <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
+                      {product.priceType === 'variants' && !isDiscontinued && (
+                        <div className="bg-neutral-950/80 backdrop-blur-sm text-neutral-300 text-[11px] font-medium px-2 py-0.5 rounded-md border border-neutral-700">
+                          Con opciones
+                        </div>
+                      )}
+                      {product.modifierGroupIds && product.modifierGroupIds.length > 0 && !isDiscontinued && (
+                        <div className="bg-blue-950/80 backdrop-blur-sm text-blue-300 text-[11px] font-medium px-2 py-0.5 rounded-md border border-blue-800/80 flex items-center gap-1">
+                          <Sparkles className="w-2.5 h-2.5 text-blue-400" />
+                          Salsas / Extras
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Body Content */}
@@ -441,7 +461,13 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                           className="flex items-center gap-1 px-3 py-1.5 bg-neutral-800 hover:bg-amber-500 hover:text-neutral-950 text-neutral-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5" />
-                          <span>{product.priceType === 'variants' ? 'Opciones' : 'Pedir'}</span>
+                          <span>
+                            {product.priceType === 'variants'
+                              ? 'Opciones'
+                              : product.modifierGroupIds && product.modifierGroupIds.length > 0
+                              ? 'Personalizar'
+                              : 'Pedir'}
+                          </span>
                         </button>
                       ) : (
                         <span className="text-xs text-neutral-500 font-medium">Agotado</span>

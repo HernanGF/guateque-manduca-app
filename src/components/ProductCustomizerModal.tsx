@@ -31,8 +31,15 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
 }) => {
   // Available modifier groups for this product
   const attachedGroups = useMemo(() => {
-    return (product.modifierGroupIds || [])
-      .map((id) => modifierGroups.find((g) => g.id === id))
+    const rawIds = product.modifierGroupIds || [];
+    return rawIds
+      .map((id) =>
+        modifierGroups.find(
+          (g) =>
+            g.id === id ||
+            g.name.trim().toLowerCase() === id.trim().toLowerCase()
+        )
+      )
       .filter((g): g is ModifierGroup => !!g);
   }, [product.modifierGroupIds, modifierGroups]);
 
@@ -227,18 +234,41 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
         </div>
 
         {/* Modal Scrollable Content */}
-        <div className="p-4 sm:p-6 max-h-[60vh] overflow-y-auto space-y-6">
+        <div className="p-4 sm:p-6 max-h-[68vh] overflow-y-auto space-y-6">
           {/* Header titles */}
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-white mb-1.5">{product.name}</h2>
             <p className="text-sm text-neutral-300 leading-relaxed">{product.description}</p>
+
+            {/* Quick summary chips of available customizations */}
+            {attachedGroups.length > 0 && (
+              <div className="mt-3 flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] text-amber-400 font-semibold flex items-center gap-1 mr-1">
+                  <Sparkles className="w-3 h-3" />
+                  Opciones disponibles:
+                </span>
+                {attachedGroups.map((g) => (
+                  <span
+                    key={g.id}
+                    className="text-[10px] px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-neutral-300 font-medium"
+                  >
+                    {g.name}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Variant Selection if type is 'variants' */}
           {product.priceType === 'variants' && product.variants.length > 0 && (
             <div className="bg-neutral-950/60 rounded-xl p-4 border border-neutral-800">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-white">Selecciona una opción</span>
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xs flex items-center justify-center">
+                    1
+                  </span>
+                  <span className="text-sm font-semibold text-white">Selecciona tu porción</span>
+                </div>
                 <span className="text-xs text-amber-400 font-medium px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
                   Obligatorio
                 </span>
@@ -286,7 +316,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
           )}
 
           {/* Modifier Groups */}
-          {attachedGroups.map((group) => {
+          {attachedGroups.map((group, gIdx) => {
             const isRequired = group.condition === 'required';
             const isSingle = group.selectionType === 'single';
             const groupSelections = modifierSelections[group.id] || {};
@@ -295,6 +325,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
               0
             );
             const error = showValidationErrors && validationErrors[group.id];
+            const stepNumber = product.priceType === 'variants' && product.variants.length > 0 ? gIdx + 2 : gIdx + 1;
 
             return (
               <div
@@ -305,6 +336,9 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center">
+                      {stepNumber}
+                    </span>
                     <span className="text-sm font-semibold text-white">{group.name}</span>
                     <span
                       className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${

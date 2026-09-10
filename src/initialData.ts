@@ -60,125 +60,6 @@ export const INITIAL_MENU_DATA: MenuData = {
   ],
   "modifierGroups": [
     {
-      "id": "mod_guarniciones",
-      "name": "Guarniciones",
-      "condition": "required",
-      "selectionType": "single",
-      "options": [
-        {
-          "id": "opt_g1",
-          "name": "Papas a la Portuguesa",
-          "price": 0,
-          "isVisible": true
-        },
-        {
-          "id": "opt_g2",
-          "name": "Puré de Papas",
-          "price": 0,
-          "isVisible": true
-        },
-        {
-          "id": "opt_g3",
-          "name": "Papas y Batatas al horno",
-          "price": 0,
-          "isVisible": true
-        },
-        {
-          "id": "opt_g4",
-          "name": "Ensalada Mixta fresca",
-          "price": 0,
-          "isVisible": true
-        }
-      ]
-    },
-    {
-      "id": "mod_salsas_incluidas",
-      "name": "Elige tus salsas incluidas",
-      "condition": "required",
-      "selectionType": "multiple",
-      "minSelect": 1,
-      "maxSelect": 2,
-      "options": [
-        {
-          "id": "opt_s1",
-          "name": "Salsa Criolla clásica",
-          "price": 0,
-          "isVisible": true
-        },
-        {
-          "id": "opt_s2",
-          "name": "Mayonesa casera al ajo y ciboulette",
-          "price": 0,
-          "isVisible": true
-        },
-        {
-          "id": "opt_s3",
-          "name": "Chimichurri suave casero",
-          "price": 0,
-          "isVisible": true
-        },
-        {
-          "id": "opt_s4",
-          "name": "Mostaza antigua con miel",
-          "price": 0,
-          "isVisible": true
-        }
-      ]
-    },
-    {
-      "id": "mod_salsas_extra",
-      "name": "Salsas EXTRA y Adicionales",
-      "condition": "optional",
-      "selectionType": "multiple",
-      "maxSelect": 5,
-      "options": [
-        {
-          "id": "opt_se1",
-          "name": "Pote Salsa Criolla EXTRA",
-          "price": 1500,
-          "isVisible": true
-        },
-        {
-          "id": "opt_se2",
-          "name": "Pote Chimichurri ahumado EXTRA",
-          "price": 1500,
-          "isVisible": true
-        },
-        {
-          "id": "opt_se3",
-          "name": "Pote Barbacoa artesanal ahumada",
-          "price": 1800,
-          "isVisible": true
-        },
-        {
-          "id": "opt_se4",
-          "name": "Figacitas de manteca extra (x12)",
-          "price": 3200,
-          "isVisible": true
-        }
-      ]
-    },
-    {
-      "id": "mod_coccion",
-      "name": "Punto de cocción",
-      "condition": "required",
-      "selectionType": "single",
-      "options": [
-        {
-          "id": "opt_c1",
-          "name": "A punto (jugoso)",
-          "price": 0,
-          "isVisible": true
-        },
-        {
-          "id": "opt_c2",
-          "name": "Bien cocido",
-          "price": 0,
-          "isVisible": true
-        }
-      ]
-    },
-    {
       "id": "mod_a2942c42-d16a-4129-b894-72637b8a4f9d",
       "name": "Elige tus salsas incluidas",
       "condition": "required",
@@ -347,6 +228,7 @@ export const INITIAL_MENU_DATA: MenuData = {
       ],
       "priceType": "variants",
       "simplePrice": 80000,
+      "clientNote": "",
       "variants": [
         {
           "id": "var_a2945757-e873-4297-a579-b420608bdf67",
@@ -373,9 +255,12 @@ export const INITIAL_MENU_DATA: MenuData = {
           "isVisible": true
         }
       ],
-      "modifierGroupIds": [],
-      "isDiscontinued": false,
+      "modifierGroupIds": [
+        "mod_a2942c42-d16a-4129-b894-72637b8a4f9d",
+        "mod_a294a040-bafc-4c28-af02-9888ca0128b1"
+      ],
       "isHidden": false,
+      "isDiscontinued": false,
       "isFeatured": true,
       "order": 1
     },

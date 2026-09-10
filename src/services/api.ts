@@ -1,9 +1,19 @@
 import { MenuData } from '../types';
 import { INITIAL_MENU_DATA } from '../initialData';
 
-const STORAGE_KEY = 'digital_menu_cached_data_v1';
+const STORAGE_KEY = 'digital_menu_cached_data_v2';
+const LEGACY_STORAGE_KEY = 'digital_menu_cached_data_v1';
 
 export async function fetchMenuData(): Promise<MenuData> {
+  // Clean up legacy v1 cache if present
+  try {
+    if (localStorage.getItem(LEGACY_STORAGE_KEY)) {
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    }
+  } catch {
+    // ignore
+  }
+
   try {
     const response = await fetch('/api/menu');
     if (response.ok) {
@@ -19,7 +29,11 @@ export async function fetchMenuData(): Promise<MenuData> {
   const cached = localStorage.getItem(STORAGE_KEY);
   if (cached) {
     try {
-      return JSON.parse(cached);
+      const parsed = JSON.parse(cached);
+      // Validate that cached data has products and modifierGroups
+      if (parsed && Array.isArray(parsed.products) && Array.isArray(parsed.modifierGroups)) {
+        return parsed;
+      }
     } catch {
       // ignore
     }

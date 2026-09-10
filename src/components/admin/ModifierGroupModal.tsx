@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import { ModifierGroup, ModifierOption } from '../../types';
-import { X, Plus, Trash2, GripVertical, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { ModifierGroup, ModifierOption, Product } from '../../types';
+import { X, Plus, Trash2, GripVertical, Eye, EyeOff, Search, Check, Utensils } from 'lucide-react';
 
 interface ModifierGroupModalProps {
   group: ModifierGroup | null; // null if creating new
+  products?: Product[];
   currency: string;
   onClose: () => void;
-  onSave: (group: ModifierGroup) => void;
+  onSave: (group: ModifierGroup, associatedProductIds?: string[]) => void;
   onDelete?: (groupId: string) => void;
 }
 
 export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
   group,
+  products = [],
   currency,
   onClose,
   onSave,
@@ -34,6 +36,37 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
       { id: 'opt_2', name: 'Opción 2', price: 0, isVisible: true },
     ]
   );
+
+  // Associated products state
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>(() => {
+    if (!group) return [];
+    return products
+      .filter((p) => (p.modifierGroupIds || []).includes(group.id))
+      .map((p) => p.id);
+  });
+  const [productSearch, setProductSearch] = useState('');
+
+  const filteredProducts = useMemo(() => {
+    if (!productSearch.trim()) return products;
+    const q = productSearch.toLowerCase();
+    return products.filter(
+      (p) => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)
+    );
+  }, [products, productSearch]);
+
+  const handleToggleProduct = (productId: string) => {
+    setSelectedProductIds((prev) =>
+      prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]
+    );
+  };
+
+  const handleSelectAllProducts = () => {
+    setSelectedProductIds(products.map((p) => p.id));
+  };
+
+  const handleDeselectAllProducts = () => {
+    setSelectedProductIds([]);
+  };
 
   const handleAddOption = () => {
     const newId = `opt_${Date.now()}`;
@@ -87,7 +120,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
       options: validOptions,
     };
 
-    onSave(savedGroup);
+    onSave(savedGroup, selectedProductIds);
     onClose();
   };
 
@@ -309,6 +342,112 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
               <span>Agregar modificador</span>
             </button>
           </div>
+
+          {/* Platos y productos asociados */}
+          {products.length > 0 && (
+            <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800 space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <Utensils className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs font-semibold text-white">
+                    Platos asociados a este modificador
+                  </span>
+                  <span className="text-[11px] bg-blue-600/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded-full font-bold">
+                    {selectedProductIds.length} de {products.length} platos
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSelectAllProducts}
+                    className="text-[11px] text-blue-400 hover:underline cursor-pointer"
+                  >
+                    Seleccionar todos
+                  </button>
+                  <span className="text-neutral-700">•</span>
+                  <button
+                    type="button"
+                    onClick={handleDeselectAllProducts}
+                    className="text-[11px] text-neutral-400 hover:underline cursor-pointer"
+                  >
+                    Desmarcar todos
+                  </button>
+                </div>
+              </div>
+
+              <p className="text-[11px] text-neutral-400 leading-relaxed">
+                Marca los platos donde quieres que aparezca este grupo de modificadores (por ejemplo, salsas para el Pernil, guarniciones para carnes, etc.).
+              </p>
+
+              {/* Product Search Input */}
+              <div className="relative">
+                <Search className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  placeholder="Buscar plato por nombre..."
+                  className="w-full pl-8 pr-3 py-1.5 bg-neutral-900 border border-neutral-800 rounded-lg text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              {/* Product list */}
+              <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
+                {filteredProducts.map((prod) => {
+                  const isChecked = selectedProductIds.includes(prod.id);
+                  return (
+                    <div
+                      key={prod.id}
+                      onClick={() => handleToggleProduct(prod.id)}
+                      className={`flex items-center justify-between p-2 rounded-xl border transition-colors cursor-pointer select-none ${
+                        isChecked
+                          ? 'bg-blue-600/15 border-blue-500/80 text-white'
+                          : 'bg-neutral-900/80 border-neutral-800/80 text-neutral-300 hover:border-neutral-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div
+                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
+                            isChecked
+                              ? 'border-blue-500 bg-blue-600 text-white'
+                              : 'border-neutral-600'
+                          }`}
+                        >
+                          {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
+                        </div>
+                        <img
+                          src={prod.imageUrl}
+                          alt={prod.name}
+                          className="w-7 h-7 rounded-md object-cover bg-neutral-950 shrink-0 border border-neutral-800"
+                          referrerPolicy="no-referrer"
+                        />
+                        <span className="text-xs font-medium truncate">
+                          {prod.name}
+                        </span>
+                      </div>
+
+                      <span
+                        className={`text-[10px] font-semibold px-2 py-0.5 rounded-md shrink-0 ${
+                          isChecked
+                            ? 'text-blue-400 bg-blue-950/50'
+                            : 'text-neutral-500'
+                        }`}
+                      >
+                        {isChecked ? 'Asociado' : 'No asociado'}
+                      </span>
+                    </div>
+                  );
+                })}
+
+                {filteredProducts.length === 0 && (
+                  <p className="text-xs text-neutral-500 text-center py-3">
+                    No se encontraron platos que coincidan con la búsqueda.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="pt-3 border-t border-neutral-800 flex items-center justify-between gap-3">
