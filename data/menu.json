@@ -2,7 +2,7 @@
   "business": {
     "id": "biz_1",
     "name": "Guateque Manduca",
-    "description": "Cocina artesanal, viandas frescas y servicio de catering. Hacé tu pedido online fácil y te lo llevamos.",
+    "description": "Cocina de autor, Servicio de Catering y Viandas envasadas al vacío. Hacé tu pedido online fácil y rápido!!!",
     "bannerUrl": "https://assets.olaclick.app/companies/backgrounds/df048b41-5640-4334-887e-ac3d93aa45a7.jpeg",
     "logoUrl": "https://assets.olaclick.app/companies/logos/36302785-857e-485f-840b-5ca9e02dea35.jpeg",
     "whatsappPhone": "5491134501611",
@@ -352,7 +352,7 @@
     {
       "id": "prod_a2a2d6e2-be19-458b-a3df-6205d0e3d625",
       "name": "Bodegón (4 viandas)",
-      "description": "1 Bondiola a la Cerveza negra con Papas y Batatas.\n1 Pata y Muslo con Papas a la Portuguesa\n1 Canelones de ricota y espinaca con Salsa Bolognesa\n1 Ñoquis de papa con Bolognesa",
+      "description": "1 Bondiola a la Cerveza negra con Papas y Batatas.\n1 Pata y Muslo con Papas a la Portuguesa\n1 Canelones de ricota y espinaca con Salsa Bolognesa\n1 Ñoquis de papa con Bolognesa\nProducto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/3a1ce482-9ee6-45b2-8b57-282ed63c1227.jpg",
       "categoryIds": [
         "cat_los-mas-elegidos",
@@ -377,7 +377,7 @@
     {
       "id": "prod_a29ed46a-0618-4e7c-9c95-0d131d1f8aa2",
       "name": "Tarta de Calabaza y Pollo",
-      "description": "Tarta individual de zapallo Cabutia con cebolla, puerro, pollo y queso. (300 gr.)",
+      "description": "Tarta individual de zapallo Cabutia con cebolla, puerro, pollo y queso. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/0a8b45dd-cd7a-48a4-bbf2-e7b7ffe1c63f.jpeg",
       "categoryIds": [
         "cat_los-mas-elegidos",
@@ -402,7 +402,7 @@
     {
       "id": "prod_a29ed213-a380-48f4-b747-95cc2a551fa3",
       "name": "Tarta de Acelga",
-      "description": "Tarta individual de Acelga con cebolla, morrón, y queso. (300 gr.)",
+      "description": "Tarta individual de Acelga con cebolla, morrón, y queso. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/23b88492-9bed-4113-a1b6-97711492c0cc.jpeg",
       "categoryIds": [
         "cat_los-mas-elegidos",
@@ -464,7 +464,7 @@
     {
       "id": "prod_a2a9257e-62eb-411d-a4a4-54a7e6ce7881",
       "name": "Fetuccini con Bolognesa",
-      "description": "Fetuccini artesanal de Sémola con salsa Bolognesa tradicional",
+      "description": "Fetuccini artesanal de Sémola con salsa Bolognesa tradicional. Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/d34eaba3-a8f3-4716-9fce-1c42d97b81d2.jpeg",
       "categoryIds": [
         "cat_los-mas-elegidos",
@@ -489,7 +489,7 @@
     {
       "id": "prod_a2a3232b-859f-4ae2-a4f7-d0d6e6d64a3f",
       "name": "Todo Pastas (4 viandas)",
-      "description": "1 Cavatelli de Espinaca con Crema, Pollo y Jamón\n1 Wok estilo Oriental de Fideos con Ternera y Vegetales.\n1 Fetuccini a la Bolognesa\n1 Ñoquis de Papa a la Bolognesa",
+      "description": "1 Cavatelli de Espinaca con Crema, Pollo y Jamón\n1 Wok estilo Oriental de Fideos con Ternera y Vegetales.\n1 Fetuccini a la Bolognesa\n1 Ñoquis de Papa a la Bolognesa\nProducto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/cea0c481-8eae-4291-8c76-2bca3e31199a.jpg",
       "categoryIds": [
         "cat_los-mas-elegidos",
@@ -623,7 +623,7 @@
     {
       "id": "prod_a2a32066-2c93-4dee-ac41-4a2f83f1122d",
       "name": "Saludable (4 viandas)",
-      "description": "1 Tarta de Acelga\n1 Tarta de Acelga y Pollo\n1 Tarta de Calabaza y Pollo\n1 Wok de Arroz Chow Fan",
+      "description": "1 Tarta de Acelga\n1 Tarta de Acelga y Pollo\n1 Tarta de Calabaza y Pollo\n1 Wok de Arroz Chow Fan\nProducto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/6e7fe84e-d1a3-4320-8feb-0190fac944bd.jpg",
       "categoryIds": [
         "cat_box-de-viandas-super-precios"
@@ -647,7 +647,7 @@
     {
       "id": "prod_a2a32170-49fa-42ce-ae83-6872c9642463",
       "name": "Todo Tartas (4 viandas)",
-      "description": "1 Tarta de Acelga\n1 Tarta de Acelga y Pollo\n1 Tarta de Calabaza y Pollo\n1 Tarta de Pollo",
+      "description": "1 Tarta de Acelga\n1 Tarta de Acelga y Pollo\n1 Tarta de Calabaza y Pollo\n1 Tarta de Pollo\nProducto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/e28bb0fa-7217-4630-a8f3-4ec2823b5b33.jpg",
       "categoryIds": [
         "cat_box-de-viandas-super-precios"
@@ -671,7 +671,7 @@
     {
       "id": "prod_a2a32298-95fb-4f11-93f7-729139f9b126",
       "name": "Carnes (4 viandas)",
-      "description": "1 Bondiola de Cerdo a la Cerveza negra\n1 Pata y Muslo al horno\n1 Ternera braseada desmechada\n1 Pulled Pork desmechado",
+      "description": "1 Bondiola de Cerdo a la Cerveza negra\n1 Pata y Muslo al horno\n1 Ternera braseada desmechada\n1 Pulled Pork desmechado\nProducto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/16f904c4-8fd1-4caf-9749-153b6ab8861f.jpg",
       "categoryIds": [
         "cat_box-de-viandas-super-precios"
@@ -695,7 +695,7 @@
     {
       "id": "prod_a2a32471-a9ae-4331-a9d9-907eaa34704a",
       "name": "Oriental (4 viandas)",
-      "description": "2 Wok de Arroz Chow Fan con Pollo, Huevo y Vegetales.\n2 Wok estilo Oriental de Fideos con Ternera y Vegetales.",
+      "description": "2 Wok de Arroz Chow Fan con Pollo, Huevo y Vegetales.\n2 Wok estilo Oriental de Fideos con Ternera y Vegetales.\nProducto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/bc4a610e-8766-4506-ad3b-17b9858b62e8.jpg",
       "categoryIds": [
         "cat_box-de-viandas-super-precios"
@@ -719,7 +719,7 @@
     {
       "id": "prod_a2a32580-3b53-4a4c-b8ad-4cfc9522e09f",
       "name": "Selección (4 viandas)",
-      "description": "1 Raviolones de Cerdo braseado con salsa Rosa\n1 Cavatelli de Espinaca con salsa Parisienne.\n1 Canelones (2) de Ricota y Espinaca con Bolognesa.\n1 Ternera Braseada Desmechada para Sanguchitos o para una picada ( 380 gs )",
+      "description": "1 Raviolones de Cerdo braseado con salsa Rosa\n1 Cavatelli de Espinaca con salsa Parisienne.\n1 Canelones (2) de Ricota y Espinaca con Bolognesa.\n1 Ternera Braseada Desmechada para Sanguchitos o para una picada ( 380 gs )\nProducto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/526dd682-207f-402b-949b-59684689838c.jpg",
       "categoryIds": [
         "cat_box-de-viandas-super-precios"
@@ -743,7 +743,7 @@
     {
       "id": "prod_a2945ff7-7924-4987-8dd3-6b4ddd94b478",
       "name": "Chow Fan con Pollo",
-      "description": "Arroz salteado con Huevo, pollo y Vegetales. (400 gr.)",
+      "description": "Arroz salteado con Huevo, pollo y Vegetales. (400 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/bd4573d5-8700-4e7c-83ac-3059cee26a06.jpg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -767,7 +767,7 @@
     {
       "id": "prod_a294d120-a646-4d06-acfd-8c4c7a421fe5",
       "name": "Wok Oriental con Ternera",
-      "description": "Wok estilo Oriental de Fideos, Ternera y Vegetales. (400 gr.)",
+      "description": "Wok estilo Oriental de Fideos, Ternera y Vegetales. (400 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/255f834d-fe87-4131-8006-b08a3d19c417.jpg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -791,7 +791,7 @@
     {
       "id": "prod_a29ed694-64d4-40a1-9bf4-435ba330afe8",
       "name": "Tarta de Acelga y Pollo",
-      "description": "Tarta individual de Acelga, cebolla, morrón, pollo y queso. (300 gr.)",
+      "description": "Tarta individual de Acelga, cebolla, morrón, pollo y queso. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/ed3eaa03-2d96-447f-b32d-a924440d4375.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -815,7 +815,7 @@
     {
       "id": "prod_a2b33bf4-65aa-4002-aaca-c73b1bac3ca9",
       "name": "Tarta de Pollo",
-      "description": "Tarta individual de Pollo con Zanahoria y Puerro. (300 gr.)",
+      "description": "Tarta individual de Pollo con Zanahoria y Puerro. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/65c910c6-6ccb-4d64-aadd-31ed65705fed.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -839,7 +839,7 @@
     {
       "id": "prod_a2b345ae-af4b-4dec-91e5-6b88b76bde31",
       "name": "Tortilla de Papas(copy)",
-      "description": "Tortilla de Papas individual con Cebolla rehogada",
+      "description": "Tortilla de Papas individual con Cebolla rehogada. Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/7a6a6735-fd89-4a4e-8b55-b6f8441f8612.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -863,7 +863,7 @@
     {
       "id": "prod_a29ed950-1ecc-41a9-9665-3584af39c6df",
       "name": "Canelones de Ricota y Espinaca",
-      "description": "Canelones tradicionales de Ricota y Espinaca. (400 gr.)",
+      "description": "Canelones tradicionales de Ricota y Espinaca. (400 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/9f4f3d9a-b02b-4198-8f99-1823cd93d43d.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -887,7 +887,7 @@
     {
       "id": "prod_a29edbd3-46eb-4a16-8d30-ac078fb74086",
       "name": "Ñoquis con salsa Bolognesa",
-      "description": "Ñoquis de Papa con salsa Bolognesa tradicional. (400 gr.)",
+      "description": "Ñoquis de Papa con salsa Bolognesa tradicional. (400 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/46483e57-98ac-43c1-a71e-de80ed78ac37.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -911,7 +911,7 @@
     {
       "id": "prod_a29ede3d-0d0a-40eb-a40b-cfca5ea5b617",
       "name": "Bondiola a la Cerveza negra",
-      "description": "Bondiola a la cerveza negra en concción a baja temperatura con  cebollas, apio y zanahoria. Acompañada de papas y batatas horneadas. (400 gr.)",
+      "description": "Bondiola a la cerveza negra en cocción a baja temperatura con cebollas, apio y zanahoria. Acompañada de papas y batatas horneadas. (400 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/14325174-b11b-41af-92b3-fb96e39c3b8c.jpg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -935,7 +935,7 @@
     {
       "id": "prod_a29ee5ff-ca3b-437a-a2c2-c0aee15c30dd",
       "name": "Raviolones de Cerdo con salsa Rosa",
-      "description": "Raviolones de Cerdo braseado con salsa Rosa. (400 gr.)",
+      "description": "Raviolones de Cerdo braseado con salsa Rosa. (400 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/4905bee1-fc48-45f6-a60c-780d72d5d1f5.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -959,7 +959,7 @@
     {
       "id": "prod_a2a256c6-7a66-46e7-a179-9e06f1fe7048",
       "name": "Ñoquis de Calabaza con Bolognesa",
-      "description": "Ñoquis de Cabutia con salsa Bolognesa tradicional. (400 gr.)",
+      "description": "Ñoquis de Cabutia con salsa Bolognesa tradicional. (400 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/f908e351-8d48-44e0-aa79-15b80c05ac0a.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -983,7 +983,7 @@
     {
       "id": "prod_a2a2592c-ac81-4889-8eea-ef27b5e1b367",
       "name": "Pata y Muslo horneada c/ guarnición",
-      "description": "Pata y Muslo de pollo al horno con guarnición a elección. (400 gr.)",
+      "description": "Pata y Muslo de pollo al horno con guarnición a elección. (400 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/48c241ae-6775-4e0b-b267-d88f8e6edb96.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -1009,7 +1009,7 @@
     {
       "id": "prod_a2b342ac-fd13-453c-a4e7-8bf6103dab9e",
       "name": "Pollo al Verdeo con Papas(copy)",
-      "description": "Pechuga de Pollo a la crema de Verdeo con Papas al horno. (330 gr.)",
+      "description": "Pechuga de Pollo a la crema de Verdeo con Papas al horno. (330 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/ad50b808-c004-4f29-a865-58e4b70d6c3a.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -1033,7 +1033,7 @@
     {
       "id": "prod_a2a25ea4-2437-4d16-85fb-11082cd61ebc",
       "name": "Ternera Braseada desmechada",
-      "description": "Ternera braseada a baja temperatura  y desmechada. (380 gr.)",
+      "description": "Ternera braseada a baja temperatura y desmechada. (380 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/3433f581-48ed-42b9-9110-2756df100366.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -1057,7 +1057,7 @@
     {
       "id": "prod_a2a2632d-657f-4f9d-a8a1-d7c950459988",
       "name": "Lengua a la Vinagreta",
-      "description": "Clásica Lengua tiernizada con Vinagreta y vegetales. (350 gr.)",
+      "description": "Clásica Lengua tiernizada con Vinagreta y vegetales. (350 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/5e5dfa8e-c0de-4197-8343-d8d663d3cfe3.jpeg",
       "categoryIds": [
         "cat_viandas-envasadas-al-vacio"
@@ -1081,7 +1081,7 @@
     {
       "id": "prod_a2b3395f-01fc-4bd7-bf8a-2e64c70cc265",
       "name": "Pollo al Verdeo con Papas",
-      "description": "Pechuga de Pollo a la crema de Verdeo con Papas al horno. (330 gr.)",
+      "description": "Pechuga de Pollo a la crema de Verdeo con Papas al horno. (330 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/ad50b808-c004-4f29-a865-58e4b70d6c3a.jpeg",
       "categoryIds": [
         "cat_menu-ejecutivo"
@@ -1105,7 +1105,7 @@
     {
       "id": "prod_a2b33ba5-68de-4862-9ecc-02128fd34bba",
       "name": "Tarta de Acelga(copy)",
-      "description": "Tarta individual de Acelga con cebolla, morrón, y queso. (300 gr.)",
+      "description": "Tarta individual de Acelga con cebolla, morrón, y queso. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/23b88492-9bed-4113-a1b6-97711492c0cc.jpeg",
       "categoryIds": [
         "cat_menu-ejecutivo"
@@ -1129,7 +1129,7 @@
     {
       "id": "prod_a2b33bb3-73d7-4e9c-b48d-a0904ac8ca99",
       "name": "Tarta de Calabaza y Pollo(copy)",
-      "description": "Tarta individual de zapallo Cabutia con cebolla, puerro, pollo y queso. (300 gr.)",
+      "description": "Tarta individual de zapallo Cabutia con cebolla, puerro, pollo y queso. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/0a8b45dd-cd7a-48a4-bbf2-e7b7ffe1c63f.jpeg",
       "categoryIds": [
         "cat_menu-ejecutivo"
@@ -1153,7 +1153,7 @@
     {
       "id": "prod_a2b33bbc-7711-4904-aab4-4c38dc8998b3",
       "name": "Tarta de Acelga y Pollo(copy)",
-      "description": "Tarta individual de Acelga, cebolla, morrón, pollo y queso. (300 gr.)",
+      "description": "Tarta individual de Acelga, cebolla, morrón, pollo y queso. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/ed3eaa03-2d96-447f-b32d-a924440d4375.jpeg",
       "categoryIds": [
         "cat_menu-ejecutivo"
@@ -1177,7 +1177,7 @@
     {
       "id": "prod_a2b34219-ee7d-455c-9653-59da4c4efa42",
       "name": "Tarta de Pollo(copy)",
-      "description": "Tarta individual de Pollo con Zanahoria y Puerro. (300 gr.)",
+      "description": "Tarta individual de Pollo con Zanahoria y Puerro. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/65c910c6-6ccb-4d64-aadd-31ed65705fed.jpeg",
       "categoryIds": [
         "cat_menu-ejecutivo"
@@ -1201,7 +1201,7 @@
     {
       "id": "prod_a2b3434f-17bd-435e-9f6c-2707a25f2a26",
       "name": "Tortilla de Papas",
-      "description": "Tortilla de Papas individual con Cebolla rehogada",
+      "description": "Tortilla de Papas individual con Cebolla rehogada. Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/7a6a6735-fd89-4a4e-8b55-b6f8441f8612.jpeg",
       "categoryIds": [
         "cat_menu-ejecutivo"
@@ -1225,7 +1225,7 @@
     {
       "id": "prod_a2a24fdf-4cce-4a36-b7e2-ecb53c4d07e0",
       "name": "Puré de Papas",
-      "description": "Puré cremoso de Papas. (300 gr.)",
+      "description": "Puré cremoso de Papas. (300 gr.) Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/94013e07-bc6e-4d19-9898-484fc198a97a.jpeg",
       "categoryIds": [
         "cat_guarniciones"
@@ -1249,7 +1249,7 @@
     {
       "id": "prod_a2a24a55-fce1-456b-8103-0c50832cd958",
       "name": "Papas a la Portuguesa (Guarnición)",
-      "description": "Papas, morrones, cebolla, tomate natural cocidos con vino blanco, caldo y sus propios jugos.",
+      "description": "Papas, morrones, cebolla, tomate natural cocidos con vino blanco, caldo y sus propios jugos. Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/671d68ac-ad93-4059-98a6-11e7b5a2e0ce.jpeg",
       "categoryIds": [
         "cat_guarniciones"
@@ -1273,7 +1273,7 @@
     {
       "id": "prod_a2a250a3-959e-4a33-a874-3e843ffa51eb",
       "name": "Papas y Batatas horneadas",
-      "description": "Papas y Batatas al horno",
+      "description": "Papas y Batatas al horno. Producto envasado al vacío y congelado.",
       "imageUrl": "https://assets.olaclick.app/companies/products/images/800/c5eb71b6-cb99-4d47-a2e9-65240f8d9824.jpeg",
       "categoryIds": [
         "cat_guarniciones"
@@ -1295,5 +1295,5 @@
       "order": 3
     }
   ],
-  "updatedAt": 1789001494836
+  "updatedAt": 1789039913489
 }

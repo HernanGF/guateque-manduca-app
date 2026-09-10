@@ -140,7 +140,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-1">
-                          <h4 className="font-semibold text-sm text-white truncate">
+                          <h4 className="font-bold text-base text-white truncate">
                             {item.productName}
                           </h4>
                           <button
@@ -148,12 +148,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             className="text-neutral-500 hover:text-red-400 transition-colors p-1"
                             title="Eliminar producto"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
 
                         {item.variantName && (
-                          <div className="text-xs text-amber-400/90 font-medium mt-0.5">
+                          <div className="text-sm text-amber-400/90 font-medium mt-0.5">
                             {item.variantName}
                           </div>
                         )}
