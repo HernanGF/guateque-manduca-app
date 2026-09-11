@@ -521,16 +521,30 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             <label className="flex items-center justify-between cursor-pointer pt-2 border-t border-neutral-900">
               <div>
                 <span className="text-xs font-medium text-white block">
-                  Marcar como Producto Destacado
+                  Marcar como Producto Destacado (Los más elegidos)
                 </span>
                 <span className="text-[11px] text-neutral-500">
-                  Aparece con insignia destacada especial.
+                  Aparece con insignia especial y en la pestaña "Los más elegidos!!!".
                 </span>
               </div>
               <input
                 type="checkbox"
                 checked={isFeatured}
-                onChange={(e) => setIsFeatured(e.target.checked)}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setIsFeatured(checked);
+                  const elegidosCat = categories.find((c) => c.name.toLowerCase().includes('elegidos'));
+                  if (elegidosCat) {
+                    if (checked) {
+                      if (!categoryIds.includes(elegidosCat.id)) {
+                        setCategoryIds((prev) => [elegidosCat.id, ...prev]);
+                      }
+                    } else {
+                      // If un-featured, automatically remove from "Los más elegidos" category
+                      setCategoryIds((prev) => prev.filter((id) => id !== elegidosCat.id));
+                    }
+                  }
+                }}
                 className="w-4 h-4 accent-amber-500 cursor-pointer"
               />
             </label>

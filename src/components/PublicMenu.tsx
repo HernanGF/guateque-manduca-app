@@ -42,8 +42,16 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
       .filter((p) => {
         // Category filter
         if (selectedCategoryId !== 'all') {
-          if (!p.categoryIds || !p.categoryIds.includes(selectedCategoryId)) {
-            return false;
+          // If viewing "Los más elegidos", show products marked as isFeatured or explicitly assigned to cat_los-mas-elegidos
+          if (selectedCategoryId === 'cat_los-mas-elegidos') {
+            const hasCat = p.categoryIds && p.categoryIds.includes('cat_los-mas-elegidos');
+            if (!p.isFeatured && !hasCat) {
+              return false;
+            }
+          } else {
+            if (!p.categoryIds || !p.categoryIds.includes(selectedCategoryId)) {
+              return false;
+            }
           }
         }
         // Search query filter
