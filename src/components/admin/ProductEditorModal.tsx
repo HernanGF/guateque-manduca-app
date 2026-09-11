@@ -47,6 +47,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
   const [isHidden, setIsHidden] = useState<boolean>(product?.isHidden || false);
   const [isDiscontinued, setIsDiscontinued] = useState<boolean>(product?.isDiscontinued || false);
   const [isFeatured, setIsFeatured] = useState<boolean>(product?.isFeatured || false);
+  const [order, setOrder] = useState<number>(product?.order ?? 1);
 
   const [showImagePrompt, setShowImagePrompt] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -128,7 +129,8 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
       isHidden,
       isDiscontinued,
       isFeatured,
-      order: product?.order || 0,
+      order: Number(order) || 0,
+      categoryOrders: product?.categoryOrders || {},
     };
 
     onSave(updatedProduct);
@@ -548,6 +550,25 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                 className="w-4 h-4 accent-amber-500 cursor-pointer"
               />
             </label>
+
+            {/* Posición / Orden en el menú */}
+            <div className="pt-2 border-t border-neutral-900 flex items-center justify-between">
+              <div>
+                <span className="text-xs font-medium text-white block">
+                  Orden / Posición en el menú
+                </span>
+                <span className="text-[11px] text-neutral-500">
+                  Número de posición (1 aparece primero, 2 segundo, etc.).
+                </span>
+              </div>
+              <input
+                type="number"
+                min="1"
+                value={order}
+                onChange={(e) => setOrder(Math.max(1, parseInt(e.target.value, 10) || 1))}
+                className="w-20 px-3 py-1.5 bg-neutral-950 border border-neutral-800 rounded-xl text-xs font-bold text-amber-400 text-center focus:outline-none focus:border-amber-500"
+              />
+            </div>
           </div>
 
           {/* Form Actions */}

@@ -4,8 +4,10 @@ import { ProductEditorModal } from './ProductEditorModal';
 import { ModifierGroupModal } from './ModifierGroupModal';
 import { CategoryModal } from './CategoryModal';
 import { BatchImportModal } from './BatchImportModal';
+import { ProductReorderModal } from './ProductReorderModal';
 import { ShareAndQRTab } from './ShareAndQRTab';
 import { formatPrice } from '../../utils/formatters';
+import { getProductOrder, sortProductsByOrder, reorderProductsForCategory } from '../../utils/productOrder';
 import {
   Utensils,
   Plus,
@@ -28,6 +30,9 @@ import {
   FileSpreadsheet,
   QrCode,
   Lock,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -52,6 +57,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editingModifierGroup, setEditingModifierGroup] = useState<ModifierGroup | null | 'new'>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null | 'new'>(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false);
+  const [isReorderModalOpen, setIsReorderModalOpen] = useState<boolean>(false);
 
   // Filters for product list
   const [productCategoryFilter, setProductCategoryFilter] = useState<string>('all');
@@ -225,16 +231,62 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   // Filtered products for admin
-  const filteredProducts = products.filter((p) => {
-    if (productCategoryFilter !== 'all') {
-      if (!p.categoryIds.includes(productCategoryFilter)) return false;
+  const filteredProducts = products
+    .filter((p) => {
+      if (productCategoryFilter !== 'all') {
+        if (productCategoryFilter === 'cat_los-mas-elegidos') {
+          if (!p.isFeatured && (!p.categoryIds || !p.categoryIds.includes('cat_los-mas-elegidos'))) return false;
+        } else {
+          if (!p.categoryIds || !p.categoryIds.includes(productCategoryFilter)) return false;
+        }
+      }
+      if (productSearchQuery.trim()) {
+        const q = productSearchQuery.toLowerCase();
+        return p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      const orderA = getProductOrder(a, productCategoryFilter);
+      const orderB = getProductOrder(b, productCategoryFilter);
+      if (orderA !== orderB) return orderA - orderB;
+      return a.name.localeCompare(b.name);
+    });
+
+  const handleQuickMove = (productId: string, direction: -1 | 1 | 'top') => {
+    const targetCat = productCategoryFilter !== 'all' ? productCategoryFilter : 'all';
+
+    const catProducts = products.filter((p) => {
+      if (targetCat === 'all') return true;
+      if (targetCat === 'cat_los-mas-elegidos') {
+        return p.isFeatured || (p.categoryIds && p.categoryIds.includes('cat_los-mas-elegidos'));
+      }
+      return p.categoryIds && p.categoryIds.includes(targetCat);
+    });
+
+    const sorted = sortProductsByOrder(catProducts, targetCat);
+    const currentIndex = sorted.findIndex((p) => p.id === productId);
+    if (currentIndex === -1) return;
+
+    let newIndex = 0;
+    if (direction === 'top') {
+      newIndex = 0;
+    } else {
+      newIndex = currentIndex + direction;
     }
-    if (productSearchQuery.trim()) {
-      const q = productSearchQuery.toLowerCase();
-      return p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
-    }
-    return true;
-  });
+
+    if (newIndex < 0 || newIndex >= sorted.length || newIndex === currentIndex) return;
+
+    const [moved] = sorted.splice(currentIndex, 1);
+    sorted.splice(newIndex, 0, moved);
+
+    const orderedIds = sorted.map((p) => p.id);
+    const updatedProducts = reorderProductsForCategory(products, targetCat, orderedIds);
+    onUpdateMenuData({
+      ...menuData,
+      products: updatedProducts,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 pb-20">
@@ -463,6 +515,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <div className="flex items-center gap-2">
                 <button
+                  onClick={() => setIsReorderModalOpen(true)}
+                  className="px-3.5 py-1.5 bg-amber-500/20 hover:bg-amber-500 hover:text-neutral-950 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                  title="Personalizar el orden en que aparecen los platos"
+                >
+                  <ArrowUpDown className="w-3.5 h-3.5" />
+                  <span>Ordenar Platos</span>
+                </button>
+                <button
                   onClick={() => setIsImportModalOpen(true)}
                   className="px-3.5 py-1.5 bg-emerald-600/90 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
                 >
@@ -520,9 +580,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
             </div>
 
+            {/* Sub-bar showing count and order action */}
+            <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs">
+              <div className="flex items-center gap-2 text-neutral-400">
+                <span>
+                  Mostrando <strong className="text-white">{filteredProducts.length}</strong> plato{filteredProducts.length !== 1 ? 's' : ''}
+                  {productCategoryFilter !== 'all' ? ` en "${categories.find((c) => c.id === productCategoryFilter)?.name}"` : ''}
+                </span>
+                {productCategoryFilter !== 'all' && (
+                  <span className="text-[11px] text-amber-400 font-medium hidden sm:inline-block">
+                    (Ordenados según aparecen en el menú de clientes)
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsReorderModalOpen(true)}
+                className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+              >
+                <ArrowUpDown className="w-3.5 h-3.5" />
+                <span>Cambiar orden de esta categoría</span>
+              </button>
+            </div>
+
             {/* Products Table / Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredProducts.map((p) => {
+              {filteredProducts.map((p, index) => {
                 const assignedCategories = categories.filter((c) =>
                   p.categoryIds.includes(c.id)
                 );
@@ -539,12 +623,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div>
                       {/* Image & Quick status */}
                       <div className="flex gap-3 items-start">
-                        <img
-                          src={p.imageUrl}
-                          alt={p.name}
-                          className="w-20 h-20 rounded-xl object-cover bg-neutral-950 shrink-0 border border-neutral-800"
-                          referrerPolicy="no-referrer"
-                        />
+                        <div className="relative shrink-0">
+                          <img
+                            src={p.imageUrl}
+                            alt={p.name}
+                            className="w-20 h-20 rounded-xl object-cover bg-neutral-950 border border-neutral-800"
+                            referrerPolicy="no-referrer"
+                          />
+                          <span
+                            className="absolute -top-1.5 -left-1.5 px-1.5 py-0.5 rounded-md bg-neutral-950/95 text-amber-400 border border-neutral-700 text-[10px] font-black shadow"
+                            title={`Posición actual #${index + 1}`}
+                          >
+                            #{index + 1}
+                          </span>
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-1">
                             <h3 className="font-bold text-sm text-white truncate">
@@ -585,6 +677,48 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           🔧 {p.modifierGroupIds.length} grupos de modificadores
                         </div>
                       )}
+                    </div>
+
+                    {/* Quick Order Position Controls */}
+                    <div className="mt-3 pt-2.5 border-t border-neutral-800/80 flex items-center justify-between gap-1 text-[11px]">
+                      <span className="text-[10px] text-neutral-400 font-semibold flex items-center gap-1">
+                        <span>Lugar #{index + 1}</span>
+                        {index === 0 && (
+                          <span className="text-[9px] px-1 py-0.2 bg-amber-500/20 text-amber-400 font-bold rounded">
+                            1°
+                          </span>
+                        )}
+                      </span>
+
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() => handleQuickMove(p.id, 'top')}
+                          className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500 hover:text-neutral-950 font-bold text-[10px] disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
+                          title="Poner en el 1° lugar de inmediato"
+                        >
+                          🔝 1°
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() => handleQuickMove(p.id, -1)}
+                          className="p-1 rounded bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
+                          title="Subir un puesto"
+                        >
+                          <ArrowUp className="w-3 h-3" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === filteredProducts.length - 1}
+                          onClick={() => handleQuickMove(p.id, 1)}
+                          className="p-1 rounded bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
+                          title="Bajar un puesto"
+                        >
+                          <ArrowDown className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
 
                     {/* Card Actions & Toggles */}
@@ -717,6 +851,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>+ Producto</span>
+                      </button>
+
+                      {/* Ordenar platos de esta categoría */}
+                      <button
+                        onClick={() => {
+                          setProductCategoryFilter(cat.id);
+                          setActiveTab('products');
+                          setIsReorderModalOpen(true);
+                        }}
+                        className="px-2.5 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-semibold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                        title="Cambiar el orden de los productos de esta categoría"
+                      >
+                        <ArrowUpDown className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Ordenar</span>
                       </button>
 
                       {/* Toggle visibility */}
@@ -1050,6 +1198,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           onImport={handleBatchImport}
         />
       )}
+
+      {/* Product Reorder Modal */}
+      <ProductReorderModal
+        isOpen={isReorderModalOpen}
+        onClose={() => setIsReorderModalOpen(false)}
+        categories={categories}
+        products={products}
+        initialCategoryId={productCategoryFilter !== 'all' ? productCategoryFilter : undefined}
+        currency={business.currency}
+        onSaveProducts={(updatedProducts) => {
+          onUpdateMenuData({
+            ...menuData,
+            products: updatedProducts,
+          });
+        }}
+      />
     </div>
   );
 };

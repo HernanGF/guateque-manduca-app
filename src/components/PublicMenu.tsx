@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { MenuData, Product } from '../types';
 import { formatPrice } from '../utils/formatters';
+import { getProductOrder } from '../utils/productOrder';
 import { Search, ShoppingBag, ArrowLeft, Lock, Sparkles, Plus, AlertCircle, List, LayoutGrid } from 'lucide-react';
 
 interface PublicMenuProps {
@@ -63,7 +64,12 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
         }
         return true;
       })
-      .sort((a, b) => (a.order || 0) - (b.order || 0));
+      .sort((a, b) => {
+        const orderA = getProductOrder(a, selectedCategoryId);
+        const orderB = getProductOrder(b, selectedCategoryId);
+        if (orderA !== orderB) return orderA - orderB;
+        return a.name.localeCompare(b.name);
+      });
   }, [products, selectedCategoryId, searchQuery]);
 
   const getProductPriceLabel = (product: Product) => {

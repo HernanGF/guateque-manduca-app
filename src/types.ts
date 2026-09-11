@@ -37,6 +37,7 @@ export interface Product {
   isHidden: boolean;
   isFeatured?: boolean;
   order: number;
+  categoryOrders?: Record<string, number>;
 }
 
 export interface Category {
