@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Product, Category, ModifierGroup, ProductVariant } from '../../types';
-import { X, Camera, Plus, Trash2, GripVertical, Check, Eye, EyeOff, AlertTriangle, Package } from 'lucide-react';
+import { X, Camera, Plus, Trash2, GripVertical, Check, Eye, EyeOff, AlertTriangle, Package, Loader2 } from 'lucide-react';
 import { parseProductDescription, isCateringProduct } from '../ProductDescription';
+import { optimizeImageFile } from '../../utils/imageOptimizer';
 
 interface ProductEditorModalProps {
   product: Product | null; // null if creating new
@@ -51,26 +52,34 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
   const [order, setOrder] = useState<number>(product?.order ?? 1);
 
   const [showImagePrompt, setShowImagePrompt] = useState(false);
+  const [isOptimizingImage, setIsOptimizingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check size limit (max 8MB for browser)
-    if (file.size > 8 * 1024 * 1024) {
-      alert('La imagen no debe superar los 8MB.');
+    if (file.size > 15 * 1024 * 1024) {
+      alert('La imagen no debe superar los 15MB.');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (loadEvt) => {
-      const result = loadEvt.target?.result as string;
-      if (result) {
-        setImageUrl(result);
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      setIsOptimizingImage(true);
+      const optimizedUrl = await optimizeImageFile(file, 1000, 0.85);
+      setImageUrl(optimizedUrl);
+    } catch (err) {
+      console.error('Error optimizing image:', err);
+      // Fallback to basic file reader
+      const reader = new FileReader();
+      reader.onload = (loadEvt) => {
+        const result = loadEvt.target?.result as string;
+        if (result) setImageUrl(result);
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setIsOptimizingImage(false);
+    }
   };
 
   const handleToggleCategory = (catId: string) => {
@@ -172,10 +181,11 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-2 right-2 p-2 rounded-full bg-blue-600 hover:bg-blue-500 text-white shadow-lg transition-transform active:scale-95 cursor-pointer"
+                disabled={isOptimizingImage}
+                className="absolute bottom-2 right-2 p-2 rounded-full bg-blue-600 hover:bg-blue-500 text-white shadow-lg transition-transform active:scale-95 cursor-pointer disabled:opacity-50"
                 title="Subir foto"
               >
-                <Camera className="w-4 h-4" />
+                {isOptimizingImage ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
               </button>
 
               <input

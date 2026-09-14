@@ -10,6 +10,7 @@ import { ShareAndQRTab } from './ShareAndQRTab';
 import { ProductDescription, isCateringProduct } from '../ProductDescription';
 import { formatPrice } from '../../utils/formatters';
 import { getProductOrder, sortProductsByOrder, reorderProductsForCategory } from '../../utils/productOrder';
+import { optimizeImageFile } from '../../utils/imageOptimizer';
 import {
   Utensils,
   Plus,
@@ -93,26 +94,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     });
   };
 
-  const handleBannerUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const res = evt.target?.result as string;
+    try {
+      const res = await optimizeImageFile(file, 1400, 0.85);
       if (res) updateBusiness({ bannerUrl: res });
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const res = evt.target?.result as string;
+        if (res) updateBusiness({ bannerUrl: res });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const res = evt.target?.result as string;
+    try {
+      const res = await optimizeImageFile(file, 600, 0.85);
       if (res) updateBusiness({ logoUrl: res });
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const res = evt.target?.result as string;
+        if (res) updateBusiness({ logoUrl: res });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // --- Product Handlers ---
@@ -526,7 +537,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="flex items-center gap-2.5">
             <Sparkles className="w-4 h-4 text-blue-400 shrink-0" />
             <span>
-              <strong>Edición directa habilitada:</strong> Todo cambio que hagas en el catálogo (precios, fotos, platos) se guarda en tu código. Al finalizar, solo ve a la pestaña <strong>GitHub</strong> arriba y presiona <strong>«Push changes to GitHub»</strong> para publicar en Vercel.
+              <strong>Edición directa habilitada:</strong> Todo cambio que hagas en el catálogo (precios, fotos, platos) se guarda inmediatamente y se optimiza de forma automática en el menú del cliente.
             </span>
           </div>
         </div>

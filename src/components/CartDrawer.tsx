@@ -159,7 +159,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         )}
 
                         {item.selectedModifiers.length > 0 && (
-                          <div className="text-[11px] text-neutral-400 mt-1 space-y-0.5">
+                          <div className="text-xs sm:text-sm text-neutral-300 mt-1.5 space-y-0.5">
                             {item.selectedModifiers.map((mod, i) => (
                               <div key={i} className="truncate">
                                 • {mod.quantity > 1 ? `${mod.quantity}x ` : ''}
@@ -171,32 +171,32 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         )}
 
                         {item.customerNote && (
-                          <div className="text-[11px] text-neutral-400 italic mt-1 bg-neutral-900 p-1.5 rounded">
+                          <div className="text-xs sm:text-sm text-neutral-300 italic mt-1.5 bg-neutral-900/90 p-2 rounded-lg border border-neutral-800">
                             "{item.customerNote}"
                           </div>
                         )}
 
-                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-neutral-900">
+                        <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-neutral-900">
                           {/* Quantity control */}
                           <div className="flex items-center bg-neutral-900 border border-neutral-800 rounded-lg p-0.5">
                             <button
                               onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
-                              className="w-6 h-6 rounded flex items-center justify-center text-neutral-400 hover:text-white"
+                              className="w-7 h-7 rounded flex items-center justify-center text-neutral-300 hover:text-white cursor-pointer"
                             >
-                              <Minus className="w-3 h-3" />
+                              <Minus className="w-3.5 h-3.5" />
                             </button>
-                            <span className="w-6 text-center text-xs font-bold text-white">
+                            <span className="w-7 text-center text-sm font-black text-white">
                               {item.quantity}
                             </span>
                             <button
                               onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                              className="w-6 h-6 rounded flex items-center justify-center text-neutral-400 hover:text-white"
+                              className="w-7 h-7 rounded flex items-center justify-center text-neutral-300 hover:text-white cursor-pointer"
                             >
-                              <Plus className="w-3 h-3" />
+                              <Plus className="w-3.5 h-3.5" />
                             </button>
                           </div>
 
-                          <span className="text-sm font-bold text-amber-400">
+                          <span className="text-base sm:text-lg font-black text-amber-400">
                             {formatPrice(item.itemTotal, business.currency)}
                           </span>
                         </div>
@@ -206,13 +206,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {/* Customer Details Form */}
-                <div className="pt-3 border-t border-neutral-800 space-y-3">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-400">
+                <div className="pt-4 border-t border-neutral-800 space-y-3.5">
+                  <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-400">
                     Datos para el pedido
                   </h3>
 
                   {formError && (
-                    <div className="flex items-center gap-2 p-2.5 rounded-lg bg-red-950/40 border border-red-800/60 text-xs text-red-300">
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/40 border border-red-800/60 text-sm text-red-300">
                       <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
                       <span>{formError}</span>
                     </div>
@@ -220,7 +220,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                   {/* Customer Name */}
                   <div>
-                    <label className="block text-xs font-medium text-neutral-300 mb-1">
+                    <label className="block text-sm font-semibold text-neutral-200 mb-1.5">
                       Nombre y Apellido <span className="text-red-400">*</span>
                     </label>
                     <input
@@ -231,24 +231,24 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         setCustomerInfo({ ...customerInfo, customerName: e.target.value })
                       }
                       placeholder="Tu nombre completo"
-                      className="w-full px-3 py-2 text-sm bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-600 focus:outline-none focus:border-amber-500"
+                      className="w-full px-3.5 py-2.5 text-base bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-amber-500"
                     />
                   </div>
 
                   {/* Order Type: Delivery vs Takeaway */}
                   <div>
-                    <label className="block text-xs font-medium text-neutral-300 mb-1">
+                    <label className="block text-sm font-semibold text-neutral-200 mb-1.5">
                       Modalidad de Entrega
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2.5">
                       <button
                         type="button"
                         onClick={() =>
                           setCustomerInfo({ ...customerInfo, orderType: 'delivery' })
                         }
-                        className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-xs font-medium transition-all ${
+                        className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border text-sm font-bold transition-all cursor-pointer ${
                           customerInfo.orderType === 'delivery'
-                            ? 'bg-amber-500/10 border-amber-500 text-amber-300'
+                            ? 'bg-amber-500/15 border-amber-500 text-amber-300 ring-1 ring-amber-500/30'
                             : 'bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-neutral-700'
                         }`}
                       >
@@ -261,9 +261,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         onClick={() =>
                           setCustomerInfo({ ...customerInfo, orderType: 'takeaway' })
                         }
-                        className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-xs font-medium transition-all ${
+                        className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border text-sm font-bold transition-all cursor-pointer ${
                           customerInfo.orderType === 'takeaway'
-                            ? 'bg-amber-500/10 border-amber-500 text-amber-300'
+                            ? 'bg-amber-500/15 border-amber-500 text-amber-300 ring-1 ring-amber-500/30'
                             : 'bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-neutral-700'
                         }`}
                       >
@@ -276,7 +276,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Address if delivery */}
                   {customerInfo.orderType === 'delivery' && (
                     <div>
-                      <label className="block text-xs font-medium text-neutral-300 mb-1">
+                      <label className="block text-sm font-semibold text-neutral-200 mb-1.5">
                         Dirección de Entrega <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -287,14 +287,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           setCustomerInfo({ ...customerInfo, address: e.target.value })
                         }
                         placeholder="Calle, número, piso, depto, timbre..."
-                        className="w-full px-3 py-2 text-sm bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-600 focus:outline-none focus:border-amber-500"
+                        className="w-full px-3.5 py-2.5 text-base bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-amber-500"
                       />
                     </div>
                   )}
 
                   {/* Payment Method */}
                   <div>
-                    <label className="block text-xs font-medium text-neutral-300 mb-1">
+                    <label className="block text-sm font-semibold text-neutral-200 mb-1.5">
                       Forma de Pago
                     </label>
                     <select
@@ -306,7 +306,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           paymentMethod: e.target.value as any,
                         })
                       }
-                      className="w-full px-3 py-2 text-sm bg-neutral-950 border border-neutral-800 rounded-xl text-white focus:outline-none focus:border-amber-500"
+                      className="w-full px-3.5 py-2.5 text-base bg-neutral-950 border border-neutral-800 rounded-xl text-white focus:outline-none focus:border-amber-500"
                     >
                       <option value="transferencia">Transferencia Bancaria / Mercado Pago</option>
                       <option value="efectivo">Efectivo al recibir / retirar</option>
@@ -317,7 +317,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                   {/* Additional Notes */}
                   <div>
-                    <label className="block text-xs font-medium text-neutral-300 mb-1">
+                    <label className="block text-sm font-semibold text-neutral-200 mb-1.5">
                       Aclaraciones generales del pedido
                     </label>
                     <input
@@ -327,7 +327,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         setCustomerInfo({ ...customerInfo, notes: e.target.value })
                       }
                       placeholder="Ej: Si no atienden tocar timbre 4B..."
-                      className="w-full px-3 py-2 text-sm bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-600 focus:outline-none focus:border-amber-500"
+                      className="w-full px-3.5 py-2.5 text-base bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-amber-500"
                     />
                   </div>
                 </div>
@@ -338,9 +338,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           {/* Footer with WhatsApp send button */}
           {cartItems.length > 0 && (
             <div className="p-4 bg-neutral-950 border-t border-neutral-800 space-y-3">
-              <div className="flex items-center justify-between text-base font-bold">
+              <div className="flex items-center justify-between text-base sm:text-lg font-bold">
                 <span className="text-neutral-300">Total a Pagar:</span>
-                <span className="text-xl text-amber-400">
+                <span className="text-2xl font-black text-amber-400">
                   {formatPrice(totalAmount, business.currency)}
                 </span>
               </div>
@@ -349,13 +349,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 id="btn-send-whatsapp"
                 type="button"
                 onClick={handleSendWhatsAppOrder}
-                className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-4 px-4 bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white font-extrabold text-base sm:text-lg rounded-xl shadow-lg shadow-emerald-900/30 transition-all flex items-center justify-center gap-2.5 cursor-pointer"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-5 h-5" />
                 <span>Enviar Pedido por WhatsApp</span>
               </button>
 
-              <p className="text-[11px] text-center text-neutral-500">
+              <p className="text-xs text-center text-neutral-400">
                 Se abrirá WhatsApp para enviar el pedido directamente al número del local.
               </p>
             </div>

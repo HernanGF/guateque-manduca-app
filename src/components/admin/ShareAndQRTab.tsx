@@ -216,15 +216,48 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
               </button>
             </div>
 
-            {shareUrl !== OFFICIAL_PUBLIC_URL && (
+            {/* Quick URL preset selectors */}
+            <div className="flex flex-wrap items-center gap-2 mt-2">
+              {typeof window !== 'undefined' && window.location.origin && (
+                <button
+                  type="button"
+                  onClick={() => handleUrlChange(window.location.origin)}
+                  className={`text-[11px] px-2.5 py-1 rounded-md transition-colors cursor-pointer border ${
+                    shareUrl === window.location.origin
+                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold'
+                      : 'bg-neutral-800 text-neutral-400 border-neutral-700 hover:text-white'
+                  }`}
+                >
+                  🔗 Usar enlace de esta app (en vivo)
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => handleUrlChange(OFFICIAL_PUBLIC_URL)}
-                className="text-[11px] text-amber-400 hover:underline mt-2 inline-flex items-center gap-1 cursor-pointer"
+                className={`text-[11px] px-2.5 py-1 rounded-md transition-colors cursor-pointer border ${
+                  shareUrl === OFFICIAL_PUBLIC_URL
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold'
+                    : 'bg-neutral-800 text-neutral-400 border-neutral-700 hover:text-white'
+                }`}
               >
-                <span>Restablecer al enlace oficial de la app</span>
+                🌐 Usar enlace Vercel ({OFFICIAL_PUBLIC_URL.replace('https://', '')})
               </button>
-            )}
+            </div>
+
+            {/* Explanatory note */}
+            <div className="mt-3 bg-neutral-950/70 border border-neutral-800/80 rounded-xl p-3 text-[11px] text-neutral-400 space-y-1">
+              <p>
+                <strong className="text-neutral-300">💡 ¿Dónde ven los cambios tus clientes?</strong>
+              </p>
+              <ul className="list-disc pl-4 space-y-0.5 text-neutral-400">
+                <li>
+                  <strong>En esta app:</strong> Cualquier plato, precio o foto que cambies se refleja de inmediato para todos los que abran el enlace en vivo de la app.
+                </li>
+                <li>
+                  <strong>En tu enlace de Vercel:</strong> Vercel está conectado a GitHub, por lo que requiere exportar o sincronizar los cambios de código para actualizarse allí.
+                </li>
+              </ul>
+            </div>
 
             {/* Link Action Shortcuts */}
             <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-neutral-800/80">

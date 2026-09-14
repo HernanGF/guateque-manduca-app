@@ -214,6 +214,9 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
             alt={product.name}
             className="w-full h-full object-cover object-center"
             referrerPolicy="no-referrer"
+            onError={(e) => {
+              (e.currentTarget as HTMLElement).style.display = 'none';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-black/50" />
 
@@ -250,14 +253,14 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
             {/* Quick summary chips of available customizations */}
             {attachedGroups.length > 0 && (
               <div className="mt-3.5 flex items-center gap-2 flex-wrap">
-                <span className="text-xs text-amber-400 font-semibold flex items-center gap-1.5 mr-1">
+                <span className="text-xs sm:text-sm text-amber-400 font-bold flex items-center gap-1.5 mr-1">
                   <Sparkles className="w-3.5 h-3.5" />
                   Opciones disponibles:
                 </span>
                 {attachedGroups.map((g) => (
                   <span
                     key={g.id}
-                    className="text-xs px-2.5 py-1 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 font-medium"
+                    className="text-xs sm:text-sm px-2.5 py-1 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-200 font-semibold"
                   >
                     {g.name}
                   </span>
@@ -274,15 +277,15 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                   <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xs flex items-center justify-center">
                     1
                   </span>
-                  <span className="text-base font-bold text-white">Selecciona tu porción</span>
+                  <span className="text-base sm:text-lg font-bold text-white">Selecciona tu porción</span>
                 </div>
-                <span className="text-xs text-amber-400 font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
+                <span className="text-xs sm:text-sm text-amber-400 font-bold px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
                   Obligatorio
                 </span>
               </div>
 
               {product.clientNote && (
-                <p className="text-xs text-amber-200/90 italic mb-3 bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/30">
+                <p className="text-xs sm:text-sm text-amber-200/90 italic mb-3 bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/30">
                   ℹ️ {product.clientNote}
                 </p>
               )}
@@ -312,7 +315,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                           </div>
                           <span className="text-base font-semibold">{variant.name}</span>
                         </div>
-                        <span className="text-base font-bold text-amber-400">
+                        <span className="text-base sm:text-lg font-black text-amber-400">
                           {formatPrice(variant.price, currency)}
                         </span>
                       </label>
@@ -341,14 +344,14 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                   error ? 'border-red-500/60 bg-red-950/10' : 'border-neutral-800'
                 }`}
               >
-                <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
                   <div className="flex items-center gap-2">
                     <span className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center">
                       {stepNumber}
                     </span>
-                    <span className="text-base font-bold text-white">{group.name}</span>
+                    <span className="text-base sm:text-lg font-bold text-white">{group.name}</span>
                     <span
-                      className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                      className={`text-xs sm:text-sm font-semibold px-2.5 py-0.5 rounded-full ${
                         isRequired
                           ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                           : 'bg-neutral-800 text-neutral-400'
@@ -358,7 +361,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                     </span>
                   </div>
 
-                  <span className="text-xs text-neutral-400 font-medium">
+                  <span className="text-xs sm:text-sm text-neutral-400 font-medium">
                     {isSingle
                       ? 'Elige 1'
                       : group.maxSelect
@@ -368,7 +371,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                 </div>
 
                 {error && (
-                  <div className="flex items-center gap-1.5 text-xs text-red-400 mt-1 mb-2">
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-red-400 mt-1 mb-2">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                     <span>{error}</span>
                   </div>
@@ -415,10 +418,10 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                                 <Check className="w-3.5 h-3.5 stroke-[3]" />
                               )}
                             </div>
-                            <span className="text-base font-medium">{opt.name}</span>
+                            <span className="text-base font-semibold">{opt.name}</span>
                           </div>
 
-                          <span className="text-sm font-semibold text-neutral-300">
+                          <span className="text-sm sm:text-base font-bold text-neutral-200">
                             {opt.price && opt.price > 0
                               ? `+ ${formatPrice(opt.price, currency)}`
                               : 'Incluido'}
@@ -433,7 +436,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
 
           {/* Customer Specific Instructions */}
           <div>
-            <label className="block text-sm font-semibold text-neutral-200 mb-2">
+            <label className="block text-sm sm:text-base font-bold text-neutral-200 mb-2">
               Aclaraciones especiales para este plato
             </label>
             <textarea
@@ -441,7 +444,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
               value={customerNote}
               onChange={(e) => setCustomerNote(e.target.value)}
               placeholder="Ej: Sin sal, bien cocido, salsa en pote separado..."
-              className="w-full px-3.5 py-2.5 text-sm sm:text-base bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-amber-500 resize-none"
+              className="w-full px-3.5 py-2.5 text-base bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-amber-500 resize-none"
             />
           </div>
         </div>
@@ -455,16 +458,16 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
               type="button"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               disabled={quantity <= 1}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-300 hover:bg-neutral-800 disabled:opacity-30 cursor-pointer"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-neutral-200 hover:bg-neutral-800 disabled:opacity-30 cursor-pointer"
             >
               <Minus className="w-4 h-4" />
             </button>
-            <span className="w-8 text-center text-sm font-bold text-white">{quantity}</span>
+            <span className="w-9 text-center text-base font-black text-white">{quantity}</span>
             <button
               id="btn-qty-plus"
               type="button"
               onClick={() => setQuantity((q) => q + 1)}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-300 hover:bg-neutral-800 cursor-pointer"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-neutral-200 hover:bg-neutral-800 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
             </button>
@@ -475,7 +478,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
             id="btn-confirm-add-to-cart"
             type="button"
             onClick={handleSubmit}
-            className="flex-1 py-3 px-4 bg-amber-500 hover:bg-amber-400 active:scale-98 text-neutral-950 font-bold rounded-xl shadow-lg transition-all flex items-center justify-between cursor-pointer"
+            className="flex-1 py-3.5 px-4 bg-amber-500 hover:bg-amber-400 active:scale-98 text-neutral-950 font-black text-base rounded-xl shadow-lg transition-all flex items-center justify-between cursor-pointer"
           >
             <span>Agregar al Pedido</span>
             <span>{formatPrice(grandTotal, currency)}</span>

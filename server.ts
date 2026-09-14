@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import sharp from 'sharp';
 import { createServer as createViteServer } from 'vite';
 import { INITIAL_MENU_DATA } from './src/initialData';
 
@@ -37,8 +38,42 @@ function loadMenuData() {
   return INITIAL_MENU_DATA;
 }
 
-function saveMenuData(data: any) {
+async function normalizeProductImage(imageUrl: string | undefined): Promise<string> {
+  if (!imageUrl || !imageUrl.startsWith('data:image/')) return imageUrl || '';
   try {
+    const base64Data = imageUrl.replace(/^data:image\/[^;]+;base64,/, '');
+    const buffer = Buffer.from(base64Data, 'base64');
+    const processedBuffer = await sharp(buffer)
+      .resize(1000, 1000, { fit: 'inside', withoutEnlargement: true })
+      .jpeg({ quality: 85 })
+      .toBuffer();
+    return `data:image/jpeg;base64,${processedBuffer.toString('base64')}`;
+  } catch (err) {
+    console.error('Failed to normalize image with sharp:', err);
+    return imageUrl;
+  }
+}
+
+async function saveMenuData(data: any) {
+  try {
+    // Normalize any data URI images in products
+    if (Array.isArray(data.products)) {
+      for (const p of data.products) {
+        if (p.imageUrl && p.imageUrl.startsWith('data:image/')) {
+          p.imageUrl = await normalizeProductImage(p.imageUrl);
+        }
+      }
+    }
+    // Normalize banner and logo if data URIs
+    if (data.business) {
+      if (data.business.bannerUrl?.startsWith('data:image/')) {
+        data.business.bannerUrl = await normalizeProductImage(data.business.bannerUrl);
+      }
+      if (data.business.logoUrl?.startsWith('data:image/')) {
+        data.business.logoUrl = await normalizeProductImage(data.business.logoUrl);
+      }
+    }
+
     const dataWithTimestamp = {
       ...data,
       updatedAt: Date.now(),
@@ -63,12 +98,12 @@ app.get('/api/menu', (req, res) => {
   res.json(data);
 });
 
-app.put('/api/menu', (req, res) => {
+app.put('/api/menu', async (req, res) => {
   const newData = req.body;
   if (!newData || !newData.business || !Array.isArray(newData.products)) {
     return res.status(400).json({ error: 'Datos de menú inválidos' });
   }
-  const success = saveMenuData(newData);
+  const success = await saveMenuData(newData);
   if (success) {
     res.json({ success: true, message: 'Menú actualizado correctamente' });
   } else {

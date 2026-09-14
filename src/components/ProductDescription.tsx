@@ -122,15 +122,15 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
       return (
         <div className={`mt-2 ${className}`}>
           {parsed.mainText && (
-            <p className="text-base text-neutral-200 leading-relaxed font-normal whitespace-pre-line">
+            <p className="text-base sm:text-lg text-neutral-200 leading-relaxed font-normal whitespace-pre-line">
               {parsed.mainText}
             </p>
           )}
 
           {parsed.footerNote && (
-            <div className="mt-3.5 pt-3 border-t border-neutral-800/80 flex items-center gap-2.5 text-xs sm:text-sm text-neutral-300">
-              <span className="text-sky-400 text-sm shrink-0">❄️</span>
-              <span className="italic font-normal">{parsed.footerNote}</span>
+            <div className="mt-3.5 pt-3 border-t border-neutral-800/80 flex items-center gap-2.5 text-sm sm:text-base text-neutral-300">
+              <span className="text-sky-400 text-base shrink-0">❄️</span>
+              <span className="italic font-medium">{parsed.footerNote}</span>
             </div>
           )}
         </div>
@@ -141,12 +141,12 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
       <div className={`mt-3 bg-neutral-900/90 border border-neutral-800/90 rounded-2xl p-4 sm:p-5 space-y-3.5 ${className}`}>
         <div className="flex items-center justify-between pb-2.5 border-b border-neutral-800">
           <div className="flex items-center gap-2">
-            <Package className="w-4 h-4 text-amber-400 shrink-0" />
-            <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+            <Package className="w-4.5 h-4.5 text-amber-400 shrink-0" />
+            <span className="text-sm sm:text-base font-bold text-white uppercase tracking-wider">
               Contenido del Box
             </span>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
+          <span className="text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
             {parsed.items.length} viandas incluidas
           </span>
         </div>
@@ -160,19 +160,19 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
             return (
               <li
                 key={idx}
-                className="flex items-start gap-2.5 p-2.5 rounded-xl bg-neutral-950/70 border border-neutral-800/60 hover:border-neutral-700/80 transition-colors"
+                className="flex items-start gap-3 p-3 rounded-xl bg-neutral-950/70 border border-neutral-800/60 hover:border-neutral-700/80 transition-colors"
               >
                 {qty ? (
                   <span
-                    className="inline-flex items-center justify-center min-w-[26px] h-6 px-1.5 rounded-lg bg-amber-500 text-neutral-950 font-black text-xs shrink-0 shadow-sm"
+                    className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-lg bg-amber-500 text-neutral-950 font-black text-sm shrink-0 shadow-sm"
                     title={`Cantidad: ${qty}`}
                   >
                     {qty}
                   </span>
                 ) : (
-                  <span className="w-2 h-2 rounded-full bg-amber-400 mt-2 shrink-0" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 mt-2 shrink-0" />
                 )}
-                <span className="text-sm font-medium text-neutral-100 leading-snug pt-0.5">
+                <span className="text-base font-medium text-neutral-100 leading-snug pt-0.5">
                   {name}
                 </span>
               </li>
@@ -181,9 +181,9 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
         </ul>
 
         {parsed.footerNote && (
-          <div className="pt-2.5 border-t border-neutral-800/80 flex items-center gap-2 text-xs text-neutral-300">
-            <span className="text-sky-400 text-sm shrink-0">❄️</span>
-            <span className="italic leading-relaxed">{parsed.footerNote}</span>
+          <div className="pt-2.5 border-t border-neutral-800/80 flex items-center gap-2.5 text-sm text-neutral-300">
+            <span className="text-sky-400 text-base shrink-0">❄️</span>
+            <span className="italic font-medium leading-relaxed">{parsed.footerNote}</span>
           </div>
         )}
       </div>
@@ -196,14 +196,14 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
       return (
         <div className={`mt-1.5 ${className}`}>
           {parsed.mainText && (
-            <p className="text-sm text-neutral-300 line-clamp-2 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-neutral-300 line-clamp-2 leading-relaxed font-normal">
               {parsed.mainText}
             </p>
           )}
 
           {parsed.footerNote && (
-            <div className="pt-1.5 border-t border-neutral-800/60 mt-2 flex items-center gap-1.5 text-[11px] text-neutral-400">
-              <span className="text-sky-400 text-xs shrink-0">❄️</span>
+            <div className="pt-1.5 border-t border-neutral-800/60 mt-2 flex items-center gap-1.5 text-xs sm:text-sm text-neutral-400">
+              <span className="text-sky-400 text-sm shrink-0">❄️</span>
               <span className="italic truncate">{parsed.footerNote}</span>
             </div>
           )}
@@ -220,9 +220,9 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
             const name = match ? match[2] : item;
 
             return (
-              <div key={idx} className="flex items-start gap-1.5 text-xs text-neutral-200">
+              <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-neutral-200">
                 {qty ? (
-                  <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-amber-500/20 text-amber-400 font-bold text-[10px] shrink-0 mt-0.5">
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-amber-500/20 text-amber-400 font-black text-xs shrink-0 mt-0.5">
                     {qty}
                   </span>
                 ) : (
@@ -235,8 +235,8 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
         </div>
 
         {parsed.footerNote && (
-          <div className="pt-1.5 border-t border-neutral-800/60 mt-1.5 flex items-center gap-1.5 text-[11px] text-neutral-400">
-            <span className="text-sky-400 text-xs shrink-0">❄️</span>
+          <div className="pt-1.5 border-t border-neutral-800/60 mt-1.5 flex items-center gap-1.5 text-xs sm:text-sm text-neutral-400">
+            <span className="text-sky-400 text-sm shrink-0">❄️</span>
             <span className="italic truncate">{parsed.footerNote}</span>
           </div>
         )}
@@ -250,14 +250,14 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
       return (
         <div className={`mt-2 ${className}`}>
           {parsed.mainText && (
-            <p className="text-sm text-neutral-300 line-clamp-3 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-neutral-300 line-clamp-3 leading-relaxed font-normal">
               {parsed.mainText}
             </p>
           )}
 
           {parsed.footerNote && (
-            <div className="pt-2 border-t border-neutral-800/60 mt-2.5 flex items-center gap-1.5 text-xs text-neutral-400">
-              <span className="text-sky-400 text-xs shrink-0">❄️</span>
+            <div className="pt-2 border-t border-neutral-800/60 mt-2.5 flex items-center gap-2 text-xs sm:text-sm text-neutral-400">
+              <span className="text-sky-400 text-sm shrink-0">❄️</span>
               <span className="italic">{parsed.footerNote}</span>
             </div>
           )}
@@ -274,9 +274,9 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
             const name = match ? match[2] : item;
 
             return (
-              <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-neutral-200">
+              <div key={idx} className="flex items-start gap-2.5 text-sm sm:text-base text-neutral-200">
                 {qty ? (
-                  <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded bg-amber-500/20 text-amber-400 font-bold text-xs shrink-0 mt-0.5">
+                  <span className="inline-flex items-center justify-center min-w-[22px] h-5.5 px-1.5 rounded bg-amber-500/20 text-amber-400 font-bold text-xs shrink-0 mt-0.5">
                     {qty}
                   </span>
                 ) : (
@@ -289,8 +289,8 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
         </div>
 
         {parsed.footerNote && (
-          <div className="pt-2 border-t border-neutral-800/60 mt-2 flex items-center gap-1.5 text-xs text-neutral-400">
-            <span className="text-sky-400 text-xs shrink-0">❄️</span>
+          <div className="pt-2 border-t border-neutral-800/60 mt-2 flex items-center gap-2 text-xs sm:text-sm text-neutral-400">
+            <span className="text-sky-400 text-sm shrink-0">❄️</span>
             <span className="italic">{parsed.footerNote}</span>
           </div>
         )}
