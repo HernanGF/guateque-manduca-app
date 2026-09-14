@@ -122,19 +122,36 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
       });
   }, [products, selectedCategoryId, searchQuery]);
 
-  const getProductPriceLabel = (product: Product) => {
+  const renderProductPrice = (product: Product) => {
     if (product.priceType === 'variants' && product.variants.length > 0) {
       const activeVariants = product.variants.filter((v) => v.isVisible !== false);
       if (activeVariants.length > 0) {
         const prices = activeVariants.map((v) => v.price).filter((p) => p > 0);
         if (prices.length > 0) {
           const minPrice = Math.min(...prices);
-          return `Desde ${formatPrice(minPrice, business.currency)}`;
+          return (
+            <div className="flex flex-col">
+              <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider">
+                Desde
+              </span>
+              <span className="text-base sm:text-lg md:text-xl font-black text-amber-400 whitespace-nowrap">
+                {formatPrice(minPrice, business.currency)}
+              </span>
+            </div>
+          );
         }
       }
-      return 'Consultar';
+      return (
+        <span className="text-sm sm:text-base font-bold text-amber-400 whitespace-nowrap">
+          Consultar
+        </span>
+      );
     }
-    return formatPrice(product.simplePrice || 0, business.currency);
+    return (
+      <span className="text-base sm:text-lg md:text-xl font-black text-amber-400 whitespace-nowrap">
+        {formatPrice(product.simplePrice || 0, business.currency)}
+      </span>
+    );
   };
 
   return (
@@ -382,12 +399,12 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                     </div>
 
                     {/* Bottom Price & Button */}
-                    <div className="mt-3.5 pt-2.5 border-t border-neutral-800/80 flex items-center justify-between">
-                      <div>
-                        <span className="text-xs text-neutral-400 block uppercase tracking-wider font-bold">Precio</span>
-                        <span className="text-lg sm:text-2xl font-black text-amber-400">
-                          {getProductPriceLabel(product)}
+                    <div className="mt-3.5 pt-2.5 border-t border-neutral-800/80 flex items-end justify-between gap-2">
+                      <div className="min-w-0">
+                        <span className="text-[11px] text-neutral-400 block uppercase tracking-wider font-bold mb-0.5">
+                          Precio
                         </span>
+                        {renderProductPrice(product)}
                       </div>
 
                       {!isDiscontinued ? (
@@ -397,7 +414,7 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                             e.stopPropagation();
                             onSelectProduct(product);
                           }}
-                          className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-neutral-800 group-hover:bg-amber-500 group-hover:text-neutral-950 text-neutral-100 text-sm sm:text-base font-bold rounded-xl transition-colors cursor-pointer"
+                          className="shrink-0 flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-neutral-800 group-hover:bg-amber-500 group-hover:text-neutral-950 text-neutral-100 text-sm sm:text-base font-bold rounded-xl transition-colors cursor-pointer"
                         >
                           <Plus className="w-4 h-4" />
                           <span>
@@ -409,7 +426,7 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                           </span>
                         </button>
                       ) : (
-                        <span className="text-sm sm:text-base text-neutral-500 font-medium">Agotado</span>
+                        <span className="text-sm sm:text-base text-neutral-500 font-medium shrink-0">Agotado</span>
                       )}
                     </div>
                   </div>
@@ -508,12 +525,12 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                     </div>
 
                     {/* Bottom Price & Action */}
-                    <div className="mt-4 pt-3 border-t border-neutral-800/80 flex items-center justify-between">
-                      <div>
-                        <span className="text-xs text-neutral-400 block font-bold uppercase tracking-wider">Precio</span>
-                        <span className="text-xl sm:text-2xl font-black text-amber-400">
-                          {getProductPriceLabel(product)}
+                    <div className="mt-4 pt-3 border-t border-neutral-800/80 flex items-end justify-between gap-2">
+                      <div className="min-w-0">
+                        <span className="text-[11px] text-neutral-400 block font-bold uppercase tracking-wider mb-0.5">
+                          Precio
                         </span>
+                        {renderProductPrice(product)}
                       </div>
 
                       {!isDiscontinued ? (
@@ -523,7 +540,7 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                             e.stopPropagation();
                             onSelectProduct(product);
                           }}
-                          className="flex items-center gap-1.5 px-4 py-2.5 bg-neutral-800 hover:bg-amber-500 hover:text-neutral-950 text-neutral-100 text-sm sm:text-base font-bold rounded-xl transition-colors cursor-pointer"
+                          className="shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-neutral-800 hover:bg-amber-500 hover:text-neutral-950 text-neutral-100 text-sm sm:text-base font-bold rounded-xl transition-colors cursor-pointer"
                         >
                           <Plus className="w-4 h-4" />
                           <span>
@@ -535,7 +552,7 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                           </span>
                         </button>
                       ) : (
-                        <span className="text-sm sm:text-base text-neutral-500 font-medium">Agotado</span>
+                        <span className="text-sm sm:text-base text-neutral-500 font-medium shrink-0">Agotado</span>
                       )}
                     </div>
                   </div>
