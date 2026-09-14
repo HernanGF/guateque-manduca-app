@@ -17,6 +17,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
 }) => {
   const isEditing = !!category;
   const [name, setName] = useState(category?.name || '');
+  const [order, setOrder] = useState<number>(category?.order ?? 99);
   const [isVisible, setIsVisible] = useState(category?.isVisible !== false);
   const [isFeatured, setIsFeatured] = useState(category?.isFeatured || false);
 
@@ -30,7 +31,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
     const savedCat: Category = {
       id: category?.id || `cat_${Date.now()}`,
       name: name.trim(),
-      order: category?.order || 99,
+      order: isNaN(order) ? 99 : order,
       isVisible,
       isFeatured,
     };
@@ -68,6 +69,26 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
               autoFocus
               className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-blue-500"
             />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-semibold text-neutral-400">
+                Orden / Posición en el menú
+              </label>
+              <span className="text-[11px] text-amber-400 font-mono">1 = Primera categoría</span>
+            </div>
+            <input
+              type="number"
+              min="1"
+              value={order}
+              onChange={(e) => setOrder(parseInt(e.target.value, 10))}
+              placeholder="1, 2, 3..."
+              className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500"
+            />
+            <p className="text-[11px] text-neutral-500 mt-1">
+              Determina qué pestaña aparece primero cuando el cliente entra al menú.
+            </p>
           </div>
 
           <div className="space-y-2 pt-2 border-t border-neutral-800">

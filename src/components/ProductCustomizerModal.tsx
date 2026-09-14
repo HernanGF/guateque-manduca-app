@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { Product, ModifierGroup, ProductVariant, SelectedModifier } from '../types';
+import { Product, ModifierGroup, ProductVariant, SelectedModifier, Category } from '../types';
 import { formatPrice } from '../utils/formatters';
 import { X, Plus, Minus, Check, AlertCircle, Sparkles } from 'lucide-react';
+import { ProductDescription, isCateringProduct } from './ProductDescription';
 
 interface ProductCustomizerModalProps {
   product: Product;
+  categories?: Category[];
   modifierGroups: ModifierGroup[];
   currency: string;
   onClose: () => void;
@@ -24,6 +26,7 @@ interface ProductCustomizerModalProps {
 
 export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
   product,
+  categories,
   modifierGroups,
   currency,
   onClose,
@@ -238,7 +241,11 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
           {/* Header titles */}
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 leading-tight tracking-tight">{product.name}</h2>
-            <p className="text-base text-neutral-200 leading-relaxed font-normal">{product.description}</p>
+            <ProductDescription
+              description={product.description}
+              isCatering={isCateringProduct(product, categories)}
+              mode="modal"
+            />
 
             {/* Quick summary chips of available customizations */}
             {attachedGroups.length > 0 && (

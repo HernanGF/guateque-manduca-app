@@ -5,7 +5,9 @@ import { ModifierGroupModal } from './ModifierGroupModal';
 import { CategoryModal } from './CategoryModal';
 import { BatchImportModal } from './BatchImportModal';
 import { ProductReorderModal } from './ProductReorderModal';
+import { CategoryReorderModal } from './CategoryReorderModal';
 import { ShareAndQRTab } from './ShareAndQRTab';
+import { ProductDescription, isCateringProduct } from '../ProductDescription';
 import { formatPrice } from '../../utils/formatters';
 import { getProductOrder, sortProductsByOrder, reorderProductsForCategory } from '../../utils/productOrder';
 import {
@@ -58,6 +60,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editingCategory, setEditingCategory] = useState<Category | null | 'new'>(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false);
   const [isReorderModalOpen, setIsReorderModalOpen] = useState<boolean>(false);
+  const [isCategoryReorderModalOpen, setIsCategoryReorderModalOpen] = useState<boolean>(false);
 
   // Filters for product list
   const [productCategoryFilter, setProductCategoryFilter] = useState<string>('all');
@@ -182,6 +185,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         c.id === categoryId ? { ...c, isVisible: !c.isVisible } : c
       ),
     });
+  };
+
+  const handleSaveReorderedCategories = (updatedCategories: Category[]) => {
+    onUpdateMenuData({
+      ...menuData,
+      categories: updatedCategories,
+    });
+  };
+
+  const handleMoveCategoryStep = (categoryId: string, direction: -1 | 1) => {
+    // Sort copy by order
+    const sorted = [...categories].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const currentIndex = sorted.findIndex((c) => c.id === categoryId);
+    if (currentIndex === -1) return;
+
+    const newIndex = currentIndex + direction;
+    if (newIndex < 0 || newIndex >= sorted.length) return;
+
+    const [moved] = sorted.splice(currentIndex, 1);
+    sorted.splice(newIndex, 0, moved);
+
+    const reordered = sorted.map((cat, idx) => ({
+      ...cat,
+      order: idx + 1,
+    }));
+
+    handleSaveReorderedCategories(reordered);
   };
 
   // --- Modifier Handlers ---
@@ -647,9 +677,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             )}
                           </div>
 
-                          <p className="text-xs text-neutral-400 mt-1 line-clamp-2">
-                            {p.description}
-                          </p>
+                          <ProductDescription
+                            description={p.description}
+                            isCatering={isCateringProduct(p, categories)}
+                            mode="admin"
+                          />
 
                           <div className="mt-2 text-xs font-bold text-blue-400">
                             {p.priceType === 'variants'
@@ -788,25 +820,40 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <div>
                 <h2 className="text-base font-bold text-white">Lista de Categorías</h2>
                 <p className="text-xs text-neutral-400">
-                  Organiza las secciones de tu menú digital. Los productos pueden estar en varias categorías.
+                  Organiza las secciones de tu menú digital y el orden en que las ven los clientes.
                 </p>
               </div>
 
-              <button
-                onClick={() => setEditingCategory('new')}
-                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow flex items-center gap-1.5 cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Crear categoría</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsCategoryReorderModalOpen(true)}
+                  className="px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-xs rounded-xl shadow flex items-center gap-1.5 transition-colors cursor-pointer"
+                  title="Cambiar el orden en que se muestran las categorías en el menú"
+                >
+                  <ArrowUpDown className="w-4 h-4" />
+                  <span>Ordenar categorías</span>
+                </button>
+
+                <button
+                  onClick={() => setEditingCategory('new')}
+                  className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Crear categoría</span>
+                </button>
+              </div>
             </div>
 
             {/* List of categories rows (exact visual feel of Screenshot 2) */}
             <div className="space-y-2">
-              {categories.map((cat) => {
+              {[...categories]
+                .sort((a, b) => (a.order || 0) - (b.order || 0))
+                .map((cat, catIndex, sortedCats) => {
                 const productCount = products.filter((p) =>
                   p.categoryIds.includes(cat.id)
                 ).length;
+                const isFirst = catIndex === 0;
+                const isLast = catIndex === sortedCats.length - 1;
 
                 return (
                   <div
@@ -814,12 +861,50 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     className="bg-neutral-900 border border-neutral-800 rounded-xl p-3.5 flex items-center justify-between gap-3 hover:border-neutral-700 transition-colors"
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <GripVertical className="w-4 h-4 text-neutral-600 shrink-0 cursor-grab" />
+                      {/* Position Badge & Quick Move Up/Down */}
+                      <div className="flex items-center gap-1 shrink-0">
+                        <span
+                          className={`w-6 h-6 rounded flex items-center justify-center text-[11px] font-black ${
+                            isFirst
+                              ? 'bg-amber-500 text-neutral-950'
+                              : 'bg-neutral-800 text-neutral-300'
+                          }`}
+                          title={`Posición #${catIndex + 1}`}
+                        >
+                          #{catIndex + 1}
+                        </span>
+
+                        <div className="flex flex-col">
+                          <button
+                            onClick={() => handleMoveCategoryStep(cat.id, -1)}
+                            disabled={isFirst}
+                            className="p-0.5 text-neutral-400 hover:text-white disabled:opacity-20 disabled:hover:text-neutral-400 transition-colors cursor-pointer"
+                            title="Subir categoría"
+                          >
+                            <ArrowUp className="w-3 h-3" />
+                          </button>
+                          <button
+                            onClick={() => handleMoveCategoryStep(cat.id, 1)}
+                            disabled={isLast}
+                            className="p-0.5 text-neutral-400 hover:text-white disabled:opacity-20 disabled:hover:text-neutral-400 transition-colors cursor-pointer"
+                            title="Bajar categoría"
+                          >
+                            <ArrowDown className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
                       
                       <div className="min-w-0 flex-1">
-                        <span className="text-sm font-bold text-white block truncate">
-                          {cat.name}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-white block truncate">
+                            {cat.name}
+                          </span>
+                          {isFirst && (
+                            <span className="text-[10px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded font-bold">
+                              1ª en el menú
+                            </span>
+                          )}
+                        </div>
                         <span className="text-[11px] text-neutral-400">
                           {productCount} producto{productCount !== 1 ? 's' : ''} asignado{productCount !== 1 ? 's' : ''}
                         </span>
@@ -1213,6 +1298,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             products: updatedProducts,
           });
         }}
+      />
+
+      {/* Category Reorder Modal */}
+      <CategoryReorderModal
+        isOpen={isCategoryReorderModalOpen}
+        onClose={() => setIsCategoryReorderModalOpen(false)}
+        categories={categories}
+        products={products}
+        onSaveCategories={handleSaveReorderedCategories}
       />
     </div>
   );

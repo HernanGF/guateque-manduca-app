@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Product, Category, ModifierGroup, ProductVariant } from '../../types';
-import { X, Camera, Plus, Trash2, GripVertical, Check, Eye, EyeOff, AlertTriangle } from 'lucide-react';
+import { X, Camera, Plus, Trash2, GripVertical, Check, Eye, EyeOff, AlertTriangle, Package } from 'lucide-react';
+import { parseProductDescription, isCateringProduct } from '../ProductDescription';
 
 interface ProductEditorModalProps {
   product: Product | null; // null if creating new
@@ -203,16 +204,76 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-neutral-400 mb-1">
-                  Descripción
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-neutral-400">
+                    Descripción / Contenido del Box
+                  </label>
+                  <span className="text-[11px] text-neutral-500">
+                    Enter para separar viandas
+                  </span>
+                </div>
                 <textarea
-                  rows={2}
+                  rows={4}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Ej: Pernil de Cerdo horneado con dos Salsas y Figacitas"
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-blue-500 resize-none"
+                  placeholder="Ej para Boxes de viandas:&#10;1 Cavatelli a la Bolognesa&#10;1 Fetuccini a la Parisienne&#10;1 Tortilla de Papas&#10;Productos envasados al vacío y congelados."
+                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-blue-500 font-mono text-xs sm:text-sm leading-relaxed"
                 />
+                <p className="text-[11px] text-neutral-500 mt-1">
+                  💡 En boxes o combos, escribe cada vianda en una línea distinta (presionando Enter). Se mostrarán ordenadas como lista para tus clientes.
+                </p>
+
+                {/* Live description & storage note preview */}
+                {(() => {
+                  const isCatering = isCateringProduct(categoryIds, categories);
+                  const parsed = parseProductDescription(description, isCatering);
+
+                  return (
+                    <div className="mt-2.5 p-3 bg-neutral-950 border border-neutral-800 rounded-xl">
+                      <div className="flex items-center justify-between text-xs font-bold text-amber-400 mb-2">
+                        <div className="flex items-center gap-1.5">
+                          <Package className="w-3.5 h-3.5" />
+                          <span>
+                            {parsed.isList
+                              ? `Vista previa del Box (${parsed.items.length} viandas):`
+                              : 'Vista previa:'}
+                          </span>
+                        </div>
+                        {isCatering ? (
+                          <span className="text-[10px] text-neutral-400 bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800">
+                            Categoría Catering
+                          </span>
+                        ) : null}
+                      </div>
+
+                      {parsed.isList ? (
+                        <div className="space-y-1">
+                          {parsed.items.map((item, idx) => (
+                            <div key={idx} className="flex items-center gap-1.5 text-xs text-neutral-300">
+                              <span className="text-amber-500 font-bold">•</span>
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-xs text-neutral-300 leading-relaxed">
+                          {parsed.mainText || (description ? description : 'Sin descripción')}
+                        </p>
+                      )}
+
+                      {parsed.footerNote ? (
+                        <div className="text-[11px] text-neutral-400 italic mt-2 pt-2 border-t border-neutral-800/80 flex items-center gap-1.5">
+                          <span className="text-sky-400 text-xs">❄️</span>
+                          <span>{parsed.footerNote}</span>
+                        </div>
+                      ) : isCatering ? (
+                        <p className="text-[11px] text-neutral-500 italic mt-1.5 pt-1.5 border-t border-neutral-800/60">
+                          ℹ️ Los productos de Catering no llevan la indicación de envasado al vacío ni congelado.
+                        </p>
+                      ) : null}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>

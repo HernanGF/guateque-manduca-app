@@ -186,6 +186,7 @@ export default function App() {
       {customizingProduct && (
         <ProductCustomizerModal
           product={customizingProduct}
+          categories={menuData.categories}
           modifierGroups={menuData.modifierGroups}
           currency={menuData.business.currency}
           onClose={() => setCustomizingProduct(null)}

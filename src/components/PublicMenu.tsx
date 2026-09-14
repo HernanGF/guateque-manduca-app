@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { MenuData, Product } from '../types';
 import { formatPrice } from '../utils/formatters';
 import { getProductOrder } from '../utils/productOrder';
 import { Search, ShoppingBag, ArrowLeft, Lock, Sparkles, Plus, AlertCircle, List, LayoutGrid } from 'lucide-react';
+import { ProductDescription, isCateringProduct } from './ProductDescription';
 
 interface PublicMenuProps {
   menuData: MenuData;
@@ -23,10 +24,6 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
   onBackToWelcome,
   onOpenAdmin,
 }) => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
-
   const { business, categories, products } = menuData;
 
   // Visible categories
@@ -35,6 +32,28 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
       .filter((c) => c.isVisible !== false)
       .sort((a, b) => (a.order || 0) - (b.order || 0));
   }, [categories]);
+
+  // Initial category: default to the first ordered category (if available), otherwise 'all'
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(() => {
+    const firstCat = categories
+      .filter((c) => c.isVisible !== false)
+      .sort((a, b) => (a.order || 0) - (b.order || 0))[0];
+    return firstCat ? firstCat.id : 'all';
+  });
+
+  // If initial load was empty and categories arrive from server, select the first category
+  useEffect(() => {
+    if (selectedCategoryId === 'all' && visibleCategories.length > 0) {
+      // Only default if it's the very first resolution
+      const firstCatId = visibleCategories[0]?.id;
+      if (firstCatId) {
+        setSelectedCategoryId(firstCatId);
+      }
+    }
+  }, [visibleCategories]);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
   // Filtered products: only visible ones, matching search & category
   const filteredProducts = useMemo(() => {
@@ -178,17 +197,6 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
         {/* Category horizontal scroll bar */}
         <div className="border-t border-neutral-800/60 bg-neutral-950/95 overflow-x-auto no-scrollbar">
           <div className="max-w-6xl mx-auto px-4 py-2.5 flex items-center gap-2">
-            <button
-              onClick={() => setSelectedCategoryId('all')}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                selectedCategoryId === 'all'
-                  ? 'bg-white text-neutral-950 shadow-sm'
-                  : 'bg-neutral-900 border border-neutral-800 text-neutral-300 hover:border-neutral-700'
-              }`}
-            >
-              Todos los platos
-            </button>
-
             {visibleCategories.map((cat) => {
               const isActive = selectedCategoryId === cat.id;
               return (
@@ -205,6 +213,18 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                 </button>
               );
             })}
+
+            {/* "Todos los platos" moved to the very end as requested */}
+            <button
+              onClick={() => setSelectedCategoryId('all')}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                selectedCategoryId === 'all'
+                  ? 'bg-white text-neutral-950 shadow-sm'
+                  : 'bg-neutral-900 border border-neutral-800 text-neutral-300 hover:border-neutral-700'
+              }`}
+            >
+              Todos los platos
+            </button>
           </div>
         </div>
       </header>
@@ -323,9 +343,11 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                       <h3 className="font-extrabold text-base sm:text-lg text-white group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
                         {product.name}
                       </h3>
-                      <p className="text-sm text-neutral-300 mt-1.5 line-clamp-3 leading-relaxed font-normal">
-                        {product.description}
-                      </p>
+                      <ProductDescription
+                        description={product.description}
+                        isCatering={isCateringProduct(product, menuData.categories)}
+                        mode="card-grid"
+                      />
                     </div>
 
                     {/* Bottom Price & Button */}
@@ -451,9 +473,11 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
                       <h3 className="font-extrabold text-lg sm:text-xl text-white group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
                         {product.name}
                       </h3>
-                      <p className="text-sm text-neutral-300 mt-2 line-clamp-3 leading-relaxed font-normal">
-                        {product.description}
-                      </p>
+                      <ProductDescription
+                        description={product.description}
+                        isCatering={isCateringProduct(product, menuData.categories)}
+                        mode="card-list"
+                      />
                     </div>
 
                     {/* Bottom Price & Action */}
