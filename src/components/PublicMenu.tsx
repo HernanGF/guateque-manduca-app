@@ -243,15 +243,15 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
         </div>
 
         {/* Category horizontal scroll bar */}
-        <div className="border-t border-neutral-800/80 bg-neutral-950/95 overflow-x-auto no-scrollbar py-2">
-          <div className="max-w-6xl mx-auto px-4 flex items-center gap-2 sm:gap-2.5">
+        <div className="border-t border-neutral-800/80 bg-neutral-950/95 overflow-x-auto no-scrollbar py-2.5">
+          <div className="max-w-6xl mx-auto px-4 flex items-center gap-2.5 sm:gap-3">
             {visibleCategories.map((cat) => {
               const isActive = selectedCategoryId === cat.id;
               return (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategoryId(cat.id)}
-                  className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  className={`px-4.5 sm:px-6 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-extrabold whitespace-nowrap transition-all cursor-pointer ${
                     isActive
                       ? 'bg-amber-500 text-neutral-950 shadow-md ring-2 ring-amber-400/40'
                       : 'bg-neutral-900 border border-neutral-700/80 text-neutral-200 hover:text-white hover:border-neutral-500'
@@ -265,7 +265,7 @@ export const PublicMenu: React.FC<PublicMenuProps> = ({
             {/* "Todos los platos" moved to the very end as requested */}
             <button
               onClick={() => setSelectedCategoryId('all')}
-              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-bold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-4.5 sm:px-6 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-extrabold whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategoryId === 'all'
                   ? 'bg-white text-neutral-950 shadow-md ring-2 ring-white/40'
                   : 'bg-neutral-900 border border-neutral-700/80 text-neutral-200 hover:text-white hover:border-neutral-500'

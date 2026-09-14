@@ -196,7 +196,7 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
       return (
         <div className={`mt-1.5 ${className}`}>
           {parsed.mainText && (
-            <p className="text-sm sm:text-base text-neutral-300 line-clamp-2 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-neutral-300 line-clamp-3 leading-relaxed font-normal">
               {parsed.mainText}
             </p>
           )}
@@ -213,14 +213,14 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
 
     return (
       <div className={`mt-2 space-y-1.5 ${className}`}>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {parsed.items.map((item, idx) => {
             const match = item.match(/^(\d+)\s+(.+)$/);
             const qty = match ? match[1] : null;
             const name = match ? match[2] : item;
 
             return (
-              <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-neutral-200">
+              <div key={idx} className="flex items-start gap-2 text-sm sm:text-base text-neutral-200">
                 {qty ? (
                   <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-amber-500/20 text-amber-400 font-black text-xs shrink-0 mt-0.5">
                     {qty}
@@ -250,7 +250,7 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
       return (
         <div className={`mt-2 ${className}`}>
           {parsed.mainText && (
-            <p className="text-sm sm:text-base text-neutral-300 line-clamp-3 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-neutral-300 line-clamp-3 leading-relaxed font-normal">
               {parsed.mainText}
             </p>
           )}
@@ -267,16 +267,16 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
 
     return (
       <div className={`mt-2.5 space-y-1.5 ${className}`}>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {parsed.items.map((item, idx) => {
             const match = item.match(/^(\d+)\s+(.+)$/);
             const qty = match ? match[1] : null;
             const name = match ? match[2] : item;
 
             return (
-              <div key={idx} className="flex items-start gap-2.5 text-sm sm:text-base text-neutral-200">
+              <div key={idx} className="flex items-start gap-2.5 text-base sm:text-lg text-neutral-200">
                 {qty ? (
-                  <span className="inline-flex items-center justify-center min-w-[22px] h-5.5 px-1.5 rounded bg-amber-500/20 text-amber-400 font-bold text-xs shrink-0 mt-0.5">
+                  <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-1.5 rounded bg-amber-500/20 text-amber-400 font-bold text-xs shrink-0 mt-0.5">
                     {qty}
                   </span>
                 ) : (
