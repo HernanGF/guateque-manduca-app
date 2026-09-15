@@ -437,13 +437,13 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
           {/* Customer Specific Instructions */}
           <div>
             <label className="block text-sm sm:text-base font-bold text-neutral-200 mb-2">
-              Aclaraciones especiales para este plato
+              Nota
             </label>
             <textarea
               rows={2}
               value={customerNote}
               onChange={(e) => setCustomerNote(e.target.value)}
-              placeholder="Ej: Sin sal, bien cocido, salsa en pote separado..."
+              placeholder="Nota o aclaraciones..."
               className="w-full px-3.5 py-2.5 text-base bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-amber-500 resize-none"
             />
           </div>
