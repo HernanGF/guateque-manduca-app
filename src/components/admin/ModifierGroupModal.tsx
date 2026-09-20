@@ -125,28 +125,28 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-xl bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden text-neutral-100 my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-xl bg-white border border-neutral-200 rounded-2xl shadow-2xl overflow-hidden text-neutral-900 my-auto">
         
         {/* Header */}
-        <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-950/70">
-          <h2 className="font-bold text-lg text-white">
+        <div className="p-4 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+          <h2 className="font-bold text-lg text-neutral-900">
             {isEditing ? 'Editar modificadores' : 'Crear modificadores'}
           </h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-300 flex items-center justify-center cursor-pointer"
+            className="w-8 h-8 rounded-full bg-neutral-200 hover:bg-neutral-300 text-neutral-700 flex items-center justify-center cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Form Body (matches Screenshot 3) */}
+        {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-4 sm:p-6 max-h-[75vh] overflow-y-auto space-y-5">
           
           {/* Group Name input */}
           <div>
-            <label className="block text-xs font-semibold text-neutral-400 mb-1">
+            <label className="block text-xs font-semibold text-neutral-700 mb-1">
               Nombre de la categoría de modificadores *
             </label>
             <div className="relative">
@@ -157,17 +157,17 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                 maxLength={150}
                 placeholder="Ej: Guarniciones, Salsas incluidas, Extras..."
                 required
-                className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-blue-500 pr-16"
+                className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-blue-500 focus:bg-white pr-16"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-neutral-500">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-neutral-400">
                 {name.length}/150
               </span>
             </div>
           </div>
 
           {/* Seleccionar la condición: Obligatorio vs Opcional */}
-          <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800">
-            <label className="block text-xs font-semibold text-neutral-300 mb-2.5">
+          <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+            <label className="block text-xs font-semibold text-neutral-800 mb-2.5">
               Seleccionar la condición
             </label>
             <div className="flex items-center gap-6">
@@ -179,7 +179,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                   onChange={() => setCondition('required')}
                   className="w-4 h-4 accent-blue-600 cursor-pointer"
                 />
-                <span className="text-xs font-medium text-white">Obligatorio</span>
+                <span className="text-xs font-medium text-neutral-900">Obligatorio</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer">
@@ -190,14 +190,14 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                   onChange={() => setCondition('optional')}
                   className="w-4 h-4 accent-blue-600 cursor-pointer"
                 />
-                <span className="text-xs font-medium text-white">Opcional</span>
+                <span className="text-xs font-medium text-neutral-900">Opcional</span>
               </label>
             </div>
           </div>
 
           {/* En esta categoría se puede seleccionar: Sólo un modificador vs Varios */}
-          <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800 space-y-3">
-            <label className="block text-xs font-semibold text-neutral-300 mb-2">
+          <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 space-y-3">
+            <label className="block text-xs font-semibold text-neutral-800 mb-2">
               En esta categoría se puede seleccionar:
             </label>
             <div className="flex items-center gap-6">
@@ -209,7 +209,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                   onChange={() => setSelectionType('single')}
                   className="w-4 h-4 accent-blue-600 cursor-pointer"
                 />
-                <span className="text-xs font-medium text-white">Sólo un modificador</span>
+                <span className="text-xs font-medium text-neutral-900">Sólo un modificador</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer">
@@ -220,15 +220,15 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                   onChange={() => setSelectionType('multiple')}
                   className="w-4 h-4 accent-blue-600 cursor-pointer"
                 />
-                <span className="text-xs font-medium text-white">Varios</span>
+                <span className="text-xs font-medium text-neutral-900">Varios</span>
               </label>
             </div>
 
             {/* If Varios: Limit limits (max quantity total) */}
             {selectionType === 'multiple' && (
-              <div className="pt-3 border-t border-neutral-900 grid grid-cols-2 gap-3">
+              <div className="pt-3 border-t border-neutral-200 grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] text-neutral-400 mb-1">
+                  <label className="block text-[11px] text-neutral-600 mb-1">
                     Mínimo a seleccionar
                   </label>
                   <input
@@ -237,11 +237,11 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                     max={20}
                     value={minSelect}
                     onChange={(e) => setMinSelect(Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 bg-neutral-900 border border-neutral-800 rounded-lg text-xs text-white"
+                    className="w-full px-2.5 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs text-neutral-900"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] text-neutral-400 mb-1">
+                  <label className="block text-[11px] text-neutral-600 mb-1">
                     Máximo a seleccionar (Total)
                   </label>
                   <input
@@ -250,7 +250,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                     max={50}
                     value={maxSelect}
                     onChange={(e) => setMaxSelect(Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 bg-neutral-900 border border-neutral-800 rounded-lg text-xs text-white font-bold"
+                    className="w-full px-2.5 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs text-neutral-900 font-bold"
                   />
                 </div>
               </div>
@@ -258,13 +258,13 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
           </div>
 
           {/* Agregar los modificadores de esta categoría */}
-          <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800">
+          <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-white">
+                <span className="text-xs font-semibold text-neutral-900">
                   Opciones de modificadores
                 </span>
-                <span className="text-xs bg-neutral-800 text-neutral-300 px-1.5 py-0.5 rounded-full font-bold">
+                <span className="text-xs bg-neutral-200 text-neutral-700 px-1.5 py-0.5 rounded-full font-bold">
                   {options.length}
                 </span>
               </div>
@@ -274,9 +274,9 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
               {options.map((opt) => (
                 <div
                   key={opt.id}
-                  className="flex items-center gap-2 p-2 rounded-xl bg-neutral-900 border border-neutral-800"
+                  className="flex items-center gap-2 p-2 rounded-xl bg-white border border-neutral-200"
                 >
-                  <GripVertical className="w-4 h-4 text-neutral-600 shrink-0" />
+                  <GripVertical className="w-4 h-4 text-neutral-400 shrink-0" />
                   
                   {/* Option Name */}
                   <input
@@ -284,7 +284,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                     value={opt.name}
                     onChange={(e) => handleUpdateOption(opt.id, 'name', e.target.value)}
                     placeholder="Nombre del modificador (ej: Puré de papas)"
-                    className="flex-1 px-2.5 py-1.5 text-xs bg-neutral-950 border border-neutral-800 rounded-lg text-white"
+                    className="flex-1 px-2.5 py-1.5 text-xs bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
                   />
 
                   {/* Option Price */}
@@ -298,7 +298,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                         handleUpdateOption(opt.id, 'price', Number(e.target.value))
                       }
                       placeholder="0.00"
-                      className="w-full px-2 py-1.5 text-xs bg-neutral-950 border border-neutral-800 rounded-lg text-white font-semibold"
+                      className="w-full px-2 py-1.5 text-xs bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-semibold"
                     />
                   </div>
 
@@ -306,17 +306,17 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                   <button
                     type="button"
                     onClick={() => handleUpdateOption(opt.id, 'isVisible', !opt.isVisible)}
-                    className={`p-1.5 rounded-lg transition-colors ${
+                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                       opt.isVisible !== false
-                        ? 'text-neutral-400 hover:text-white'
-                        : 'text-neutral-600 hover:text-neutral-400'
+                        ? 'text-neutral-500 hover:text-neutral-800'
+                        : 'text-neutral-400 hover:text-neutral-600'
                     }`}
                     title={opt.isVisible !== false ? 'Visible' : 'Oculto'}
                   >
                     {opt.isVisible !== false ? (
                       <Eye className="w-3.5 h-3.5" />
                     ) : (
-                      <EyeOff className="w-3.5 h-3.5 text-amber-500" />
+                      <EyeOff className="w-3.5 h-3.5 text-amber-600" />
                     )}
                   </button>
 
@@ -324,7 +324,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                   <button
                     type="button"
                     onClick={() => handleRemoveOption(opt.id)}
-                    className="text-neutral-500 hover:text-red-400 p-1.5"
+                    className="text-neutral-400 hover:text-red-500 p-1.5 cursor-pointer"
                     title="Eliminar opción"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -336,7 +336,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
             <button
               type="button"
               onClick={handleAddOption}
-              className="mt-3 w-full py-2 border border-dashed border-blue-500/50 hover:border-blue-500 text-blue-400 hover:text-blue-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+              className="mt-3 w-full py-2 border border-dashed border-blue-400 hover:border-blue-600 text-blue-600 hover:text-blue-700 bg-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Agregar modificador</span>
@@ -345,14 +345,14 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
 
           {/* Platos y productos asociados */}
           {products.length > 0 && (
-            <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800 space-y-3">
+            <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
-                  <Utensils className="w-4 h-4 text-amber-400" />
-                  <span className="text-xs font-semibold text-white">
+                  <Utensils className="w-4 h-4 text-amber-600" />
+                  <span className="text-xs font-semibold text-neutral-900">
                     Platos asociados a este modificador
                   </span>
-                  <span className="text-[11px] bg-blue-600/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded-full font-bold">
+                  <span className="text-[11px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full font-bold">
                     {selectedProductIds.length} de {products.length} platos
                   </span>
                 </div>
@@ -361,34 +361,34 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                   <button
                     type="button"
                     onClick={handleSelectAllProducts}
-                    className="text-[11px] text-blue-400 hover:underline cursor-pointer"
+                    className="text-[11px] text-blue-600 hover:underline cursor-pointer font-medium"
                   >
                     Seleccionar todos
                   </button>
-                  <span className="text-neutral-700">•</span>
+                  <span className="text-neutral-300">•</span>
                   <button
                     type="button"
                     onClick={handleDeselectAllProducts}
-                    className="text-[11px] text-neutral-400 hover:underline cursor-pointer"
+                    className="text-[11px] text-neutral-500 hover:underline cursor-pointer"
                   >
                     Desmarcar todos
                   </button>
                 </div>
               </div>
 
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
+              <p className="text-[11px] text-neutral-600 leading-relaxed">
                 Marca los platos donde quieres que aparezca este grupo de modificadores (por ejemplo, salsas para el Pernil, guarniciones para carnes, etc.).
               </p>
 
               {/* Product Search Input */}
               <div className="relative">
-                <Search className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={productSearch}
                   onChange={(e) => setProductSearch(e.target.value)}
                   placeholder="Buscar plato por nombre..."
-                  className="w-full pl-8 pr-3 py-1.5 bg-neutral-900 border border-neutral-800 rounded-lg text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-blue-500"
+                  className="w-full pl-8 pr-3 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -402,16 +402,16 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                       onClick={() => handleToggleProduct(prod.id)}
                       className={`flex items-center justify-between p-2 rounded-xl border transition-colors cursor-pointer select-none ${
                         isChecked
-                          ? 'bg-blue-600/15 border-blue-500/80 text-white'
-                          : 'bg-neutral-900/80 border-neutral-800/80 text-neutral-300 hover:border-neutral-700'
+                          ? 'bg-blue-50 border-blue-400 text-neutral-900'
+                          : 'bg-white border-neutral-200 text-neutral-700 hover:border-neutral-300'
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div
                           className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
                             isChecked
-                              ? 'border-blue-500 bg-blue-600 text-white'
-                              : 'border-neutral-600'
+                              ? 'border-blue-600 bg-blue-600 text-white'
+                              : 'border-neutral-300 bg-white'
                           }`}
                         >
                           {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
@@ -419,7 +419,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                         <img
                           src={prod.imageUrl}
                           alt={prod.name}
-                          className="w-7 h-7 rounded-md object-cover bg-neutral-950 shrink-0 border border-neutral-800"
+                          className="w-7 h-7 rounded-md object-cover bg-neutral-100 shrink-0 border border-neutral-200"
                           referrerPolicy="no-referrer"
                         />
                         <span className="text-xs font-medium truncate">
@@ -430,8 +430,8 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                       <span
                         className={`text-[10px] font-semibold px-2 py-0.5 rounded-md shrink-0 ${
                           isChecked
-                            ? 'text-blue-400 bg-blue-950/50'
-                            : 'text-neutral-500'
+                            ? 'text-blue-700 bg-blue-100'
+                            : 'text-neutral-400'
                         }`}
                       >
                         {isChecked ? 'Asociado' : 'No asociado'}
@@ -450,7 +450,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
           )}
 
           {/* Actions */}
-          <div className="pt-3 border-t border-neutral-800 flex items-center justify-between gap-3">
+          <div className="pt-3 border-t border-neutral-200 flex items-center justify-between gap-3">
             {isEditing && onDelete ? (
               <button
                 type="button"
@@ -460,7 +460,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                     onClose();
                   }
                 }}
-                className="px-3.5 py-2 rounded-xl bg-red-950/60 hover:bg-red-900/80 border border-red-800/80 text-red-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Eliminar</span>
@@ -473,7 +473,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-semibold cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold cursor-pointer"
               >
                 Cancelar
               </button>

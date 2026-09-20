@@ -204,11 +204,11 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-lg bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden text-neutral-100 my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-lg bg-white border border-neutral-200 rounded-2xl shadow-2xl overflow-hidden text-neutral-900 my-auto">
         
         {/* Product Image Header */}
-        <div className="relative h-52 sm:h-60 w-full bg-neutral-950">
+        <div className="relative h-52 sm:h-60 w-full bg-neutral-100">
           <img
             src={product.imageUrl}
             alt={product.name}
@@ -218,13 +218,13 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
               (e.currentTarget as HTMLElement).style.display = 'none';
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/30" />
 
           {/* Close button */}
           <button
             id="btn-close-modal"
             onClick={onClose}
-            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-transform hover:scale-105 cursor-pointer z-10"
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-transform hover:scale-105 cursor-pointer z-10"
             aria-label="Cerrar"
           >
             <X className="w-5 h-5" />
@@ -243,7 +243,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
         <div className="p-4 sm:p-6 max-h-[68vh] overflow-y-auto space-y-6">
           {/* Header titles */}
           <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 leading-tight tracking-tight">{product.name}</h2>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 mb-2 leading-tight tracking-tight">{product.name}</h2>
             <ProductDescription
               description={product.description}
               isCatering={isCateringProduct(product, categories)}
@@ -253,14 +253,14 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
             {/* Quick summary chips of available customizations */}
             {attachedGroups.length > 0 && (
               <div className="mt-3.5 flex items-center gap-2 flex-wrap">
-                <span className="text-xs sm:text-sm text-amber-400 font-bold flex items-center gap-1.5 mr-1">
+                <span className="text-xs sm:text-sm text-amber-700 font-bold flex items-center gap-1.5 mr-1">
                   <Sparkles className="w-3.5 h-3.5" />
                   Opciones disponibles:
                 </span>
                 {attachedGroups.map((g) => (
                   <span
                     key={g.id}
-                    className="text-xs sm:text-sm px-2.5 py-1 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-200 font-semibold"
+                    className="text-xs sm:text-sm px-2.5 py-1 rounded-lg bg-neutral-100 border border-neutral-200 text-neutral-700 font-semibold"
                   >
                     {g.name}
                   </span>
@@ -271,21 +271,21 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
 
           {/* Variant Selection if type is 'variants' */}
           {product.priceType === 'variants' && product.variants.length > 0 && (
-            <div className="bg-neutral-950/60 rounded-xl p-4 border border-neutral-800">
+            <div className="bg-neutral-50 rounded-xl p-4 border border-neutral-200">
               <div className="flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xs flex items-center justify-center">
+                  <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-700 font-bold text-xs flex items-center justify-center">
                     1
                   </span>
-                  <span className="text-base sm:text-lg font-bold text-white">Selecciona tu porción</span>
+                  <span className="text-base sm:text-lg font-bold text-neutral-900">Selecciona tu porción</span>
                 </div>
-                <span className="text-xs sm:text-sm text-amber-400 font-bold px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
+                <span className="text-xs sm:text-sm text-amber-700 font-bold px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30">
                   Obligatorio
                 </span>
               </div>
 
               {product.clientNote && (
-                <p className="text-xs sm:text-sm text-amber-200/90 italic mb-3 bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/30">
+                <p className="text-xs sm:text-sm text-amber-900 italic mb-3 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
                   ℹ️ {product.clientNote}
                 </p>
               )}
@@ -301,21 +301,21 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                         onClick={() => setSelectedVariant(variant)}
                         className={`flex items-center justify-between p-3.5 rounded-xl border transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-amber-500/10 border-amber-500 text-white'
-                            : 'bg-neutral-900 border-neutral-800 hover:border-neutral-700 text-neutral-300'
+                            ? 'bg-amber-50 border-amber-500 text-neutral-900 shadow-xs'
+                            : 'bg-white border-neutral-200 hover:border-neutral-300 text-neutral-700'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div
                             className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-                              isSelected ? 'border-amber-500 bg-amber-500' : 'border-neutral-600'
+                              isSelected ? 'border-amber-500 bg-amber-500' : 'border-neutral-300'
                             }`}
                           >
-                            {isSelected && <div className="w-2 h-2 rounded-full bg-neutral-950" />}
+                            {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
                           </div>
                           <span className="text-base font-semibold">{variant.name}</span>
                         </div>
-                        <span className="text-base sm:text-lg font-black text-amber-400">
+                        <span className="text-base sm:text-lg font-black text-amber-600">
                           {formatPrice(variant.price, currency)}
                         </span>
                       </label>
@@ -340,28 +340,28 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
             return (
               <div
                 key={group.id}
-                className={`bg-neutral-950/60 rounded-xl p-4 border transition-colors ${
-                  error ? 'border-red-500/60 bg-red-950/10' : 'border-neutral-800'
+                className={`bg-neutral-50 rounded-xl p-4 border transition-colors ${
+                  error ? 'border-red-400 bg-red-50/50' : 'border-neutral-200'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center">
+                    <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">
                       {stepNumber}
                     </span>
-                    <span className="text-base sm:text-lg font-bold text-white">{group.name}</span>
+                    <span className="text-base sm:text-lg font-bold text-neutral-900">{group.name}</span>
                     <span
                       className={`text-xs sm:text-sm font-semibold px-2.5 py-0.5 rounded-full ${
                         isRequired
-                          ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                          : 'bg-neutral-800 text-neutral-400'
+                          ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                          : 'bg-neutral-200 text-neutral-600'
                       }`}
                     >
                       {isRequired ? 'Obligatorio' : 'Opcional'}
                     </span>
                   </div>
 
-                  <span className="text-xs sm:text-sm text-neutral-400 font-medium">
+                  <span className="text-xs sm:text-sm text-neutral-500 font-medium">
                     {isSingle
                       ? 'Elige 1'
                       : group.maxSelect
@@ -371,7 +371,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                 </div>
 
                 {error && (
-                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-red-400 mt-1 mb-2">
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-red-600 mt-1 mb-2">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                     <span>{error}</span>
                   </div>
@@ -400,10 +400,10 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                           }}
                           className={`flex items-center justify-between p-3.5 rounded-xl border transition-all cursor-pointer select-none ${
                             isSelected
-                              ? 'bg-amber-500/10 border-amber-500 text-white'
+                              ? 'bg-amber-50 border-amber-500 text-neutral-900 shadow-xs'
                               : isMaxReached
-                              ? 'bg-neutral-900/50 border-neutral-800/60 opacity-50 cursor-not-allowed text-neutral-500'
-                              : 'bg-neutral-900 border-neutral-800 hover:border-neutral-700 text-neutral-300'
+                              ? 'bg-neutral-100/60 border-neutral-200 opacity-50 cursor-not-allowed text-neutral-400'
+                              : 'bg-white border-neutral-200 hover:border-neutral-300 text-neutral-700'
                           }`}
                         >
                           <div className="flex items-center gap-3">
@@ -411,7 +411,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                               className={`w-5 h-5 rounded-${isSingle ? 'full' : 'md'} border flex items-center justify-center transition-colors ${
                                 isSelected
                                   ? 'border-amber-500 bg-amber-500 text-neutral-950'
-                                  : 'border-neutral-600'
+                                  : 'border-neutral-300'
                               }`}
                             >
                               {isSelected && (
@@ -421,7 +421,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
                             <span className="text-base font-semibold">{opt.name}</span>
                           </div>
 
-                          <span className="text-sm sm:text-base font-bold text-neutral-200">
+                          <span className="text-sm sm:text-base font-bold text-neutral-800">
                             {opt.price && opt.price > 0
                               ? `+ ${formatPrice(opt.price, currency)}`
                               : 'Incluido'}
@@ -436,7 +436,7 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
 
           {/* Customer Specific Instructions */}
           <div>
-            <label className="block text-sm sm:text-base font-bold text-neutral-200 mb-2">
+            <label className="block text-sm sm:text-base font-bold text-neutral-800 mb-2">
               Nota
             </label>
             <textarea
@@ -444,30 +444,30 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
               value={customerNote}
               onChange={(e) => setCustomerNote(e.target.value)}
               placeholder="Nota o aclaraciones..."
-              className="w-full px-3.5 py-2.5 text-base bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-amber-500 resize-none"
+              className="w-full px-3.5 py-2.5 text-base bg-neutral-50 border border-neutral-200 rounded-xl text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-amber-500 focus:bg-white resize-none"
             />
           </div>
         </div>
 
         {/* Modal Bottom Sticky Bar */}
-        <div className="p-4 bg-neutral-950 border-t border-neutral-800 flex items-center justify-between gap-3">
+        <div className="p-4 bg-neutral-50 border-t border-neutral-200 flex items-center justify-between gap-3">
           {/* Quantity Controls */}
-          <div className="flex items-center bg-neutral-900 border border-neutral-800 rounded-xl p-1 shrink-0">
+          <div className="flex items-center bg-white border border-neutral-200 rounded-xl p-1 shrink-0">
             <button
               id="btn-qty-minus"
               type="button"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               disabled={quantity <= 1}
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-neutral-200 hover:bg-neutral-800 disabled:opacity-30 cursor-pointer"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-neutral-700 hover:bg-neutral-100 disabled:opacity-30 cursor-pointer"
             >
               <Minus className="w-4 h-4" />
             </button>
-            <span className="w-9 text-center text-base font-black text-white">{quantity}</span>
+            <span className="w-9 text-center text-base font-black text-neutral-900">{quantity}</span>
             <button
               id="btn-qty-plus"
               type="button"
               onClick={() => setQuantity((q) => q + 1)}
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-neutral-200 hover:bg-neutral-800 cursor-pointer"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-neutral-700 hover:bg-neutral-100 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
             </button>

@@ -41,15 +41,15 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="relative w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden text-neutral-100">
-        <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-950/70">
-          <h3 className="font-bold text-base text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="relative w-full max-w-md bg-white border border-neutral-200 rounded-2xl shadow-2xl overflow-hidden text-neutral-900">
+        <div className="p-4 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+          <h3 className="font-bold text-base text-neutral-900">
             {isEditing ? 'Editar Categoría' : 'Nueva Categoría'}
           </h3>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-300 flex items-center justify-center cursor-pointer"
+            className="w-8 h-8 rounded-full bg-neutral-200 hover:bg-neutral-300 text-neutral-700 flex items-center justify-center cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -57,7 +57,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-neutral-400 mb-1">
+            <label className="block text-xs font-semibold text-neutral-600 mb-1">
               Nombre de la categoría *
             </label>
             <input
@@ -67,16 +67,16 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
               placeholder="Ej: Menú Ejecutivo, Postres, Viandas..."
               required
               autoFocus
-              className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-blue-500"
+              className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-blue-500 focus:bg-white"
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-semibold text-neutral-400">
+              <label className="block text-xs font-semibold text-neutral-600">
                 Orden / Posición en el menú
               </label>
-              <span className="text-[11px] text-amber-400 font-mono">1 = Primera categoría</span>
+              <span className="text-[11px] text-amber-700 font-mono font-medium">1 = Primera categoría</span>
             </div>
             <input
               type="number"
@@ -84,16 +84,16 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
               value={order}
               onChange={(e) => setOrder(parseInt(e.target.value, 10))}
               placeholder="1, 2, 3..."
-              className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500"
+              className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 focus:outline-none focus:border-amber-500 focus:bg-white"
             />
             <p className="text-[11px] text-neutral-500 mt-1">
               Determina qué pestaña aparece primero cuando el cliente entra al menú.
             </p>
           </div>
 
-          <div className="space-y-2 pt-2 border-t border-neutral-800">
+          <div className="space-y-2 pt-2 border-t border-neutral-200">
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-xs text-neutral-300">Visible en el menú público</span>
+              <span className="text-xs text-neutral-700 font-medium">Visible en el menú público</span>
               <input
                 type="checkbox"
                 checked={isVisible}
@@ -103,7 +103,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
             </label>
 
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-xs text-neutral-300">Categoría destacada al inicio</span>
+              <span className="text-xs text-neutral-700 font-medium">Categoría destacada al inicio</span>
               <input
                 type="checkbox"
                 checked={isFeatured}
@@ -113,7 +113,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
             </label>
           </div>
 
-          <div className="pt-3 border-t border-neutral-800 flex items-center justify-between gap-2">
+          <div className="pt-3 border-t border-neutral-200 flex items-center justify-between gap-2">
             {isEditing && onDelete ? (
               <button
                 type="button"
@@ -123,7 +123,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
                     onClose();
                   }
                 }}
-                className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 cursor-pointer"
+                className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer font-medium"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Eliminar</span>
@@ -136,13 +136,13 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3.5 py-1.5 rounded-lg bg-neutral-800 text-xs text-neutral-300 hover:bg-neutral-700 cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-neutral-100 text-xs text-neutral-700 hover:bg-neutral-200 cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white shadow cursor-pointer"
+                className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white shadow-xs cursor-pointer"
               >
                 Guardar
               </button>

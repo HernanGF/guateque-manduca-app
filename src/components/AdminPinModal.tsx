@@ -87,13 +87,13 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-xs bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-6 text-center text-neutral-100 flex flex-col items-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div className="relative w-full max-w-xs bg-white border border-neutral-200 rounded-2xl shadow-2xl p-6 text-center text-neutral-900 flex flex-col items-center">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3.5 right-3.5 text-neutral-500 hover:text-neutral-300 p-1.5 rounded-lg transition-colors cursor-pointer"
+          className="absolute top-3.5 right-3.5 text-neutral-400 hover:text-neutral-700 p-1.5 rounded-lg transition-colors cursor-pointer"
           title="Cerrar"
         >
           <X className="w-4 h-4" />
@@ -103,10 +103,10 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
         <div
           className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-colors ${
             isSuccess
-              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+              ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
               : error
-              ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-              : 'bg-neutral-800 text-amber-400 border border-neutral-700'
+              ? 'bg-red-50 text-red-600 border border-red-200'
+              : 'bg-amber-50 text-amber-600 border border-amber-200'
           }`}
         >
           {isSuccess ? (
@@ -116,10 +116,10 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
           )}
         </div>
 
-        <h3 className="text-base font-bold text-white mb-1">
+        <h3 className="text-base font-bold text-neutral-900 mb-1">
           {isSuccess ? 'Acceso Autorizado' : 'Código de Seguridad'}
         </h3>
-        <p className="text-xs text-neutral-400 mb-5">
+        <p className="text-xs text-neutral-500 mb-5">
           {isSuccess
             ? 'Ingresando...'
             : error
@@ -140,12 +140,12 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
                 key={index}
                 className={`w-4 h-4 rounded-full transition-all duration-200 ${
                   isSuccess
-                    ? 'bg-emerald-400 scale-110 shadow-sm shadow-emerald-500/50'
+                    ? 'bg-emerald-500 scale-110 shadow-sm shadow-emerald-500/50'
                     : error
                     ? 'bg-red-500 scale-100'
                     : isFilled
-                    ? 'bg-amber-400 scale-110 shadow-sm shadow-amber-500/50'
-                    : 'bg-neutral-800 border border-neutral-700'
+                    ? 'bg-amber-500 scale-110 shadow-sm shadow-amber-500/50'
+                    : 'bg-neutral-200 border border-neutral-300'
                 }`}
               />
             );
@@ -154,7 +154,7 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
 
         {/* Error message indicator */}
         {error && (
-          <div className="flex items-center gap-1.5 text-xs text-red-400 mb-4 animate-fade-in">
+          <div className="flex items-center gap-1.5 text-xs text-red-600 mb-4 animate-fade-in">
             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
             <span>El PIN ingresado no es válido</span>
           </div>
@@ -167,7 +167,7 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
               key={digit}
               type="button"
               onClick={() => handleDigit(digit)}
-              className="h-12 rounded-xl bg-neutral-800/80 hover:bg-neutral-700 active:bg-amber-500 active:text-neutral-950 text-white font-bold text-lg transition-all flex items-center justify-center cursor-pointer shadow-xs"
+              className="h-12 rounded-xl bg-neutral-100 hover:bg-neutral-200 active:bg-amber-500 active:text-white text-neutral-900 font-bold text-lg transition-all flex items-center justify-center cursor-pointer shadow-xs border border-neutral-200"
             >
               {digit}
             </button>
@@ -177,7 +177,7 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
           <button
             type="button"
             onClick={handleClear}
-            className="h-12 rounded-xl bg-neutral-800/40 hover:bg-neutral-800 text-neutral-400 hover:text-white font-semibold text-xs transition-colors flex items-center justify-center cursor-pointer"
+            className="h-12 rounded-xl bg-neutral-100/60 hover:bg-neutral-200 text-neutral-600 hover:text-neutral-900 font-semibold text-xs transition-colors flex items-center justify-center cursor-pointer border border-neutral-200"
           >
             C
           </button>
@@ -186,7 +186,7 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
           <button
             type="button"
             onClick={() => handleDigit('0')}
-            className="h-12 rounded-xl bg-neutral-800/80 hover:bg-neutral-700 active:bg-amber-500 active:text-neutral-950 text-white font-bold text-lg transition-all flex items-center justify-center cursor-pointer shadow-xs"
+            className="h-12 rounded-xl bg-neutral-100 hover:bg-neutral-200 active:bg-amber-500 active:text-white text-neutral-900 font-bold text-lg transition-all flex items-center justify-center cursor-pointer shadow-xs border border-neutral-200"
           >
             0
           </button>
@@ -195,7 +195,7 @@ export const AdminPinModal: React.FC<AdminPinModalProps> = ({
           <button
             type="button"
             onClick={handleDelete}
-            className="h-12 rounded-xl bg-neutral-800/40 hover:bg-neutral-800 text-neutral-400 hover:text-white transition-colors flex items-center justify-center cursor-pointer"
+            className="h-12 rounded-xl bg-neutral-100/60 hover:bg-neutral-200 text-neutral-600 hover:text-neutral-900 transition-colors flex items-center justify-center cursor-pointer border border-neutral-200"
             title="Borrar último dígito"
           >
             <Delete className="w-4 h-4" />

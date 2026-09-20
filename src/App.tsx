@@ -131,9 +131,9 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-950 text-neutral-200 flex flex-col items-center justify-center gap-3">
+      <div className="min-h-screen bg-neutral-50 text-neutral-800 flex flex-col items-center justify-center gap-3">
         <div className="w-10 h-10 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
-        <span className="text-sm text-neutral-400 font-medium tracking-wide">
+        <span className="text-sm text-neutral-600 font-medium tracking-wide">
           Cargando menú en la nube...
         </span>
       </div>
@@ -141,7 +141,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans selection:bg-amber-500 selection:text-black">
+    <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-amber-500 selection:text-black">
       {/* 1. Welcome & Presentation Screen */}
       {currentView === 'welcome' && (
         <WelcomeScreen

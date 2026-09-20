@@ -148,17 +148,17 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-xl bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden text-neutral-100 my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-xl bg-white border border-neutral-200 rounded-2xl shadow-2xl overflow-hidden text-neutral-900 my-auto">
         
         {/* Header */}
-        <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-950/70">
-          <h2 className="font-bold text-lg text-white">
+        <div className="p-4 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+          <h2 className="font-bold text-lg text-neutral-900">
             {isEditing ? 'Editar producto' : 'Nuevo producto'}
           </h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-300 flex items-center justify-center cursor-pointer"
+            className="w-8 h-8 rounded-full bg-neutral-200 hover:bg-neutral-300 text-neutral-700 flex items-center justify-center cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -167,10 +167,10 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-4 sm:p-6 max-h-[75vh] overflow-y-auto space-y-6">
           
-          {/* Top Section: Photo + Name + Description (matches screenshot 1) */}
+          {/* Top Section: Photo + Name + Description */}
           <div className="flex flex-col sm:flex-row gap-4 items-start">
             {/* Photo Box */}
-            <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950 shrink-0 group">
+            <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden border border-neutral-200 bg-neutral-100 shrink-0 group">
               <img
                 src={imageUrl}
                 alt="Vista previa"
@@ -200,7 +200,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             {/* Name & Description Inputs */}
             <div className="flex-1 w-full space-y-3">
               <div>
-                <label className="block text-xs font-semibold text-neutral-400 mb-1">
+                <label className="block text-xs font-semibold text-neutral-700 mb-1">
                   Nombre del Producto *
                 </label>
                 <input
@@ -209,13 +209,13 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ej: Pernil de Cerdo"
                   required
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-blue-500 focus:bg-white"
                 />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-neutral-400">
+                  <label className="block text-xs font-semibold text-neutral-700">
                     Descripción / Contenido del Box
                   </label>
                   <span className="text-[11px] text-neutral-500">
@@ -227,7 +227,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Ej para Boxes de viandas:&#10;1 Cavatelli a la Bolognesa&#10;1 Fetuccini a la Parisienne&#10;1 Tortilla de Papas&#10;Productos envasados al vacío y congelados."
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-blue-500 font-mono text-xs sm:text-sm leading-relaxed"
+                  className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-blue-500 focus:bg-white font-mono text-xs sm:text-sm leading-relaxed"
                 />
                 <p className="text-[11px] text-neutral-500 mt-1">
                   💡 En boxes o combos, escribe cada vianda en una línea distinta (presionando Enter). Se mostrarán ordenadas como lista para tus clientes.
@@ -239,8 +239,8 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                   const parsed = parseProductDescription(description, isCatering);
 
                   return (
-                    <div className="mt-2.5 p-3 bg-neutral-950 border border-neutral-800 rounded-xl">
-                      <div className="flex items-center justify-between text-xs font-bold text-amber-400 mb-2">
+                    <div className="mt-2.5 p-3 bg-neutral-50 border border-neutral-200 rounded-xl">
+                      <div className="flex items-center justify-between text-xs font-bold text-amber-700 mb-2">
                         <div className="flex items-center gap-1.5">
                           <Package className="w-3.5 h-3.5" />
                           <span>
@@ -250,7 +250,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                           </span>
                         </div>
                         {isCatering ? (
-                          <span className="text-[10px] text-neutral-400 bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800">
+                          <span className="text-[10px] text-neutral-600 bg-neutral-200 px-2 py-0.5 rounded border border-neutral-300">
                             Categoría Catering
                           </span>
                         ) : null}
@@ -259,25 +259,25 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                       {parsed.isList ? (
                         <div className="space-y-1">
                           {parsed.items.map((item, idx) => (
-                            <div key={idx} className="flex items-center gap-1.5 text-xs text-neutral-300">
+                            <div key={idx} className="flex items-center gap-1.5 text-xs text-neutral-700">
                               <span className="text-amber-500 font-bold">•</span>
                               <span>{item}</span>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <p className="text-xs text-neutral-300 leading-relaxed">
+                        <p className="text-xs text-neutral-700 leading-relaxed">
                           {parsed.mainText || (description ? description : 'Sin descripción')}
                         </p>
                       )}
 
                       {parsed.footerNote ? (
-                        <div className="text-[11px] text-neutral-400 italic mt-2 pt-2 border-t border-neutral-800/80 flex items-center gap-1.5">
-                          <span className="text-sky-400 text-xs">❄️</span>
+                        <div className="text-[11px] text-neutral-600 italic mt-2 pt-2 border-t border-neutral-200 flex items-center gap-1.5">
+                          <span className="text-sky-600 text-xs">❄️</span>
                           <span>{parsed.footerNote}</span>
                         </div>
                       ) : isCatering ? (
-                        <p className="text-[11px] text-neutral-500 italic mt-1.5 pt-1.5 border-t border-neutral-800/60">
+                        <p className="text-[11px] text-neutral-500 italic mt-1.5 pt-1.5 border-t border-neutral-200">
                           ℹ️ Los productos de Catering no llevan la indicación de envasado al vacío ni congelado.
                         </p>
                       ) : null}
@@ -293,7 +293,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             <button
               type="button"
               onClick={() => setShowImagePrompt(!showImagePrompt)}
-              className="text-xs text-blue-400 hover:underline"
+              className="text-xs text-blue-600 hover:underline cursor-pointer"
             >
               {showImagePrompt ? 'Ocultar campo de enlace web' : 'O cambiar mediante enlace URL de imagen'}
             </button>
@@ -303,14 +303,14 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 placeholder="https://ejemplo.com/foto.jpg"
-                className="w-full mt-1.5 px-3 py-1.5 bg-neutral-950 border border-neutral-800 rounded-lg text-xs text-white"
+                className="w-full mt-1.5 px-3 py-1.5 bg-neutral-50 border border-neutral-200 rounded-lg text-xs text-neutral-900 focus:bg-white"
               />
             )}
           </div>
 
           {/* Categorías (Multi-select) */}
-          <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800">
-            <label className="block text-xs font-semibold text-neutral-300 mb-2">
+          <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+            <label className="block text-xs font-semibold text-neutral-800 mb-2">
               Categorías en las que aparece (puedes marcar varias)
             </label>
             <div className="flex flex-wrap gap-2">
@@ -323,8 +323,8 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                     onClick={() => handleToggleCategory(cat.id)}
                     className={`text-xs px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5 cursor-pointer ${
                       isSelected
-                        ? 'bg-blue-600/20 border-blue-500 text-blue-300 font-semibold'
-                        : 'bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-neutral-700'
+                        ? 'bg-blue-50 border-blue-500 text-blue-700 font-semibold'
+                        : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
                     }`}
                   >
                     {isSelected && <Check className="w-3 h-3" />}
@@ -335,20 +335,20 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             </div>
           </div>
 
-          {/* Precio(s): Segmented control (matches screenshot 1) */}
-          <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800">
+          {/* Precio(s): Segmented control */}
+          <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-semibold text-white">Precio(s)</span>
+              <span className="text-sm font-semibold text-neutral-900">Precio(s)</span>
               
               {/* Segmented Tab */}
-              <div className="flex bg-neutral-900 border border-neutral-800 rounded-lg p-0.5">
+              <div className="flex bg-neutral-200 border border-neutral-300 rounded-lg p-0.5">
                 <button
                   type="button"
                   onClick={() => setPriceType('simple')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all ${
+                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                     priceType === 'simple'
-                      ? 'bg-neutral-800 text-white shadow-xs'
-                      : 'text-neutral-400 hover:text-neutral-200'
+                      ? 'bg-white text-neutral-900 shadow-xs'
+                      : 'text-neutral-600 hover:text-neutral-900'
                   }`}
                 >
                   Simple
@@ -356,14 +356,14 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setPriceType('variants')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 cursor-pointer ${
                     priceType === 'variants'
                       ? 'bg-blue-600 text-white shadow-xs'
-                      : 'text-neutral-400 hover:text-neutral-200'
+                      : 'text-neutral-600 hover:text-neutral-900'
                   }`}
                 >
                   <span>Variantes</span>
-                  <span className="bg-blue-900/60 text-white text-[10px] px-1.5 rounded-full">
+                  <span className="bg-blue-800 text-white text-[10px] px-1.5 rounded-full">
                     {variants.length}
                   </span>
                 </button>
@@ -373,7 +373,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             {/* Simple price input */}
             {priceType === 'simple' ? (
               <div>
-                <label className="block text-xs text-neutral-400 mb-1">
+                <label className="block text-xs text-neutral-600 mb-1">
                   Precio unitario ({currency})
                 </label>
                 <input
@@ -381,7 +381,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                   step="any"
                   value={simplePrice}
                   onChange={(e) => setSimplePrice(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-neutral-900 border border-neutral-800 rounded-xl text-base font-bold text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-white border border-neutral-200 rounded-xl text-base font-bold text-neutral-900 focus:outline-none focus:border-blue-500"
                 />
               </div>
             ) : (
@@ -393,7 +393,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                     value={clientNote}
                     onChange={(e) => setClientNote(e.target.value)}
                     placeholder="Decir a mis clientes (ej: Selecciona la cantidad que rinde)"
-                    className="w-full px-3 py-2 text-xs bg-neutral-900 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 text-xs bg-white border border-neutral-200 rounded-xl text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
@@ -401,16 +401,16 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                   {variants.map((v) => (
                     <div
                       key={v.id}
-                      className="flex items-center gap-2 p-2 rounded-xl bg-neutral-900 border border-neutral-800"
+                      className="flex items-center gap-2 p-2 rounded-xl bg-white border border-neutral-200"
                     >
-                      <GripVertical className="w-4 h-4 text-neutral-600 shrink-0" />
+                      <GripVertical className="w-4 h-4 text-neutral-400 shrink-0" />
                       
                       <input
                         type="text"
                         value={v.name}
                         onChange={(e) => handleUpdateVariant(v.id, 'name', e.target.value)}
                         placeholder="Nombre de la opción"
-                        className="flex-1 px-2.5 py-1.5 text-xs bg-neutral-950 border border-neutral-800 rounded-lg text-white"
+                        className="flex-1 px-2.5 py-1.5 text-xs bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
                       />
 
                       <div className="flex items-center gap-1 w-28">
@@ -422,14 +422,14 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                           onChange={(e) =>
                             handleUpdateVariant(v.id, 'price', Number(e.target.value))
                           }
-                          className="w-full px-2 py-1.5 text-xs bg-neutral-950 border border-neutral-800 rounded-lg text-white font-semibold"
+                          className="w-full px-2 py-1.5 text-xs bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-semibold"
                         />
                       </div>
 
                       <button
                         type="button"
                         onClick={() => handleRemoveVariant(v.id)}
-                        className="text-neutral-500 hover:text-red-400 p-1.5"
+                        className="text-neutral-400 hover:text-red-500 p-1.5 cursor-pointer"
                         title="Eliminar opción"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -441,7 +441,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                 <button
                   type="button"
                   onClick={handleAddVariant}
-                  className="w-full py-2 border border-dashed border-blue-500/50 hover:border-blue-500 text-blue-400 hover:text-blue-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full py-2 border border-dashed border-blue-400 hover:border-blue-600 text-blue-600 hover:text-blue-700 bg-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Agregar variante</span>
@@ -450,12 +450,12 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             )}
           </div>
 
-          {/* Agregar modificadores (matches screenshot 1) */}
-          <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800">
+          {/* Agregar modificadores */}
+          <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-white">Agregar modificadores</span>
-                <span className="text-xs bg-neutral-800 text-neutral-300 px-1.5 py-0.5 rounded-full font-bold">
+                <span className="text-sm font-semibold text-neutral-900">Agregar modificadores</span>
+                <span className="text-xs bg-neutral-200 text-neutral-700 px-1.5 py-0.5 rounded-full font-bold">
                   {selectedModifierGroupIds.length}
                 </span>
               </div>
@@ -479,34 +479,34 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                     onClick={() => handleToggleModifierGroup(group.id)}
                     className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer select-none ${
                       isAttached
-                        ? 'bg-blue-600/15 border-blue-500 text-white shadow-sm'
-                        : 'bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-neutral-700'
+                        ? 'bg-blue-50 border-blue-500 text-neutral-900 shadow-xs'
+                        : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
                         className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
-                          isAttached ? 'border-blue-500 bg-blue-600 text-white' : 'border-neutral-600 bg-neutral-950'
+                          isAttached ? 'border-blue-600 bg-blue-600 text-white' : 'border-neutral-300 bg-white'
                         }`}
                       >
                         {isAttached && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-bold text-white block">
+                          <span className="text-xs font-bold text-neutral-900 block">
                             {group.name}
                           </span>
                           <span
                             className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
                               group.condition === 'required'
-                                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                                : 'bg-neutral-800 text-neutral-400'
+                                ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                                : 'bg-neutral-200 text-neutral-600'
                             }`}
                           >
                             {group.condition === 'required' ? 'Obligatorio' : 'Opcional'}
                           </span>
                         </div>
-                        <p className="text-[11px] text-neutral-400 truncate mt-0.5">
+                        <p className="text-[11px] text-neutral-500 truncate mt-0.5">
                           {optionsSummary || `${group.options.length} opciones`}
                         </p>
                       </div>
@@ -516,7 +516,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                       className={`text-xs font-semibold px-2.5 py-1 rounded-lg shrink-0 ml-2 ${
                         isAttached
                           ? 'bg-blue-600 text-white'
-                          : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                          : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                       }`}
                     >
                       {isAttached ? 'Asociado' : 'Asociar'}
@@ -526,8 +526,8 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
               })}
 
               {modifierGroups.length === 0 && (
-                <div className="p-4 rounded-xl bg-neutral-900/50 border border-neutral-800 text-center">
-                  <p className="text-xs text-neutral-400">
+                <div className="p-4 rounded-xl bg-white border border-neutral-200 text-center">
+                  <p className="text-xs text-neutral-600">
                     No tienes categorías de modificadores creadas todavía.
                   </p>
                   <p className="text-[11px] text-neutral-500 mt-1">
@@ -539,8 +539,8 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
           </div>
 
           {/* Product Status & Visibility Switches */}
-          <div className="bg-neutral-950/60 p-4 rounded-xl border border-neutral-800 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400">
+          <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-500">
               Estado y Visibilidad
             </h4>
 
@@ -548,12 +548,12 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             <label className="flex items-center justify-between cursor-pointer">
               <div className="flex items-center gap-2">
                 {isHidden ? (
-                  <EyeOff className="w-4 h-4 text-amber-500" />
+                  <EyeOff className="w-4 h-4 text-amber-600" />
                 ) : (
                   <Eye className="w-4 h-4 text-neutral-400" />
                 )}
                 <div>
-                  <span className="text-xs font-medium text-white block">
+                  <span className="text-xs font-medium text-neutral-900 block">
                     Ocultar del menú público
                   </span>
                   <span className="text-[11px] text-neutral-500">
@@ -570,11 +570,11 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             </label>
 
             {/* Discontinuado */}
-            <label className="flex items-center justify-between cursor-pointer pt-2 border-t border-neutral-900">
+            <label className="flex items-center justify-between cursor-pointer pt-2 border-t border-neutral-200">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-400" />
+                <AlertTriangle className="w-4 h-4 text-red-500" />
                 <div>
-                  <span className="text-xs font-medium text-white block">
+                  <span className="text-xs font-medium text-neutral-900 block">
                     Producto Discontinuado / Agotado
                   </span>
                   <span className="text-[11px] text-neutral-500">
@@ -591,9 +591,9 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             </label>
 
             {/* Destacado */}
-            <label className="flex items-center justify-between cursor-pointer pt-2 border-t border-neutral-900">
+            <label className="flex items-center justify-between cursor-pointer pt-2 border-t border-neutral-200">
               <div>
-                <span className="text-xs font-medium text-white block">
+                <span className="text-xs font-medium text-neutral-900 block">
                   Marcar como Producto Destacado (Los más elegidos)
                 </span>
                 <span className="text-[11px] text-neutral-500">
@@ -623,9 +623,9 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             </label>
 
             {/* Posición / Orden en el menú */}
-            <div className="pt-2 border-t border-neutral-900 flex items-center justify-between">
+            <div className="pt-2 border-t border-neutral-200 flex items-center justify-between">
               <div>
-                <span className="text-xs font-medium text-white block">
+                <span className="text-xs font-medium text-neutral-900 block">
                   Orden / Posición en el menú
                 </span>
                 <span className="text-[11px] text-neutral-500">
@@ -637,13 +637,13 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                 min="1"
                 value={order}
                 onChange={(e) => setOrder(Math.max(1, parseInt(e.target.value, 10) || 1))}
-                className="w-20 px-3 py-1.5 bg-neutral-950 border border-neutral-800 rounded-xl text-xs font-bold text-amber-400 text-center focus:outline-none focus:border-amber-500"
+                className="w-20 px-3 py-1.5 bg-white border border-neutral-200 rounded-xl text-xs font-bold text-amber-700 text-center focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
 
           {/* Form Actions */}
-          <div className="pt-3 border-t border-neutral-800 flex items-center justify-between gap-3">
+          <div className="pt-3 border-t border-neutral-200 flex items-center justify-between gap-3">
             {isEditing && onDelete ? (
               <button
                 type="button"
@@ -653,7 +653,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                     onClose();
                   }
                 }}
-                className="px-3.5 py-2 rounded-xl bg-red-950/60 hover:bg-red-900/80 border border-red-800/80 text-red-300 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Eliminar</span>
@@ -666,7 +666,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-semibold cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold cursor-pointer"
               >
                 Cancelar
               </button>
