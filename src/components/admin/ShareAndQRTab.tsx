@@ -55,6 +55,7 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [isDownloadingPoster, setIsDownloadingPoster] = useState<boolean>(false);
   const printRef = useRef<HTMLDivElement>(null);
 
   // Generate high-resolution QR code whenever shareUrl changes
@@ -108,15 +109,194 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
     }
   };
 
-  // Download QR Code PNG
-  const handleDownloadQR = () => {
+  // Download Full Poster as PNG (Includes Logo, QR with decorative frame, instructions and business data)
+  const handleDownloadPoster = async () => {
     if (!qrCodeDataUrl) return;
-    const link = document.createElement('a');
-    link.href = qrCodeDataUrl;
-    link.download = `QR-Menu-${business.name.replace(/\s+/g, '_')}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    setIsDownloadingPoster(true);
+
+    try {
+      const canvas = document.createElement('canvas');
+      const width = 960;
+      const height = 1360;
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('No se pudo inicializar el contexto de renderizado');
+
+      const drawRoundedRect = (
+        x: number,
+        y: number,
+        w: number,
+        h: number,
+        r: number
+      ) => {
+        ctx.beginPath();
+        if (typeof ctx.roundRect === 'function') {
+          ctx.roundRect(x, y, w, h, r);
+        } else {
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + w - r, y);
+          ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+          ctx.lineTo(x + w, y + h - r);
+          ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+          ctx.lineTo(x + r, y + h);
+          ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+          ctx.lineTo(x, y + r);
+          ctx.quadraticCurveTo(x, y, x + r, y);
+        }
+      };
+
+      const loadImage = (src: string): Promise<HTMLImageElement> => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => resolve(img);
+          img.onerror = () => {
+            const imgFallback = new Image();
+            imgFallback.onload = () => resolve(imgFallback);
+            imgFallback.onerror = (e) => reject(e);
+            imgFallback.src = src;
+          };
+          img.src = src;
+        });
+      };
+
+      // 1. Background (Pure White card)
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+
+      // Outer subtle card border
+      const pad = 24;
+      ctx.strokeStyle = '#e5e7eb';
+      ctx.lineWidth = 3;
+      drawRoundedRect(pad, pad, width - pad * 2, height - pad * 2, 36);
+      ctx.stroke();
+
+      // 2. Business Logo
+      const logoSize = 140;
+      const logoX = (width - logoSize) / 2;
+      const logoY = 70;
+      let logoDrawn = false;
+
+      if (business.logoUrl) {
+        try {
+          const logoImg = await loadImage(business.logoUrl);
+          ctx.save();
+          drawRoundedRect(logoX, logoY, logoSize, logoSize, 28);
+          ctx.clip();
+          ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+          ctx.restore();
+
+          // Stroke logo border
+          ctx.strokeStyle = '#e5e7eb';
+          ctx.lineWidth = 3;
+          drawRoundedRect(logoX, logoY, logoSize, logoSize, 28);
+          ctx.stroke();
+          logoDrawn = true;
+        } catch (err) {
+          console.warn('Could not load logo for poster canvas, using initials fallback', err);
+        }
+      }
+
+      if (!logoDrawn) {
+        // Fallback logo
+        ctx.fillStyle = '#171717';
+        drawRoundedRect(logoX, logoY, logoSize, logoSize, 28);
+        ctx.fill();
+
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 52px system-ui, -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const initials = (business.name || 'GM').slice(0, 2).toUpperCase();
+        ctx.fillText(initials, width / 2, logoY + logoSize / 2);
+      }
+
+      // 3. Business Name
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#0a0a0a';
+      ctx.font = '900 36px system-ui, -apple-system, sans-serif';
+      ctx.fillText(business.name.toUpperCase(), width / 2, 255);
+
+      // 4. Subtitle
+      ctx.fillStyle = '#525252';
+      ctx.font = '600 19px system-ui, -apple-system, sans-serif';
+      ctx.fillText('Menú Digital & Pedidos Online', width / 2, 298);
+
+      // 5. QR Code Container Box
+      const qrBoxSize = 550;
+      const qrBoxX = (width - qrBoxSize) / 2;
+      const qrBoxY = 345;
+
+      // Fill QR Box background
+      ctx.fillStyle = '#f9fafb';
+      drawRoundedRect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 28);
+      ctx.fill();
+
+      // Dashed border for QR Box
+      ctx.save();
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([12, 8]);
+      drawRoundedRect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 28);
+      ctx.stroke();
+      ctx.restore();
+
+      // Draw QR Code Image inside Box
+      const qrImg = await loadImage(qrCodeDataUrl);
+      const qrImgSize = 480;
+      const qrImgX = (width - qrImgSize) / 2;
+      const qrImgY = qrBoxY + (qrBoxSize - qrImgSize) / 2;
+      ctx.drawImage(qrImg, qrImgX, qrImgY, qrImgSize, qrImgSize);
+
+      // 6. Scan Instructions Banner
+      const bannerW = 620;
+      const bannerH = 105;
+      const bannerX = (width - bannerW) / 2;
+      const bannerY = 935;
+
+      ctx.fillStyle = '#fffbeb'; // amber-50
+      drawRoundedRect(bannerX, bannerY, bannerW, bannerH, 20);
+      ctx.fill();
+
+      ctx.strokeStyle = '#fcd34d'; // amber-300
+      ctx.lineWidth = 2.5;
+      drawRoundedRect(bannerX, bannerY, bannerW, bannerH, 20);
+      ctx.stroke();
+
+      ctx.fillStyle = '#78350f'; // amber-900
+      ctx.font = '900 24px system-ui, -apple-system, sans-serif';
+      ctx.fillText('¡ESCANEÁ CON LA CÁMARA DE TU CELULAR!', width / 2, bannerY + 40);
+
+      ctx.fillStyle = '#404040'; // neutral-700
+      ctx.font = '500 18px system-ui, -apple-system, sans-serif';
+      ctx.fillText('Accedé a toda la carta y hacé tu pedido', width / 2, bannerY + 72);
+
+      // 7. Footer Details
+      ctx.fillStyle = '#525252';
+      ctx.font = '600 20px system-ui, -apple-system, sans-serif';
+      ctx.fillText(`WhatsApp: +${business.whatsappPhone}`, width / 2, 1090);
+
+      if (business.address) {
+        ctx.fillStyle = '#737373';
+        ctx.font = '500 18px system-ui, -apple-system, sans-serif';
+        ctx.fillText(business.address, width / 2, 1125);
+      }
+
+      // 8. Download
+      const posterDataUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = posterDataUrl;
+      link.download = `Cartel-QR-${business.name.replace(/\s+/g, '_')}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error('Error generating poster image:', err);
+    } finally {
+      setIsDownloadingPoster(false);
+    }
   };
 
   // Trigger print of the QR card
@@ -148,12 +328,12 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={handleDownloadQR}
-            disabled={!qrCodeDataUrl}
+            onClick={handleDownloadPoster}
+            disabled={!qrCodeDataUrl || isDownloadingPoster}
             className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Descargar QR (PNG)</span>
+            <span>{isDownloadingPoster ? 'Generando Cartel...' : 'Descargar Cartel Completo (PNG)'}</span>
           </button>
           <button
             type="button"
@@ -359,7 +539,7 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
               <li className="flex items-start gap-2">
                 <Download className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5" />
                 <span>
-                  <strong>Stickers para Viandas y Catering:</strong> Descarga el archivo PNG en alta definición e imprímelo en stickers para pegarlo en las bolsas y cajas de entrega.
+                  <strong>Descarga del Cartel Completo:</strong> Guarda el cartel listo con tu logo, recuadro de QR e instrucciones en formato imagen PNG para imprimirlo, enmarcarlo o compartirlo en tus estados.
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -436,11 +616,12 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
           <div className="w-full max-w-sm flex items-center justify-between gap-3 mt-4">
             <button
               type="button"
-              onClick={handleDownloadQR}
-              className="flex-1 py-2.5 px-3 bg-neutral-900 hover:bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+              onClick={handleDownloadPoster}
+              disabled={!qrCodeDataUrl || isDownloadingPoster}
+              className="flex-1 py-2.5 px-3 bg-neutral-900 hover:bg-neutral-800 disabled:opacity-50 text-neutral-200 border border-neutral-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
             >
               <Download className="w-3.5 h-3.5 text-amber-400" />
-              <span>Guardar imagen</span>
+              <span>{isDownloadingPoster ? 'Generando Cartel...' : 'Descargar Cartel Completo'}</span>
             </button>
             <button
               type="button"
