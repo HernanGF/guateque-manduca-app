@@ -13,6 +13,8 @@ import {
   MessageCircle,
   Sparkles,
   Info,
+  AlertCircle,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface ShareAndQRTabProps {
@@ -56,6 +58,8 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
   const [copied, setCopied] = useState<boolean>(false);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [isDownloadingPoster, setIsDownloadingPoster] = useState<boolean>(false);
+  const [posterDownloadSuccess, setPosterDownloadSuccess] = useState<boolean>(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
   const printRef = useRef<HTMLDivElement>(null);
 
   // Generate high-resolution QR code whenever shareUrl changes
@@ -113,6 +117,8 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
   const handleDownloadPoster = async () => {
     if (!qrCodeDataUrl) return;
     setIsDownloadingPoster(true);
+    setDownloadError(null);
+    setPosterDownloadSuccess(false);
 
     try {
       const canvas = document.createElement('canvas');
@@ -146,17 +152,48 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
         }
       };
 
-      const loadImage = (src: string): Promise<HTMLImageElement> => {
-        return new Promise((resolve, reject) => {
+      const loadImageSafe = (src: string): Promise<HTMLImageElement | null> => {
+        return new Promise((resolve) => {
+          if (!src) {
+            resolve(null);
+            return;
+          }
           const img = new Image();
           img.crossOrigin = 'anonymous';
-          img.onload = () => resolve(img);
-          img.onerror = () => {
-            const imgFallback = new Image();
-            imgFallback.onload = () => resolve(imgFallback);
-            imgFallback.onerror = (e) => reject(e);
-            imgFallback.src = src;
+
+          // Set timeout to avoid hanging indefinitely on slow external assets
+          const timer = setTimeout(() => {
+            console.warn('Timeout loading image:', src);
+            resolve(null);
+          }, 3500);
+
+          img.onload = () => {
+            clearTimeout(timer);
+            resolve(img);
           };
+
+          img.onerror = () => {
+            clearTimeout(timer);
+            // If it failed and is an external URL, try via proxy endpoint
+            if (src.startsWith('http://') || src.startsWith('https://')) {
+              const proxySrc = `/api/proxy-image?url=${encodeURIComponent(src)}`;
+              const proxyImg = new Image();
+              proxyImg.crossOrigin = 'anonymous';
+              const proxyTimer = setTimeout(() => resolve(null), 3500);
+              proxyImg.onload = () => {
+                clearTimeout(proxyTimer);
+                resolve(proxyImg);
+              };
+              proxyImg.onerror = () => {
+                clearTimeout(proxyTimer);
+                resolve(null);
+              };
+              proxyImg.src = proxySrc;
+            } else {
+              resolve(null);
+            }
+          };
+
           img.src = src;
         });
       };
@@ -178,28 +215,38 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
       const logoY = 70;
       let logoDrawn = false;
 
-      if (business.logoUrl) {
-        try {
-          const logoImg = await loadImage(business.logoUrl);
-          ctx.save();
-          drawRoundedRect(logoX, logoY, logoSize, logoSize, 28);
-          ctx.clip();
-          ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
-          ctx.restore();
+      // Try primary logo URL, fallback to local /logo.jpg if fails
+      const candidateLogoUrls = [
+        business.logoUrl,
+        '/logo.jpg',
+      ].filter(Boolean);
 
-          // Stroke logo border
-          ctx.strokeStyle = '#e5e7eb';
-          ctx.lineWidth = 3;
-          drawRoundedRect(logoX, logoY, logoSize, logoSize, 28);
-          ctx.stroke();
-          logoDrawn = true;
+      for (const url of candidateLogoUrls) {
+        if (!url) continue;
+        try {
+          const logoImg = await loadImageSafe(url);
+          if (logoImg && logoImg.width > 0 && logoImg.height > 0) {
+            ctx.save();
+            drawRoundedRect(logoX, logoY, logoSize, logoSize, 28);
+            ctx.clip();
+            ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+            ctx.restore();
+
+            // Stroke logo border
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 3;
+            drawRoundedRect(logoX, logoY, logoSize, logoSize, 28);
+            ctx.stroke();
+            logoDrawn = true;
+            break;
+          }
         } catch (err) {
-          console.warn('Could not load logo for poster canvas, using initials fallback', err);
+          console.warn('Error rendering logo:', err);
         }
       }
 
       if (!logoDrawn) {
-        // Fallback logo
+        // Fallback logo badge
         ctx.fillStyle = '#171717';
         drawRoundedRect(logoX, logoY, logoSize, logoSize, 28);
         ctx.fill();
@@ -243,12 +290,14 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
       ctx.stroke();
       ctx.restore();
 
-      // Draw QR Code Image inside Box
-      const qrImg = await loadImage(qrCodeDataUrl);
-      const qrImgSize = 480;
-      const qrImgX = (width - qrImgSize) / 2;
-      const qrImgY = qrBoxY + (qrBoxSize - qrImgSize) / 2;
-      ctx.drawImage(qrImg, qrImgX, qrImgY, qrImgSize, qrImgSize);
+      // Draw QR Code Image inside Box (dataUrl doesn't trigger CORS taint)
+      const qrImg = await loadImageSafe(qrCodeDataUrl);
+      if (qrImg) {
+        const qrImgSize = 480;
+        const qrImgX = (width - qrImgSize) / 2;
+        const qrImgY = qrBoxY + (qrBoxSize - qrImgSize) / 2;
+        ctx.drawImage(qrImg, qrImgX, qrImgY, qrImgSize, qrImgSize);
+      }
 
       // 6. Scan Instructions Banner
       const bannerW = 620;
@@ -284,16 +333,41 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
         ctx.fillText(business.address, width / 2, 1125);
       }
 
-      // 8. Download
-      const posterDataUrl = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.href = posterDataUrl;
-      link.download = `Cartel-QR-${business.name.replace(/\s+/g, '_')}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (err) {
+      // 8. Trigger Download safely via Blob
+      const fileName = `Cartel-QR-${business.name.replace(/\s+/g, '_')}.png`;
+
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          // Fallback to dataURL if toBlob fails
+          const posterDataUrl = canvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.href = posterDataUrl;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          setTimeout(() => document.body.removeChild(link), 200);
+          setPosterDownloadSuccess(true);
+          setTimeout(() => setPosterDownloadSuccess(false), 4000);
+          return;
+        }
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => {
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }, 1000);
+
+        setPosterDownloadSuccess(true);
+        setTimeout(() => setPosterDownloadSuccess(false), 4000);
+      }, 'image/png');
+    } catch (err: any) {
       console.error('Error generating poster image:', err);
+      setDownloadError(err?.message || 'Error al generar la imagen del cartel');
     } finally {
       setIsDownloadingPoster(false);
     }
@@ -345,6 +419,45 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
           </button>
         </div>
       </div>
+
+      {/* Download Status Notification */}
+      {posterDownloadSuccess && (
+        <div className="bg-emerald-950/70 border border-emerald-500/50 rounded-2xl p-4 flex items-center justify-between gap-3 text-emerald-200 text-xs shadow-lg animate-in fade-in duration-300">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+            <div>
+              <strong className="text-emerald-100 block text-sm">¡Cartel descargado con éxito!</strong>
+              <span className="text-emerald-300">La imagen PNG en alta definición ya se encuentra guardada en tu carpeta de descargas.</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPosterDownloadSuccess(false)}
+            className="text-emerald-400 hover:text-emerald-200 text-xs px-2.5 py-1 rounded-lg bg-emerald-900/50 hover:bg-emerald-900/80 transition-colors"
+          >
+            Cerrar
+          </button>
+        </div>
+      )}
+
+      {downloadError && (
+        <div className="bg-red-950/70 border border-red-500/50 rounded-2xl p-4 flex items-center justify-between gap-3 text-red-200 text-xs shadow-lg animate-in fade-in duration-300">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
+            <div>
+              <strong className="text-red-100 block text-sm">No se pudo completar la descarga</strong>
+              <span className="text-red-300">{downloadError}. Puedes usar la opción de "Imprimir Cartel" para guardarlo en PDF.</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setDownloadError(null)}
+            className="text-red-400 hover:text-red-200 text-xs px-2.5 py-1 rounded-lg bg-red-900/50 hover:bg-red-900/80 transition-colors"
+          >
+            Cerrar
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         

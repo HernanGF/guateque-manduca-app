@@ -98,6 +98,41 @@ app.get('/api/menu', (req, res) => {
   res.json(data);
 });
 
+// Proxy image to bypass CORS and prevent tainted canvas
+app.get('/api/proxy-image', async (req, res) => {
+  try {
+    const imageUrl = req.query.url;
+    if (!imageUrl || typeof imageUrl !== 'string') {
+      return res.status(400).send('Missing url parameter');
+    }
+    const targetUrl = imageUrl.trim();
+    if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+      return res.status(400).send('Invalid url protocol');
+    }
+
+    const imgResponse = await fetch(targetUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+    });
+
+    if (!imgResponse.ok) {
+      return res.status(imgResponse.status).send('Failed to fetch image');
+    }
+
+    const contentType = imgResponse.headers.get('content-type') || 'image/jpeg';
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+
+    const arrayBuffer = await imgResponse.arrayBuffer();
+    return res.send(Buffer.from(arrayBuffer));
+  } catch (err: any) {
+    console.error('Error proxying image:', err);
+    return res.status(500).send('Error proxying image');
+  }
+});
+
 app.put('/api/menu', async (req, res) => {
   const newData = req.body;
   if (!newData || !newData.business || !Array.isArray(newData.products)) {
