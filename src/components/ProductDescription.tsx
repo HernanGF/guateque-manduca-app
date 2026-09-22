@@ -146,9 +146,11 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
               Contenido del Box
             </span>
           </div>
-          <span className="text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
-            {parsed.items.length} viandas incluidas
-          </span>
+          {!isCatering && (
+            <span className="text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+              {parsed.items.length} viandas incluidas
+            </span>
+          )}
         </div>
 
         <ul className="space-y-2">
@@ -318,7 +320,7 @@ export const ProductDescription: React.FC<ProductDescriptionProps> = ({
   return (
     <div className={`mt-1.5 space-y-0.5 ${className}`}>
       <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 block">
-        {parsed.items.length} viandas:
+        {isCatering ? 'Contenido del box:' : `${parsed.items.length} viandas:`}
       </span>
       <div className="space-y-0.5 max-h-20 overflow-y-auto pr-1">
         {parsed.items.map((item, idx) => (

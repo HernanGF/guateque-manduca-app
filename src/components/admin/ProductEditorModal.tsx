@@ -245,7 +245,9 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                           <Package className="w-3.5 h-3.5" />
                           <span>
                             {parsed.isList
-                              ? `Vista previa del Box (${parsed.items.length} viandas):`
+                              ? isCatering
+                                ? `Vista previa del Box (${parsed.items.length} ítems):`
+                                : `Vista previa del Box (${parsed.items.length} viandas):`
                               : 'Vista previa:'}
                           </span>
                         </div>
