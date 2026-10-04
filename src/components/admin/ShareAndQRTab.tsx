@@ -919,10 +919,10 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
             <div
               ref={printRef}
               id="printable-qr-card"
-              className="w-full max-w-sm bg-white text-neutral-900 rounded-3xl p-6 shadow-2xl border border-neutral-200 flex flex-col items-center text-center transition-all"
+              className="w-full max-w-md bg-white text-neutral-900 rounded-3xl p-6 sm:p-7 shadow-2xl border border-neutral-200 flex flex-col items-center text-center transition-all"
             >
               {/* Business Logo */}
-              <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-neutral-200 shadow-md mb-2.5 bg-neutral-950 shrink-0">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-neutral-200 shadow-md mb-3 bg-neutral-950 shrink-0">
                 <img
                   src={business.logoUrl || '/logo.jpg'}
                   alt={business.name}
@@ -932,17 +932,17 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
               </div>
 
               {/* Business Name */}
-              <h3 className="text-2xl font-black tracking-tight text-neutral-950 uppercase">
+              <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-neutral-950 uppercase leading-tight">
                 {business.name}
               </h3>
-              <p className="text-xs text-amber-700 font-bold uppercase tracking-wider mt-0.5 mb-3.5">
+              <p className="text-sm sm:text-base text-amber-700 font-bold uppercase tracking-wider mt-1 mb-4">
                 Menú Digital & Pedidos Online
               </p>
 
               {/* QR Code Container with 1:1 Aspect Ratio Lock */}
-              <div className="p-3 bg-neutral-50 rounded-2xl border-2 border-neutral-200 mb-3.5 shadow-xs shrink-0 inline-block">
+              <div className="p-3.5 bg-neutral-50 rounded-2xl border-2 border-neutral-200 mb-4 shadow-sm shrink-0 inline-block">
                 {isGenerating ? (
-                  <div className="w-48 h-48 sm:w-52 sm:h-52 flex flex-col items-center justify-center gap-2">
+                  <div className="w-60 h-60 sm:w-68 sm:h-68 flex flex-col items-center justify-center gap-2">
                     <div className="w-8 h-8 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
                     <span className="text-xs text-neutral-500">Generando QR...</span>
                   </div>
@@ -950,32 +950,32 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                   <img
                     src={qrCodeDataUrl}
                     alt="Código QR del Menú"
-                    className="w-48 h-48 sm:w-52 sm:h-52 aspect-square object-contain block mx-auto rounded-xl"
+                    className="w-60 h-60 sm:w-68 sm:h-68 aspect-square object-contain block mx-auto rounded-xl"
                     style={{ aspectRatio: '1 / 1', objectFit: 'contain' }}
                   />
                 ) : null}
               </div>
 
               {/* Scan instructions banner */}
-              <div className="bg-amber-50 border border-amber-300 rounded-2xl px-4 py-2.5 mb-3.5 w-full">
-                <span className="text-xs font-black text-amber-950 uppercase tracking-wider block">
+              <div className="bg-amber-50 border border-amber-300 rounded-2xl px-5 py-3 mb-4 w-full">
+                <span className="text-sm sm:text-base font-black text-amber-950 uppercase tracking-wider block">
                   ¡Escaneá con la cámara de tu celular!
                 </span>
-                <span className="text-[11px] font-semibold text-neutral-700 block mt-0.5">
+                <span className="text-xs sm:text-sm font-semibold text-neutral-700 block mt-0.5">
                   Accedé a toda la carta y hacé tu pedido
                 </span>
               </div>
 
               {/* Contact details */}
-              <div className="w-full space-y-0.5 text-center">
-                <span className="text-sm font-black text-neutral-950 block">
+              <div className="w-full space-y-1 text-center">
+                <span className="text-base sm:text-lg font-black text-neutral-950 block">
                   WhatsApp: {formattedPhone}
                 </span>
-                <span className="text-xs font-extrabold text-neutral-800 block">
+                <span className="text-xs sm:text-sm font-extrabold text-neutral-800 block">
                   📍 Villa Madero · Buenos Aires
                 </span>
                 {business.address && (
-                  <span className="text-[11px] font-medium text-neutral-600 block max-w-xs mx-auto leading-relaxed">
+                  <span className="text-[11px] sm:text-xs font-medium text-neutral-600 block max-w-xs mx-auto leading-relaxed">
                     {business.address}
                   </span>
                 )}
@@ -984,7 +984,7 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
           )}
 
           {/* Quick Action Buttons */}
-          <div className="w-full max-w-sm flex items-center justify-between gap-3 mt-4">
+          <div className="w-full max-w-md flex items-center justify-between gap-3 mt-4">
             <button
               type="button"
               onClick={handleDownloadPoster}
@@ -1127,11 +1127,11 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                 </div>
               </div>
             ) : (
-              /* POSTER / MOSTRADOR CARD (Identical to Preview) */
+              /* POSTER / MOSTRADOR CARD (Enlarged and identical to Preview) */
               <div
                 style={{
-                  width: '360px',
-                  maxWidth: '360px',
+                  width: '420px',
+                  maxWidth: '420px',
                   margin: '0 auto',
                   padding: '24px 20px',
                   backgroundColor: '#ffffff',
@@ -1145,12 +1145,12 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                 {/* Logo */}
                 <div
                   style={{
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '18px',
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '20px',
                     overflow: 'hidden',
                     border: '2px solid #e5e5e5',
-                    margin: '0 auto 10px auto',
+                    margin: '0 auto 12px auto',
                     backgroundColor: '#0a0a0a',
                   }}
                 >
@@ -1165,13 +1165,13 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                 {/* Business Name */}
                 <h2
                   style={{
-                    fontSize: '24px',
+                    fontSize: '32px',
                     fontWeight: '900',
                     letterSpacing: '-0.02em',
                     textTransform: 'uppercase',
                     color: '#0a0a0a',
-                    margin: '0 0 3px 0',
-                    lineHeight: '1.1',
+                    margin: '0 0 4px 0',
+                    lineHeight: '1.15',
                   }}
                 >
                   {business.name}
@@ -1180,26 +1180,26 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                 {/* Subtitle */}
                 <p
                   style={{
-                    fontSize: '12px',
+                    fontSize: '15px',
                     fontWeight: '800',
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     color: '#b45309',
-                    margin: '0 0 14px 0',
+                    margin: '0 0 16px 0',
                   }}
                 >
                   Menú Digital & Pedidos Online
                 </p>
 
-                {/* QR Code Container (Locked 1:1 Aspect Ratio) */}
+                {/* QR Code Container (Enlarged with Locked 1:1 Aspect Ratio) */}
                 <div
                   style={{
                     display: 'inline-block',
-                    padding: '10px',
+                    padding: '12px',
                     backgroundColor: '#fafafa',
-                    border: '1.5px solid #e5e5e5',
-                    borderRadius: '18px',
-                    margin: '0 auto 14px auto',
+                    border: '2px solid #e5e5e5',
+                    borderRadius: '20px',
+                    margin: '0 auto 16px auto',
                   }}
                 >
                   {qrCodeDataUrl ? (
@@ -1207,8 +1207,8 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                       src={qrCodeDataUrl}
                       alt="Código QR del Menú"
                       style={{
-                        width: '200px',
-                        height: '200px',
+                        width: '260px',
+                        height: '260px',
                         aspectRatio: '1 / 1',
                         objectFit: 'contain',
                         display: 'block',
@@ -1223,15 +1223,15 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                   style={{
                     backgroundColor: '#fffbeb',
                     border: '1.5px solid #fcd34d',
-                    borderRadius: '14px',
-                    padding: '10px 14px',
-                    marginBottom: '14px',
+                    borderRadius: '16px',
+                    padding: '12px 16px',
+                    marginBottom: '16px',
                   }}
                 >
                   <span
                     style={{
                       display: 'block',
-                      fontSize: '13px',
+                      fontSize: '15px',
                       fontWeight: '900',
                       color: '#78350f',
                       textTransform: 'uppercase',
@@ -1243,10 +1243,10 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                   <span
                     style={{
                       display: 'block',
-                      fontSize: '11px',
+                      fontSize: '12.5px',
                       fontWeight: '600',
                       color: '#404040',
-                      marginTop: '2px',
+                      marginTop: '3px',
                     }}
                   >
                     Accedé a toda la carta y hacé tu pedido
@@ -1254,15 +1254,15 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
                 </div>
 
                 {/* Contact details */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px' }}>
-                  <div style={{ fontSize: '15px', fontWeight: '900', color: '#0a0a0a' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ fontSize: '18px', fontWeight: '900', color: '#0a0a0a' }}>
                     WhatsApp: {formattedPhone}
                   </div>
-                  <div style={{ fontSize: '12px', fontWeight: '800', color: '#1f2937' }}>
+                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#1f2937' }}>
                     📍 Villa Madero · Buenos Aires
                   </div>
                   {business.address && (
-                    <div style={{ fontSize: '10.5px', fontWeight: '500', color: '#525252', maxWidth: '300px' }}>
+                    <div style={{ fontSize: '11.5px', fontWeight: '500', color: '#525252', maxWidth: '360px' }}>
                       {business.address}
                     </div>
                   )}
@@ -1334,8 +1334,8 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
           }
 
           #print-poster-portal.format-poster {
-            width: 360px !important;
-            max-width: 360px !important;
+            width: 420px !important;
+            max-width: 420px !important;
             margin: 6mm auto !important;
           }
 
