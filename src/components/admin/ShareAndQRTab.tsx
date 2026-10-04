@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import QRCode from 'qrcode';
 import { BusinessInfo } from '../../types';
 import {
@@ -53,6 +54,22 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
       localStorage.setItem('guateque_share_url', newUrl);
     }
   };
+
+  // Helper to format WhatsApp phone in clear international standard (+54 9 11 3450-1611)
+  const formattedPhone = (() => {
+    const raw = business.whatsappPhone || '';
+    const clean = raw.replace(/\D/g, '');
+    if (clean.startsWith('54911') && clean.length === 13) {
+      return `+54 9 11 ${clean.slice(5, 9)}-${clean.slice(9)}`;
+    }
+    if (clean.startsWith('549') && clean.length >= 12) {
+      return `+54 9 ${clean.slice(3, 5)} ${clean.slice(5, 9)}-${clean.slice(9)}`;
+    }
+    if (clean.length > 8) {
+      return `+${clean}`;
+    }
+    return clean ? `+${clean}` : '+54 9 11 3450-1611';
+  })();
 
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
@@ -123,7 +140,7 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
     try {
       const canvas = document.createElement('canvas');
       const width = 960;
-      const height = 1360;
+      const height = 1260;
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
@@ -209,10 +226,10 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
       drawRoundedRect(pad, pad, width - pad * 2, height - pad * 2, 36);
       ctx.stroke();
 
-      // 2. Business Logo
-      const logoSize = 140;
+      // 2. Business Logo (Bigger & Prominent)
+      const logoSize = 160;
       const logoX = (width - logoSize) / 2;
-      const logoY = 70;
+      const logoY = 55;
       let logoDrawn = false;
 
       // Try primary logo URL, fallback to local /logo.jpg if fails
@@ -259,51 +276,48 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
         ctx.fillText(initials, width / 2, logoY + logoSize / 2);
       }
 
-      // 3. Business Name
+      // 3. Business Name (Bigger and bold)
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillStyle = '#0a0a0a';
-      ctx.font = '900 36px system-ui, -apple-system, sans-serif';
-      ctx.fillText(business.name.toUpperCase(), width / 2, 255);
+      ctx.font = '900 46px system-ui, -apple-system, sans-serif';
+      ctx.fillText(business.name.toUpperCase(), width / 2, 260);
 
-      // 4. Subtitle
-      ctx.fillStyle = '#525252';
-      ctx.font = '600 19px system-ui, -apple-system, sans-serif';
-      ctx.fillText('Menú Digital & Pedidos Online', width / 2, 298);
+      // 4. Subtitle (Bigger and prominent)
+      ctx.fillStyle = '#b45309';
+      ctx.font = '800 22px system-ui, -apple-system, sans-serif';
+      ctx.fillText('MENÚ DIGITAL & PEDIDOS ONLINE', width / 2, 302);
 
       // 5. QR Code Container Box
-      const qrBoxSize = 550;
+      const qrBoxSize = 540;
       const qrBoxX = (width - qrBoxSize) / 2;
       const qrBoxY = 345;
 
       // Fill QR Box background
-      ctx.fillStyle = '#f9fafb';
+      ctx.fillStyle = '#ffffff';
       drawRoundedRect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 28);
       ctx.fill();
 
-      // Dashed border for QR Box
-      ctx.save();
-      ctx.strokeStyle = '#cbd5e1';
+      // Clean border for QR Box
+      ctx.strokeStyle = '#e2e8f0';
       ctx.lineWidth = 3;
-      ctx.setLineDash([12, 8]);
       drawRoundedRect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 28);
       ctx.stroke();
-      ctx.restore();
 
       // Draw QR Code Image inside Box (dataUrl doesn't trigger CORS taint)
       const qrImg = await loadImageSafe(qrCodeDataUrl);
       if (qrImg) {
-        const qrImgSize = 480;
+        const qrImgSize = 500;
         const qrImgX = (width - qrImgSize) / 2;
         const qrImgY = qrBoxY + (qrBoxSize - qrImgSize) / 2;
         ctx.drawImage(qrImg, qrImgX, qrImgY, qrImgSize, qrImgSize);
       }
 
-      // 6. Scan Instructions Banner
-      const bannerW = 620;
-      const bannerH = 105;
+      // 6. Scan Instructions Banner (Bigger & Clearer)
+      const bannerW = 680;
+      const bannerH = 110;
       const bannerX = (width - bannerW) / 2;
-      const bannerY = 935;
+      const bannerY = 915;
 
       ctx.fillStyle = '#fffbeb'; // amber-50
       drawRoundedRect(bannerX, bannerY, bannerW, bannerH, 20);
@@ -315,22 +329,26 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
       ctx.stroke();
 
       ctx.fillStyle = '#78350f'; // amber-900
-      ctx.font = '900 24px system-ui, -apple-system, sans-serif';
-      ctx.fillText('¡ESCANEÁ CON LA CÁMARA DE TU CELULAR!', width / 2, bannerY + 40);
+      ctx.font = '900 26px system-ui, -apple-system, sans-serif';
+      ctx.fillText('¡ESCANEÁ CON LA CÁMARA DE TU CELULAR!', width / 2, bannerY + 44);
 
-      ctx.fillStyle = '#404040'; // neutral-700
-      ctx.font = '500 18px system-ui, -apple-system, sans-serif';
-      ctx.fillText('Accedé a toda la carta y hacé tu pedido', width / 2, bannerY + 72);
+      ctx.fillStyle = '#374151'; // neutral-700
+      ctx.font = '600 19px system-ui, -apple-system, sans-serif';
+      ctx.fillText('Accedé a toda la carta y hacé tu pedido', width / 2, bannerY + 80);
 
-      // 7. Footer Details
-      ctx.fillStyle = '#525252';
-      ctx.font = '600 20px system-ui, -apple-system, sans-serif';
-      ctx.fillText(`WhatsApp: +${business.whatsappPhone}`, width / 2, 1090);
+      // 7. Footer Details (Bigger & Clearer)
+      ctx.fillStyle = '#111827';
+      ctx.font = '900 28px system-ui, -apple-system, sans-serif';
+      ctx.fillText(`WhatsApp: ${formattedPhone}`, width / 2, 1070);
+
+      ctx.fillStyle = '#1f2937';
+      ctx.font = '800 22px system-ui, -apple-system, sans-serif';
+      ctx.fillText('📍 Villa Madero · Buenos Aires', width / 2, 1114);
 
       if (business.address) {
-        ctx.fillStyle = '#737373';
-        ctx.font = '500 18px system-ui, -apple-system, sans-serif';
-        ctx.fillText(business.address, width / 2, 1125);
+        ctx.fillStyle = '#4b5563';
+        ctx.font = '600 17px system-ui, -apple-system, sans-serif';
+        ctx.fillText(business.address, width / 2, 1152);
       }
 
       // 8. Trigger Download safely via Blob
@@ -668,16 +686,16 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
         {/* RIGHT COLUMN: Printable Poster Mockup & Live QR (5 cols) */}
         <div className="lg:col-span-5 flex flex-col items-center">
           
-          {/* Printable Poster Card */}
+          {/* Printable Poster Card (Screen Preview) */}
           <div
             ref={printRef}
             id="printable-qr-card"
-            className="w-full max-w-sm bg-white text-neutral-900 rounded-3xl p-6 sm:p-7 shadow-2xl border border-neutral-200 flex flex-col items-center text-center transition-all"
+            className="w-full max-w-md bg-white text-neutral-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-neutral-200 flex flex-col items-center text-center transition-all"
           >
             {/* Business Logo */}
-            <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-neutral-200 shadow-md mb-3 bg-neutral-950">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden border-2 border-neutral-200 shadow-md mb-3 bg-neutral-950">
               <img
-                src={business.logoUrl}
+                src={business.logoUrl || '/logo.jpg'}
                 alt={business.name}
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
@@ -685,48 +703,57 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
             </div>
 
             {/* Business Name */}
-            <h3 className="text-xl font-black tracking-tight text-neutral-950 uppercase">
+            <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-neutral-950 uppercase">
               {business.name}
             </h3>
-            <p className="text-xs text-neutral-600 font-medium mt-0.5 mb-4">
+            <p className="text-xs sm:text-sm text-amber-700 font-bold uppercase tracking-wider mt-1 mb-4">
               Menú Digital & Pedidos Online
             </p>
 
             {/* QR Code Container */}
-            <div className="relative p-3 bg-neutral-50 rounded-2xl border-2 border-dashed border-neutral-300 mb-4 shadow-inner">
+            <div className="relative p-3.5 bg-neutral-50 rounded-2xl border-2 border-neutral-200 mb-4 shadow-sm">
               {isGenerating ? (
-                <div className="w-48 h-48 sm:w-56 sm:h-56 flex flex-col items-center justify-center gap-2">
+                <div className="w-56 h-56 sm:w-64 sm:h-64 flex flex-col items-center justify-center gap-2">
                   <div className="w-8 h-8 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
-                  <span className="text-[11px] text-neutral-500">Generando QR...</span>
+                  <span className="text-xs text-neutral-500">Generando QR...</span>
                 </div>
               ) : qrCodeDataUrl ? (
                 <img
                   src={qrCodeDataUrl}
                   alt="Código QR del Menú"
-                  className="w-48 h-48 sm:w-56 sm:h-56 object-contain rounded-xl"
+                  className="w-56 h-56 sm:w-64 sm:h-64 object-contain rounded-xl"
                 />
               ) : null}
             </div>
 
             {/* Scan instructions */}
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-2 mb-3">
-              <span className="text-xs font-black text-amber-900 uppercase tracking-wider block">
+            <div className="bg-amber-50 border border-amber-300 rounded-2xl px-5 py-3 mb-4 w-full">
+              <span className="text-xs sm:text-sm font-black text-amber-950 uppercase tracking-wider block">
                 ¡Escaneá con la cámara de tu celular!
               </span>
-              <span className="text-[11px] text-neutral-700 block mt-0.5">
+              <span className="text-xs font-semibold text-neutral-700 block mt-0.5">
                 Accedé a toda la carta y hacé tu pedido
               </span>
             </div>
 
             {/* Footer details */}
-            <div className="text-[11px] text-neutral-500 space-y-0.5">
-              <span>WhatsApp: +{business.whatsappPhone}</span>
-              {business.address && <span className="block truncate max-w-[260px]">{business.address}</span>}
+            <div className="w-full space-y-1 pt-1 text-center">
+              <span className="text-sm sm:text-base font-black text-neutral-950 block">
+                WhatsApp: {formattedPhone}
+              </span>
+              <span className="text-xs sm:text-sm font-extrabold text-neutral-800 block">
+                📍 Villa Madero · Buenos Aires
+              </span>
+              {business.address && (
+                <span className="text-[11px] sm:text-xs font-medium text-neutral-600 block max-w-xs mx-auto leading-relaxed">
+                  {business.address}
+                </span>
+              )}
             </div>
           </div>
 
           {/* Quick Buttons below poster */}
-          <div className="w-full max-w-sm flex items-center justify-between gap-3 mt-4">
+          <div className="w-full max-w-md flex items-center justify-between gap-3 mt-4">
             <button
               type="button"
               onClick={handleDownloadPoster}
@@ -742,30 +769,246 @@ export const ShareAndQRTab: React.FC<ShareAndQRTabProps> = ({ business }) => {
               className="flex-1 py-2.5 px-3 bg-neutral-900 hover:bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-sm"
             >
               <Printer className="w-3.5 h-3.5 text-blue-400" />
-              <span>Imprimir</span>
+              <span>Imprimir Cartel</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Embedded print styles for when user clicks print */}
+      {/* PORTAL FOR PRINTING (renders directly to body so no other UI interferes or creates 2nd pages) */}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <div id="print-poster-portal">
+            {/* TOP: Brand Identity */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              {/* Business Logo */}
+              <div
+                style={{
+                  width: '125px',
+                  height: '125px',
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                  border: '3px solid #f0f0f0',
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.08)',
+                  backgroundColor: '#0a0a0a',
+                  marginBottom: '14px',
+                }}
+              >
+                <img
+                  src={business.logoUrl || '/logo.jpg'}
+                  alt={business.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+
+              {/* Business Name */}
+              <h1
+                style={{
+                  fontSize: '40px',
+                  fontWeight: '900',
+                  letterSpacing: '-0.03em',
+                  color: '#0a0a0a',
+                  textTransform: 'uppercase',
+                  margin: '0 0 6px 0',
+                  lineHeight: '1.1',
+                }}
+              >
+                {business.name}
+              </h1>
+
+              {/* Subtitle */}
+              <p
+                style={{
+                  fontSize: '19px',
+                  fontWeight: '800',
+                  letterSpacing: '0.06em',
+                  color: '#b45309',
+                  textTransform: 'uppercase',
+                  margin: '0',
+                }}
+              >
+                Menú Digital & Pedidos Online
+              </p>
+            </div>
+
+            {/* CENTER: QR Code (large and clean) */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: 'auto 0' }}>
+              <div
+                style={{
+                  padding: '14px',
+                  backgroundColor: '#ffffff',
+                  borderRadius: '24px',
+                  border: '3px solid #e5e5e5',
+                  boxShadow: '0 6px 20px rgba(0,0,0,0.06)',
+                }}
+              >
+                {qrCodeDataUrl ? (
+                  <img
+                    src={qrCodeDataUrl}
+                    alt="Código QR del Menú"
+                    style={{
+                      width: '290px',
+                      height: '290px',
+                      display: 'block',
+                    }}
+                  />
+                ) : null}
+              </div>
+            </div>
+
+            {/* BOTTOM: Instructions Banner, WhatsApp, and Address */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                width: '100%',
+                gap: '12px',
+              }}
+            >
+              {/* Scan instructions banner */}
+              <div
+                style={{
+                  backgroundColor: '#fffbeb',
+                  border: '2px solid #fcd34d',
+                  borderRadius: '18px',
+                  padding: '12px 28px',
+                  width: '100%',
+                  maxWidth: '520px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'block',
+                    fontSize: '18px',
+                    fontWeight: '900',
+                    color: '#78350f',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.03em',
+                  }}
+                >
+                  ¡Escaneá con la cámara de tu celular!
+                </span>
+                <span
+                  style={{
+                    display: 'block',
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    color: '#404040',
+                    marginTop: '3px',
+                  }}
+                >
+                  Accedé a toda la carta y hacé tu pedido
+                </span>
+              </div>
+
+              {/* Contact & Location Info */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                <div
+                  style={{
+                    fontSize: '22px',
+                    fontWeight: '900',
+                    color: '#111827',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  WhatsApp: {formattedPhone}
+                </div>
+
+                <div
+                  style={{
+                    fontSize: '17px',
+                    fontWeight: '800',
+                    color: '#1f2937',
+                  }}
+                >
+                  📍 Villa Madero · Buenos Aires
+                </div>
+
+                {business.address && (
+                  <div
+                    style={{
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      color: '#4b5563',
+                      maxWidth: '500px',
+                    }}
+                  >
+                    {business.address}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {/* Embedded print styles: ensures exactly ONE page, removes browser URL codes, and fits page vertically */}
       <style>{`
+        @page {
+          size: portrait;
+          margin: 0 !important;
+        }
+
+        @media screen {
+          #print-poster-portal {
+            display: none !important;
+          }
+        }
+
         @media print {
-          body * {
-            visibility: hidden !important;
-          }
-          #printable-qr-card, #printable-qr-card * {
-            visibility: visible !important;
-          }
-          #printable-qr-card {
-            position: fixed !important;
-            left: 50% !important;
-            top: 50% !important;
-            transform: translate(-50%, -50%) scale(1.15) !important;
-            box-shadow: none !important;
-            border: 1px solid #e5e5e5 !important;
+          html,
+          body {
             margin: 0 !important;
-            padding: 32px !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          /* Completely remove the app UI from print layout */
+          #root,
+          body > *:not(#print-poster-portal) {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+          }
+
+          #print-poster-portal {
+            display: flex !important;
+            visibility: visible !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+            padding: 2.2cm 2cm 2cm 2cm !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            text-align: center !important;
+            background: #ffffff !important;
+            page-break-before: avoid !important;
+            page-break-after: avoid !important;
+            page-break-inside: avoid !important;
+            break-before: avoid !important;
+            break-after: avoid !important;
+            break-inside: avoid !important;
+          }
+
+          #print-poster-portal * {
+            visibility: visible !important;
           }
         }
       `}</style>
