@@ -246,7 +246,9 @@
       "isDiscontinued": false,
       "isFeatured": true,
       "order": 1,
-      "categoryOrders": {}
+      "categoryOrders": {
+        "cat_catering": 4
+      }
     },
     {
       "id": "prod_1790253821990",
@@ -278,7 +280,9 @@
       "isDiscontinued": false,
       "isFeatured": false,
       "order": 1,
-      "categoryOrders": {}
+      "categoryOrders": {
+        "cat_catering": 3
+      }
     },
     {
       "id": "prod_1790253036440",
@@ -311,7 +315,9 @@
       "isDiscontinued": false,
       "isFeatured": false,
       "order": 1,
-      "categoryOrders": {}
+      "categoryOrders": {
+        "cat_catering": 2
+      }
     },
     {
       "id": "prod_1789396212156",
@@ -618,7 +624,8 @@
       "isFeatured": true,
       "order": 1,
       "categoryOrders": {
-        "cat_los-mas-elegidos": 2
+        "cat_los-mas-elegidos": 2,
+        "cat_catering": 5
       }
     },
     {
@@ -664,7 +671,8 @@
       "isFeatured": true,
       "order": 2,
       "categoryOrders": {
-        "cat_los-mas-elegidos": 4
+        "cat_los-mas-elegidos": 4,
+        "cat_catering": 6
       }
     },
     {
@@ -711,7 +719,8 @@
       "isFeatured": true,
       "order": 3,
       "categoryOrders": {
-        "cat_los-mas-elegidos": 6
+        "cat_los-mas-elegidos": 6,
+        "cat_catering": 7
       }
     },
     {
@@ -830,7 +839,8 @@
       "isFeatured": true,
       "order": 1,
       "categoryOrders": {
-        "cat_los-mas-elegidos": 1
+        "cat_los-mas-elegidos": 1,
+        "cat_catering": 1
       }
     },
     {
@@ -926,7 +936,10 @@
       "isDiscontinued": false,
       "isHidden": false,
       "isFeatured": false,
-      "order": 5
+      "order": 5,
+      "categoryOrders": {
+        "cat_catering": 8
+      }
     },
     {
       "id": "prod_a294ac26-758e-488d-bc57-49eaca6e3039",
@@ -968,7 +981,10 @@
       "isDiscontinued": false,
       "isHidden": false,
       "isFeatured": false,
-      "order": 6
+      "order": 6,
+      "categoryOrders": {
+        "cat_catering": 9
+      }
     },
     {
       "id": "prod_a2950b31-b7d3-4201-aec7-fc1bb02325a6",
@@ -992,7 +1008,10 @@
       "isDiscontinued": false,
       "isHidden": false,
       "isFeatured": false,
-      "order": 7
+      "order": 7,
+      "categoryOrders": {
+        "cat_catering": 10
+      }
     },
     {
       "id": "prod_a2a32066-2c93-4dee-ac41-4a2f83f1122d",
@@ -1703,5 +1722,5 @@
       "order": 3
     }
   ],
-  "updatedAt": 1791115262836
+  "updatedAt": 1791116511676
 }
