@@ -11,8 +11,23 @@ import { AdminPinModal } from './components/AdminPinModal';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<'welcome' | 'menu' | 'admin'>('welcome');
-  const [menuData, setMenuData] = useState<MenuData>(INITIAL_MENU_DATA);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [menuData, setMenuData] = useState<MenuData>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = localStorage.getItem('guateque_menu_cached_data');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed?.products) && parsed?.business) {
+            return parsed;
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return INITIAL_MENU_DATA;
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Security / Admin PIN state
   const [isAdminUnlocked, setIsAdminUnlocked] = useState<boolean>(false);
@@ -25,15 +40,17 @@ export default function App() {
   // Customizer modal state
   const [customizingProduct, setCustomizingProduct] = useState<Product | null>(null);
 
-  // Load menu data from cloud server on start
+  // Silently sync menu data from cloud server in background
   useEffect(() => {
     let isMounted = true;
     async function load() {
-      setIsLoading(true);
-      const data = await fetchMenuData();
-      if (isMounted) {
-        setMenuData(data);
-        setIsLoading(false);
+      try {
+        const data = await fetchMenuData();
+        if (isMounted && data) {
+          setMenuData(data);
+        }
+      } catch (err) {
+        console.warn('Sync notice:', err);
       }
     }
     load();

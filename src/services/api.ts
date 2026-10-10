@@ -6,7 +6,10 @@ const STORAGE_KEY = 'guateque_menu_cached_data';
 export async function fetchMenuData(): Promise<MenuData> {
   // 1. Try to fetch from server API (runs when dev server or backend is active)
   try {
-    const response = await fetch('/api/menu');
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    const response = await fetch('/api/menu', { signal: controller.signal });
+    clearTimeout(timeoutId);
     if (response.ok) {
       const data: MenuData = await response.json();
       try {
@@ -17,7 +20,7 @@ export async function fetchMenuData(): Promise<MenuData> {
       return data;
     }
   } catch {
-    // Expected on static hosting like Vercel
+    // Expected on static hosting like Vercel or when network is slow
   }
 
   // 2. On static hosting (like Vercel), compare local storage timestamp with deployed data
