@@ -62,6 +62,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false);
   const [isReorderModalOpen, setIsReorderModalOpen] = useState<boolean>(false);
   const [isCategoryReorderModalOpen, setIsCategoryReorderModalOpen] = useState<boolean>(false);
+  const [itemToDelete, setItemToDelete] = useState<{
+    type: 'product' | 'category' | 'modifierGroup' | 'resetData';
+    id?: string;
+    name: string;
+  } | null>(null);
 
   // Filters for product list
   const [productCategoryFilter, setProductCategoryFilter] = useState<string>('all');
@@ -816,6 +821,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <Edit2 className="w-3.5 h-3.5" />
                         <span>Editar</span>
                       </button>
+
+                      {/* Direct Delete button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setItemToDelete({
+                            type: 'product',
+                            id: p.id,
+                            name: p.name || 'este producto',
+                          })
+                        }
+                        className="p-1.5 text-neutral-400 hover:text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-900 rounded-lg transition-colors cursor-pointer"
+                        title="Eliminar producto"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 );
@@ -983,10 +1004,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       {/* Edit category */}
                       <button
                         onClick={() => setEditingCategory(cat)}
-                        className="p-1.5 rounded-lg text-neutral-400 hover:text-white transition-colors"
-                        title="Editar nombre"
+                        className="p-1.5 rounded-lg text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                        title="Editar categoría"
                       >
                         <Edit2 className="w-4 h-4" />
+                      </button>
+
+                      {/* Direct Delete category */}
+                      <button
+                        onClick={() =>
+                          setItemToDelete({
+                            type: 'category',
+                            id: cat.id,
+                            name: cat.name,
+                          })
+                        }
+                        className="p-1.5 rounded-lg text-neutral-400 hover:text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-900 transition-colors cursor-pointer"
+                        title="Eliminar categoría"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -1051,13 +1087,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           </div>
                         </div>
 
-                        <button
-                          onClick={() => setEditingModifierGroup(group)}
-                          className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white"
-                          title="Editar grupo de modificadores"
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => setEditingModifierGroup(group)}
+                            className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white cursor-pointer transition-colors"
+                            title="Editar grupo de modificadores"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            onClick={() =>
+                              setItemToDelete({
+                                type: 'modifierGroup',
+                                id: group.id,
+                                name: group.name,
+                              })
+                            }
+                            className="p-1.5 rounded-lg bg-neutral-800 hover:bg-red-950/40 text-neutral-400 hover:text-red-400 border border-transparent hover:border-red-900 cursor-pointer transition-colors"
+                            title="Eliminar grupo de modificadores"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       {/* Options preview */}
@@ -1231,11 +1283,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    if (confirm('¿Deseas restaurar los productos y categorías de ejemplo?')) {
-                      onResetData();
-                    }
-                  }}
+                  onClick={() =>
+                    setItemToDelete({
+                      type: 'resetData',
+                      name: 'los datos de ejemplo y menú predeterminado',
+                    })
+                  }
                   className="px-3 py-1.5 rounded-lg border border-neutral-700 hover:border-neutral-600 text-xs text-neutral-300 flex items-center gap-1.5 cursor-pointer"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -1319,6 +1372,55 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         products={products}
         onSaveCategories={handleSaveReorderedCategories}
       />
+
+      {/* Confirmation Modal for Direct Deletions */}
+      {itemToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5 max-w-sm w-full shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center shrink-0">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white">¿Confirmar eliminación?</h3>
+                <p className="text-xs text-neutral-400">Esta acción no se puede deshacer.</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-neutral-300 bg-neutral-950 p-3 rounded-xl border border-neutral-800 break-words">
+              ¿Estás seguro de que deseas eliminar <strong className="text-white font-semibold">"{itemToDelete.name}"</strong>?
+            </p>
+
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setItemToDelete(null)}
+                className="px-3.5 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-semibold cursor-pointer transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (itemToDelete.type === 'product' && itemToDelete.id) {
+                    handleDeleteProduct(itemToDelete.id);
+                  } else if (itemToDelete.type === 'category' && itemToDelete.id) {
+                    handleDeleteCategory(itemToDelete.id);
+                  } else if (itemToDelete.type === 'modifierGroup' && itemToDelete.id) {
+                    handleDeleteModifierGroup(itemToDelete.id);
+                  } else if (itemToDelete.type === 'resetData') {
+                    onResetData();
+                  }
+                  setItemToDelete(null);
+                }}
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/30 cursor-pointer transition-colors"
+              >
+                Sí, eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

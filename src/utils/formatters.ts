@@ -79,10 +79,9 @@ export function generateWhatsAppOrderMessage(
   }
 
   const paymentLabels: Record<string, string> = {
-    efectivo: '💵 Efectivo al recibir',
-    transferencia: '💳 Transferencia / Mercado Pago',
-    tarjeta: '💳 Tarjeta de débito/crédito',
-    otro: 'Acordar con el local',
+    efectivo: '💵 Efectivo',
+    mercadopago: '📱 Mercado Pago',
+    transferencia: '🏦 Transferencia Bancaria',
   };
   lines.push(`• *Forma de pago:* ${paymentLabels[customerInfo.paymentMethod] || customerInfo.paymentMethod}`);
 

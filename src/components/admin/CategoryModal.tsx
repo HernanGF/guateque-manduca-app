@@ -20,6 +20,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
   const [order, setOrder] = useState<number>(category?.order ?? 99);
   const [isVisible, setIsVisible] = useState(category?.isVisible !== false);
   const [isFeatured, setIsFeatured] = useState(category?.isFeatured || false);
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,19 +116,39 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
 
           <div className="pt-3 border-t border-neutral-200 flex items-center justify-between gap-2">
             {isEditing && onDelete ? (
-              <button
-                type="button"
-                onClick={() => {
-                  if (confirm(`¿Eliminar la categoría "${category.name}"?`)) {
-                    onDelete(category.id);
-                    onClose();
-                  }
-                }}
-                className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer font-medium"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Eliminar</span>
-              </button>
+              isConfirmingDelete ? (
+                <div className="flex items-center gap-1.5 bg-red-50 border border-red-300 p-1 rounded-lg">
+                  <span className="text-[11px] font-semibold text-red-700">
+                    ¿Eliminar?
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onDelete(category.id);
+                      onClose();
+                    }}
+                    className="px-2 py-0.5 bg-red-600 hover:bg-red-700 text-white text-[11px] font-bold rounded cursor-pointer"
+                  >
+                    Sí
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsConfirmingDelete(false)}
+                    className="px-1.5 py-0.5 bg-neutral-200 hover:bg-neutral-300 text-neutral-700 text-[11px] font-semibold rounded cursor-pointer"
+                  >
+                    No
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsConfirmingDelete(true)}
+                  className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer font-medium p-1 rounded hover:bg-red-50"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Eliminar categoría</span>
+                </button>
+              )
             ) : (
               <div />
             )}

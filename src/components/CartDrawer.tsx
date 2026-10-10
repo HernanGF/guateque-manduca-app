@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
 import { CartItem, BusinessInfo, OrderCustomerInfo } from '../types';
 import { formatPrice, generateWhatsAppOrderMessage, getWhatsAppUrl } from '../utils/formatters';
-import { X, Trash2, Plus, Minus, Send, ShoppingBag, Bike, Store, AlertCircle, Sparkles } from 'lucide-react';
+import {
+  X,
+  Trash2,
+  Plus,
+  Minus,
+  Send,
+  ShoppingBag,
+  Bike,
+  Store,
+  AlertCircle,
+  Sparkles,
+  Banknote,
+  Smartphone,
+  Building2,
+} from 'lucide-react';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -26,7 +40,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     customerName: '',
     orderType: business.deliveryAvailable ? 'delivery' : 'takeaway',
     address: '',
-    paymentMethod: 'transferencia',
+    paymentMethod: 'efectivo',
     notes: '',
   });
 
@@ -144,9 +158,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             {item.productName}
                           </h4>
                           <button
-                            onClick={() => onRemoveItem(item.id)}
-                            className="text-neutral-400 hover:text-red-500 transition-colors p-1 cursor-pointer"
-                            title="Eliminar producto"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onRemoveItem(item.id);
+                            }}
+                            className="text-neutral-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors cursor-pointer shrink-0"
+                            title="Eliminar del pedido"
+                            aria-label="Eliminar producto del carrito"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -294,9 +313,56 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                   {/* Payment Method */}
                   <div>
-                    <label className="block text-sm font-semibold text-neutral-800 mb-1.5">
-                      Forma de Pago
+                    <label className="block text-sm font-semibold text-neutral-800 mb-2">
+                      Medio de Pago <span className="text-red-500">*</span>
                     </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setCustomerInfo({ ...customerInfo, paymentMethod: 'efectivo' })
+                        }
+                        className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col items-center justify-center gap-1.5 border transition-all cursor-pointer ${
+                          customerInfo.paymentMethod === 'efectivo'
+                            ? 'bg-amber-500 text-neutral-950 border-amber-500 shadow-sm'
+                            : 'bg-neutral-50 text-neutral-700 border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300'
+                        }`}
+                      >
+                        <Banknote className="w-4 h-4" />
+                        <span>Efectivo</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setCustomerInfo({ ...customerInfo, paymentMethod: 'mercadopago' })
+                        }
+                        className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col items-center justify-center gap-1.5 border transition-all cursor-pointer ${
+                          customerInfo.paymentMethod === 'mercadopago'
+                            ? 'bg-amber-500 text-neutral-950 border-amber-500 shadow-sm'
+                            : 'bg-neutral-50 text-neutral-700 border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300'
+                        }`}
+                      >
+                        <Smartphone className="w-4 h-4" />
+                        <span>Mercado Pago</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setCustomerInfo({ ...customerInfo, paymentMethod: 'transferencia' })
+                        }
+                        className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold flex flex-col items-center justify-center gap-1.5 border transition-all cursor-pointer ${
+                          customerInfo.paymentMethod === 'transferencia'
+                            ? 'bg-amber-500 text-neutral-950 border-amber-500 shadow-sm'
+                            : 'bg-neutral-50 text-neutral-700 border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300'
+                        }`}
+                      >
+                        <Building2 className="w-4 h-4" />
+                        <span>Transferencia</span>
+                      </button>
+                    </div>
+
                     <select
                       id="select-payment-method"
                       value={customerInfo.paymentMethod}
@@ -306,12 +372,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           paymentMethod: e.target.value as any,
                         })
                       }
-                      className="w-full px-3.5 py-2.5 text-base bg-neutral-50 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:border-amber-500 focus:bg-white"
+                      className="sr-only"
+                      aria-label="Medio de pago"
                     >
-                      <option value="transferencia">Transferencia Bancaria / Mercado Pago</option>
-                      <option value="efectivo">Efectivo al recibir / retirar</option>
-                      <option value="tarjeta">Tarjeta de débito / crédito</option>
-                      <option value="otro">Otro / Consultar</option>
+                      <option value="efectivo">Efectivo</option>
+                      <option value="mercadopago">Mercado Pago</option>
+                      <option value="transferencia">Transferencia Bancaria</option>
                     </select>
                   </div>
 

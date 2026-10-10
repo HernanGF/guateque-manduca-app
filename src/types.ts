@@ -97,6 +97,6 @@ export interface OrderCustomerInfo {
   customerName: string;
   orderType: 'delivery' | 'takeaway';
   address: string;
-  paymentMethod: 'efectivo' | 'transferencia' | 'tarjeta' | 'otro';
+  paymentMethod: 'efectivo' | 'mercadopago' | 'transferencia';
   notes: string;
 }

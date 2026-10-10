@@ -36,6 +36,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
       { id: 'opt_2', name: 'Opción 2', price: 0, isVisible: true },
     ]
   );
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
   // Associated products state
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>(() => {
@@ -452,19 +453,40 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
           {/* Actions */}
           <div className="pt-3 border-t border-neutral-200 flex items-center justify-between gap-3">
             {isEditing && onDelete ? (
-              <button
-                type="button"
-                onClick={() => {
-                  if (confirm(`¿Eliminar grupo de modificadores "${group.name}"?`)) {
-                    onDelete(group.id);
-                    onClose();
-                  }
-                }}
-                className="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Eliminar</span>
-              </button>
+              isConfirmingDelete ? (
+                <div className="flex items-center gap-2 bg-red-50 border border-red-300 p-1.5 rounded-xl">
+                  <span className="text-xs font-semibold text-red-700 px-1">
+                    ¿Confirmar eliminación?
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onDelete(group.id);
+                      onClose();
+                    }}
+                    className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg cursor-pointer transition-colors shadow-sm"
+                  >
+                    Sí, eliminar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsConfirmingDelete(false)}
+                    className="px-2 py-1 bg-neutral-200 hover:bg-neutral-300 text-neutral-700 text-xs font-semibold rounded-lg cursor-pointer transition-colors"
+                  >
+                    No
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsConfirmingDelete(true)}
+                  className="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+                  title="Eliminar grupo de modificadores"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Eliminar grupo</span>
+                </button>
+              )
             ) : (
               <div />
             )}
