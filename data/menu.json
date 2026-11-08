@@ -1765,7 +1765,34 @@
       "isHidden": false,
       "isFeatured": false,
       "order": 3
+    },
+    {
+      "id": "prod_1794179710134",
+      "name": "Raviolones de carne al Malbec con crema de hongos",
+      "description": "Raviolones rellenos de carne braseada al Malbec con crema de hongos. (400 gr.)",
+      "imageUrl": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80",
+      "categoryIds": [
+        "cat_viandas-envasadas-al-vacio"
+      ],
+      "priceType": "simple",
+      "simplePrice": 12000,
+      "variants": [
+        {
+          "id": "var_1794179710134",
+          "name": "Porción",
+          "price": 12000,
+          "isVisible": true
+        }
+      ],
+      "modifierGroupIds": [],
+      "isDiscontinued": false,
+      "isHidden": false,
+      "isFeatured": false,
+      "order": 12,
+      "categoryOrders": {
+        "cat_viandas-envasadas-al-vacio": 12
+      }
     }
   ],
-  "updatedAt": 1793716417435
+  "updatedAt": 1794179714374
 }
