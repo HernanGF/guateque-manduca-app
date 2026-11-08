@@ -25,6 +25,7 @@ export default function App() {
           if (
             cachedTimestamp > initialTimestamp &&
             Array.isArray(parsed?.products) &&
+            parsed.products.length >= INITIAL_MENU_DATA.products.length &&
             parsed?.business
           ) {
             return parsed;

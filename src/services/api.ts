@@ -37,6 +37,7 @@ export async function fetchMenuData(): Promise<MenuData> {
       if (
         cachedTimestamp > initialTimestamp &&
         Array.isArray(cached.products) &&
+        cached.products.length >= INITIAL_MENU_DATA.products.length &&
         Array.isArray(cached.modifierGroups)
       ) {
         return cached;
