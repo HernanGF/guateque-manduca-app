@@ -23,36 +23,26 @@ export async function fetchMenuData(): Promise<MenuData> {
     // Expected on static hosting like Vercel or when network is slow
   }
 
-  // 2. On static hosting (like Vercel), compare local storage timestamp with deployed data
-  const initialTimestamp = INITIAL_MENU_DATA.updatedAt || 0;
-
-  try {
-    const cachedRaw = localStorage.getItem(STORAGE_KEY);
-    if (cachedRaw) {
-      const cached: MenuData = JSON.parse(cachedRaw);
-      const cachedTimestamp = cached.updatedAt || 0;
-
-      // If cached data is strictly newer than the deployed code build (e.g. unpublished admin test in this browser),
-      // we use it. Otherwise, the fresh deployment always takes precedence!
-      if (
-        cachedTimestamp > initialTimestamp &&
-        Array.isArray(cached.products) &&
-        cached.products.length >= INITIAL_MENU_DATA.products.length &&
-        Array.isArray(cached.modifierGroups)
-      ) {
-        return cached;
+  // 2. Fallback on static hosting or offline:
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(STORAGE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && Array.isArray(parsed.products) && parsed.products.length > 0) {
+          const cachedTime = parsed.updatedAt || 0;
+          const initialTime = INITIAL_MENU_DATA.updatedAt || 0;
+          if (cachedTime > initialTime) {
+            // User made newer edits locally in this browser
+            return parsed;
+          }
+        }
       }
+      // If deployed version is newer or equal, update local storage cache to match
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_MENU_DATA));
+    } catch {
+      // ignore
     }
-  } catch {
-    // ignore
-  }
-
-  // 3. Fallback to latest compiled code (INITIAL_MENU_DATA).
-  // Automatically update localStorage with the new build so the browser stays completely fresh!
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_MENU_DATA));
-  } catch {
-    // ignore
   }
 
   return INITIAL_MENU_DATA;

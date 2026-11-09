@@ -21,11 +21,12 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
   const [isVisible, setIsVisible] = useState(category?.isVisible !== false);
   const [isFeatured, setIsFeatured] = useState(category?.isFeatured || false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      alert('Por favor escribe el nombre de la categoría.');
+      setErrorMessage('Por favor escribe el nombre de la categoría.');
       return;
     }
 
@@ -57,6 +58,11 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {errorMessage && (
+            <div className="bg-red-50 border border-red-300 text-red-700 px-3 py-2 rounded-xl text-xs font-semibold">
+              {errorMessage}
+            </div>
+          )}
           <div>
             <label className="block text-xs font-semibold text-neutral-600 mb-1">
               Nombre de la categoría *
@@ -64,7 +70,10 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                if (errorMessage) setErrorMessage(null);
+              }}
               placeholder="Ej: Menú Ejecutivo, Postres, Viandas..."
               required
               autoFocus
@@ -84,6 +93,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
               min="1"
               value={order}
               onChange={(e) => setOrder(parseInt(e.target.value, 10))}
+              onWheel={(e) => (e.target as HTMLElement).blur()}
               placeholder="1, 2, 3..."
               className="w-full px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 focus:outline-none focus:border-amber-500 focus:bg-white"
             />

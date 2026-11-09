@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Product, Category, ModifierGroup, ProductVariant } from '../../types';
 import { X, Camera, Plus, Trash2, GripVertical, Check, Eye, EyeOff, AlertTriangle, Package, Loader2 } from 'lucide-react';
 import { parseProductDescription, isCateringProduct } from '../ProductDescription';
+import { formatPrice } from '../../utils/formatters';
 import { optimizeImageFile } from '../../utils/imageOptimizer';
 
 interface ProductEditorModalProps {
@@ -27,21 +28,41 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
 
   const [name, setName] = useState(product?.name || '');
   const [description, setDescription] = useState(product?.description || '');
-  const [imageUrl, setImageUrl] = useState(
-    product?.imageUrl ||
-      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'
-  );
+  const [imageUrl, setImageUrl] = useState(product?.imageUrl || '');
   const [categoryIds, setCategoryIds] = useState<string[]>(product?.categoryIds || []);
   const [priceType, setPriceType] = useState<'simple' | 'variants'>(
     product?.priceType || 'simple'
   );
-  const [simplePrice, setSimplePrice] = useState<number>(product?.simplePrice || 0);
+  const [simplePriceInput, setSimplePriceInput] = useState<string>(
+    product?.simplePrice !== undefined && product.simplePrice !== null ? String(product.simplePrice) : ''
+  );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const parsePrice = (val: string): number => {
+    if (!val) return 0;
+    let cleaned = val.trim().replace(/[\$\s]/g, '');
+    // If Argentine format: 14.000 or 14.000,50
+    if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(cleaned)) {
+      cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+    } else if (cleaned.includes(',') && !cleaned.includes('.')) {
+      cleaned = cleaned.replace(',', '.');
+    } else if (cleaned.includes('.') && !cleaned.includes(',')) {
+      // e.g. 14.000 (3 digits after dot, no other dot) -> treat dot as thousand separator
+      if (/^\d+\.\d{3}$/.test(cleaned)) {
+        cleaned = cleaned.replace('.', '');
+      }
+    }
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : Math.round(num * 100) / 100;
+  };
   const [clientNote, setClientNote] = useState<string>(product?.clientNote || '');
   const [variants, setVariants] = useState<ProductVariant[]>(
-    product?.variants || [
-      { id: 'var_1', name: 'Porción individual', price: 0, isVisible: true },
-      { id: 'var_2', name: 'Porción para compartir', price: 0, isVisible: true },
-    ]
+    product?.variants && product.variants.length > 0
+      ? product.variants
+      : [
+          { id: 'var_1', name: 'Porción individual', price: 0, isVisible: true },
+          { id: 'var_2', name: 'Porción para compartir', price: 0, isVisible: true },
+        ]
   );
   const [selectedModifierGroupIds, setSelectedModifierGroupIds] = useState<string[]>(
     product?.modifierGroupIds || []
@@ -61,7 +82,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
     if (!file) return;
 
     if (file.size > 15 * 1024 * 1024) {
-      alert('La imagen no debe superar los 15MB.');
+      setErrorMessage('La imagen no debe superar los 15MB.');
       return;
     }
 
@@ -122,8 +143,27 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      alert('Por favor ingresa el nombre del producto.');
+      setErrorMessage('Por favor ingresa el nombre del producto.');
       return;
+    }
+
+    const parsedSimple = parsePrice(simplePriceInput);
+
+    let finalSimplePrice = 0;
+    let finalVariants: ProductVariant[] = [];
+
+    if (priceType === 'simple') {
+      finalSimplePrice = parsedSimple;
+      finalVariants = (variants && variants.length > 0)
+        ? variants.map((v, i) => i === 0 ? { ...v, price: parsedSimple } : v)
+        : [{ id: `var_${Date.now()}`, name: 'Porción', price: parsedSimple, isVisible: true }];
+    } else {
+      finalVariants = variants.map((v) => ({
+        ...v,
+        name: v.name.trim() || 'Opción',
+        price: typeof v.price === 'number' ? v.price : Number(v.price) || 0,
+      }));
+      finalSimplePrice = finalVariants[0]?.price || 0;
     }
 
     const updatedProduct: Product = {
@@ -133,9 +173,9 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
       imageUrl: imageUrl.trim(),
       categoryIds,
       priceType,
-      simplePrice: Number(simplePrice) || 0,
+      simplePrice: finalSimplePrice,
       clientNote: clientNote.trim(),
-      variants,
+      variants: finalVariants,
       modifierGroupIds: selectedModifierGroupIds,
       isHidden,
       isDiscontinued,
@@ -167,17 +207,39 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-4 sm:p-6 max-h-[75vh] overflow-y-auto space-y-6">
+          {errorMessage && (
+            <div className="bg-red-50 border border-red-300 text-red-700 px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setErrorMessage(null)}
+                className="text-red-500 hover:text-red-700 font-bold ml-2 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+          )}
           
           {/* Top Section: Photo + Name + Description */}
           <div className="flex flex-col sm:flex-row gap-4 items-start">
             {/* Photo Box */}
             <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden border border-neutral-200 bg-neutral-100 shrink-0 group">
-              <img
-                src={imageUrl}
-                alt="Vista previa"
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt="Vista previa"
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center p-2 text-neutral-400 text-center bg-neutral-100">
+                  <Camera className="w-7 h-7 mb-1 text-neutral-400 opacity-60" />
+                  <span className="text-[10px] leading-tight">Sin foto (toca para subir)</span>
+                </div>
+              )}
               
               <button
                 type="button"
@@ -376,16 +438,36 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
             {/* Simple price input */}
             {priceType === 'simple' ? (
               <div>
-                <label className="block text-xs text-neutral-600 mb-1">
-                  Precio unitario ({currency})
-                </label>
-                <input
-                  type="number"
-                  step="any"
-                  value={simplePrice}
-                  onChange={(e) => setSimplePrice(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-neutral-200 rounded-xl text-base font-bold text-neutral-900 focus:outline-none focus:border-blue-500"
-                />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-semibold text-neutral-700">
+                    Precio unitario ({currency})
+                  </label>
+                  {simplePriceInput && (
+                    <span className="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                      Vista previa: {formatPrice(parsePrice(simplePriceInput), currency)}
+                    </span>
+                  )}
+                </div>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-neutral-400">
+                    {currency}
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={simplePriceInput}
+                    onChange={(e) => {
+                      setSimplePriceInput(e.target.value);
+                      if (errorMessage) setErrorMessage(null);
+                    }}
+                    onWheel={(e) => (e.target as HTMLElement).blur()}
+                    placeholder="Ej: 14000"
+                    className="w-full pl-8 pr-3 py-2.5 bg-white border border-neutral-300 rounded-xl text-base font-bold text-neutral-900 focus:outline-none focus:border-blue-500 shadow-xs"
+                  />
+                </div>
+                <p className="text-[11px] text-neutral-500 mt-1">
+                  Ingresa el valor numérico (ej: 14000 o 14.000). No se modificará por accidente al scrollear la pantalla.
+                </p>
               </div>
             ) : (
               /* Variants Section */
@@ -416,15 +498,17 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                         className="flex-1 px-2.5 py-1.5 text-xs bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
                       />
 
-                      <div className="flex items-center gap-1 w-28">
+                      <div className="flex items-center gap-1 w-32">
                         <span className="text-xs text-neutral-500">{currency}</span>
                         <input
-                          type="number"
-                          step="any"
-                          value={v.price}
+                          type="text"
+                          inputMode="numeric"
+                          value={v.price === 0 ? '' : v.price}
                           onChange={(e) =>
-                            handleUpdateVariant(v.id, 'price', Number(e.target.value))
+                            handleUpdateVariant(v.id, 'price', parsePrice(e.target.value))
                           }
+                          onWheel={(e) => (e.target as HTMLElement).blur()}
+                          placeholder="0"
                           className="w-full px-2 py-1.5 text-xs bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-semibold"
                         />
                       </div>
@@ -640,6 +724,7 @@ export const ProductEditorModal: React.FC<ProductEditorModalProps> = ({
                 min="1"
                 value={order}
                 onChange={(e) => setOrder(Math.max(1, parseInt(e.target.value, 10) || 1))}
+                onWheel={(e) => (e.target as HTMLElement).blur()}
                 className="w-20 px-3 py-1.5 bg-white border border-neutral-200 rounded-xl text-xs font-bold text-amber-700 text-center focus:outline-none focus:border-amber-500"
               />
             </div>

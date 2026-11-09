@@ -301,6 +301,7 @@ export const ProductReorderModal: React.FC<ProductReorderModalProps> = ({
                             handleJumpToPosition(index, val);
                           }
                         }}
+                        onWheel={(e) => (e.target as HTMLElement).blur()}
                         className="w-8 bg-transparent text-center text-xs font-bold text-amber-400 focus:outline-none focus:bg-neutral-900 rounded"
                       />
                     </div>

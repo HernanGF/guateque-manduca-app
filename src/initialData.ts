@@ -232,7 +232,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 9000,
           "isVisible": true
         },
         {
@@ -265,7 +265,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 8000,
           "isVisible": true
         },
         {
@@ -297,7 +297,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 9000,
           "isVisible": true
         },
         {
@@ -324,7 +324,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         "cat_los-mas-elegidos"
       ],
       "priceType": "variants",
-      "simplePrice": 0,
+      "simplePrice": 220000,
       "clientNote": "",
       "variants": [
         {
@@ -358,7 +358,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         "cat_catering"
       ],
       "priceType": "variants",
-      "simplePrice": 0,
+      "simplePrice": 180000,
       "clientNote": "",
       "variants": [
         {
@@ -433,7 +433,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 9000,
           "isVisible": true
         },
         {
@@ -465,7 +465,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 8000,
           "isVisible": true
         },
         {
@@ -497,7 +497,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 9000,
           "isVisible": true
         },
         {
@@ -529,7 +529,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 9000,
           "isVisible": true
         },
         {
@@ -561,7 +561,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 9000,
           "isVisible": true
         },
         {
@@ -593,7 +593,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 7000,
           "isVisible": true
         },
         {
@@ -625,7 +625,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 9000,
           "isVisible": true
         },
         {
@@ -657,7 +657,7 @@ export const INITIAL_MENU_DATA: MenuData = {
         {
           "id": "var_1",
           "name": "Porción individual",
-          "price": 0,
+          "price": 39000,
           "isVisible": true
         },
         {
@@ -1767,38 +1767,7 @@ export const INITIAL_MENU_DATA: MenuData = {
       "isHidden": false,
       "isFeatured": false,
       "order": 3
-    },
-    {
-      "id": "prod_1794179710134",
-      "name": "Raviolones de carne al Malbec con crema de hongos",
-      "description": "Raviolones rellenos de carne braseada al Malbec con crema de hongos. (400 gr.)",
-      "imageUrl": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80",
-      "categoryIds": [
-        "cat_viandas-envasadas-al-vacio",
-        "cat_menu-ejecutivo",
-        "cat_los-mas-elegidos"
-      ],
-      "priceType": "simple",
-      "simplePrice": 12000,
-      "variants": [
-        {
-          "id": "var_1794179710134",
-          "name": "Porción",
-          "price": 12000,
-          "isVisible": true
-        }
-      ],
-      "modifierGroupIds": [],
-      "isDiscontinued": false,
-      "isHidden": false,
-      "isFeatured": true,
-      "order": 1,
-      "categoryOrders": {
-        "cat_viandas-envasadas-al-vacio": 1,
-        "cat_menu-ejecutivo": 1,
-        "cat_los-mas-elegidos": 1
-      }
     }
   ],
-  "updatedAt": 1794180124206
+  "updatedAt": 1794184165178
 };

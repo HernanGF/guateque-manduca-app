@@ -17,21 +17,12 @@ export default function App() {
         const cached = localStorage.getItem('guateque_menu_cached_data');
         if (cached) {
           const parsed = JSON.parse(cached);
-          const initialTimestamp = INITIAL_MENU_DATA.updatedAt || 0;
-          const cachedTimestamp = parsed?.updatedAt || 0;
-
-          // If cached data is strictly newer than the bundled build, use it.
-          // Otherwise, the fresh deployment build takes precedence!
-          if (
-            cachedTimestamp > initialTimestamp &&
-            Array.isArray(parsed?.products) &&
-            parsed.products.length >= INITIAL_MENU_DATA.products.length &&
-            parsed?.business
-          ) {
-            return parsed;
-          } else {
-            // Update cache with the fresh deployment
-            localStorage.setItem('guateque_menu_cached_data', JSON.stringify(INITIAL_MENU_DATA));
+          if (parsed && Array.isArray(parsed.products) && parsed.products.length > 0) {
+            const cachedTime = parsed.updatedAt || 0;
+            const initialTime = INITIAL_MENU_DATA.updatedAt || 0;
+            if (cachedTime > initialTime) {
+              return parsed;
+            }
           }
         }
       } catch {

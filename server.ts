@@ -80,11 +80,6 @@ async function saveMenuData(data: any) {
     };
     fs.writeFileSync(DATA_FILE, JSON.stringify(dataWithTimestamp, null, 2), 'utf-8');
     
-    // Also write directly to src/initialData.ts so that changes persist into the repo
-    // and can be pushed to GitHub to update Vercel!
-    const tsContent = `import { MenuData } from "./types";\n\nexport const INITIAL_MENU_DATA: MenuData = ${JSON.stringify(dataWithTimestamp, null, 2)};\n`;
-    fs.writeFileSync(INITIAL_DATA_FILE, tsContent, 'utf-8');
-    
     return true;
   } catch (err) {
     console.error('Error saving data:', err);

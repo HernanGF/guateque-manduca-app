@@ -37,6 +37,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
     ]
   );
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Associated products state
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>(() => {
@@ -94,7 +95,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      alert('Por favor ingresa el nombre de la categoría de modificadores.');
+      setErrorMessage('Por favor ingresa el nombre de la categoría de modificadores.');
       return;
     }
 
@@ -107,7 +108,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
       .filter((opt) => opt.name.length > 0);
 
     if (validOptions.length === 0) {
-      alert('Debes incluir al menos una opción válida.');
+      setErrorMessage('Debes incluir al menos una opción válida.');
       return;
     }
 
@@ -144,6 +145,18 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-4 sm:p-6 max-h-[75vh] overflow-y-auto space-y-5">
+          {errorMessage && (
+            <div className="bg-red-50 border border-red-300 text-red-700 px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-between">
+              <span>{errorMessage}</span>
+              <button
+                type="button"
+                onClick={() => setErrorMessage(null)}
+                className="text-red-500 hover:text-red-700 font-bold ml-2 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+          )}
           
           {/* Group Name input */}
           <div>
@@ -238,6 +251,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                     max={20}
                     value={minSelect}
                     onChange={(e) => setMinSelect(Number(e.target.value))}
+                    onWheel={(e) => (e.target as HTMLElement).blur()}
                     className="w-full px-2.5 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs text-neutral-900"
                   />
                 </div>
@@ -251,6 +265,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                     max={50}
                     value={maxSelect}
                     onChange={(e) => setMaxSelect(Number(e.target.value))}
+                    onWheel={(e) => (e.target as HTMLElement).blur()}
                     className="w-full px-2.5 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs text-neutral-900 font-bold"
                   />
                 </div>
@@ -298,6 +313,7 @@ export const ModifierGroupModal: React.FC<ModifierGroupModalProps> = ({
                       onChange={(e) =>
                         handleUpdateOption(opt.id, 'price', Number(e.target.value))
                       }
+                      onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="0.00"
                       className="w-full px-2 py-1.5 text-xs bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-semibold"
                     />

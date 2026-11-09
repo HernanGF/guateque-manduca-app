@@ -34,7 +34,7 @@ function prepareDatabase() {
       p.categoryIds = [menu.categories[0].id];
     }
 
-    // Ensure price numbers are valid
+    // Ensure price numbers are valid and synchronized
     if (typeof p.simplePrice !== 'number' || isNaN(p.simplePrice)) {
       p.simplePrice = 0;
     }
@@ -45,6 +45,15 @@ function prepareDatabase() {
           v.price = 0;
         }
       });
+    }
+
+    // Keep simplePrice and variant prices in sync
+    if (p.priceType === 'simple' && Array.isArray(p.variants) && p.variants.length > 0) {
+      if (p.simplePrice > 0) {
+        p.variants[0].price = p.simplePrice;
+      }
+    } else if (p.priceType === 'variants' && Array.isArray(p.variants) && p.variants.length > 0) {
+      p.simplePrice = p.variants[0].price;
     }
   });
 

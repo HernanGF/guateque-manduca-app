@@ -36,6 +36,8 @@ import {
   ArrowUp,
   ArrowDown,
   ArrowUpDown,
+  Download,
+  Upload,
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -74,8 +76,49 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const bannerFileRef = useRef<HTMLInputElement>(null);
   const logoFileRef = useRef<HTMLInputElement>(null);
+  const jsonFileInputRef = useRef<HTMLInputElement>(null);
+  const [jsonNotice, setJsonNotice] = useState<string | null>(null);
 
   const { business, categories, products, modifierGroups } = menuData;
+
+  const handleExportMenuJson = () => {
+    try {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(menuData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute('href', dataStr);
+      downloadAnchor.setAttribute('download', `menu-${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      setJsonNotice('¡Archivo menu.json descargado correctamente!');
+      setTimeout(() => setJsonNotice(null), 4000);
+    } catch {
+      setJsonNotice('Error al exportar archivo JSON');
+      setTimeout(() => setJsonNotice(null), 4000);
+    }
+  };
+
+  const handleImportMenuJson = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const parsed = JSON.parse(event.target?.result as string);
+        if (parsed && Array.isArray(parsed.products) && parsed.business) {
+          onUpdateMenuData(parsed);
+          setJsonNotice(`¡Menú importado con éxito (${parsed.products.length} productos)!`);
+        } else {
+          setJsonNotice('El archivo JSON no tiene la estructura de menú válida.');
+        }
+      } catch {
+        setJsonNotice('Error al leer el archivo JSON.');
+      }
+      setTimeout(() => setJsonNotice(null), 4000);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
 
   // Batch import from Sheets/Excel
   const handleBatchImport = (
@@ -559,31 +602,62 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => setIsReorderModalOpen(true)}
-                  className="px-3.5 py-1.5 bg-amber-500/20 hover:bg-amber-500 hover:text-neutral-950 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                  className="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500 hover:text-neutral-950 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
                   title="Personalizar el orden en que aparecen los platos"
                 >
                   <ArrowUpDown className="w-3.5 h-3.5" />
-                  <span>Ordenar Platos</span>
+                  <span>Ordenar</span>
                 </button>
                 <button
                   onClick={() => setIsImportModalOpen(true)}
-                  className="px-3.5 py-1.5 bg-emerald-600/90 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                  className="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                  title="Importar desde Google Sheets o archivo"
                 >
-                  <FileSpreadsheet className="w-3.5 h-3.5" />
-                  <span>Importar desde Sheets</span>
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Sheets</span>
                 </button>
                 <button
+                  onClick={handleExportMenuJson}
+                  className="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                  title="Descargar copia exacta del menú completo en JSON"
+                >
+                  <Download className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Exportar JSON</span>
+                </button>
+                <button
+                  onClick={() => jsonFileInputRef.current?.click()}
+                  className="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                  title="Subir archivo menu.json para restaurar o sincronizar"
+                >
+                  <Upload className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Importar JSON</span>
+                </button>
+                <input
+                  type="file"
+                  ref={jsonFileInputRef}
+                  onChange={handleImportMenuJson}
+                  accept=".json,application/json"
+                  className="hidden"
+                />
+                <button
                   onClick={() => setEditingProduct('new')}
-                  className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                  className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm ml-auto sm:ml-0"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Crear Plato</span>
                 </button>
               </div>
             </div>
+
+            {jsonNotice && (
+              <div className="bg-emerald-950/70 border border-emerald-500/50 rounded-xl p-3 text-xs text-emerald-300 flex items-center justify-between">
+                <span>{jsonNotice}</span>
+                <button onClick={() => setJsonNotice(null)} className="text-emerald-400 font-bold ml-2">✕</button>
+              </div>
+            )}
 
             {/* Search & Filter Bar */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-neutral-900/60 p-3 rounded-2xl border border-neutral-800">
@@ -951,8 +1025,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             id: `prod_${Date.now()}`,
                             name: '',
                             description: '',
-                            imageUrl:
-                              'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+                            imageUrl: '',
                             categoryIds: [cat.id],
                             priceType: 'simple',
                             simplePrice: 0,
