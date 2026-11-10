@@ -1769,5 +1769,5 @@ export const INITIAL_MENU_DATA: MenuData = {
       "order": 3
     }
   ],
-  "updatedAt": 1794184165178
+  "updatedAt": 1794314116671
 };
