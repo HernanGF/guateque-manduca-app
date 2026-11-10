@@ -18,11 +18,7 @@ export default function App() {
         if (cached) {
           const parsed = JSON.parse(cached);
           if (parsed && Array.isArray(parsed.products) && parsed.products.length > 0) {
-            const cachedTime = parsed.updatedAt || 0;
-            const initialTime = INITIAL_MENU_DATA.updatedAt || 0;
-            if (cachedTime > initialTime) {
-              return parsed;
-            }
+            return parsed;
           }
         }
       } catch {

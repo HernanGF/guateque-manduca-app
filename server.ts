@@ -78,7 +78,12 @@ async function saveMenuData(data: any) {
       ...data,
       updatedAt: Date.now(),
     };
-    fs.writeFileSync(DATA_FILE, JSON.stringify(dataWithTimestamp, null, 2), 'utf-8');
+    const formatted = JSON.stringify(dataWithTimestamp, null, 2);
+    fs.writeFileSync(DATA_FILE, formatted, 'utf-8');
+    
+    // Also sync to src/initialData.ts so any build or git push includes the changes permanently
+    const tsContent = `import { MenuData } from "./types";\n\nexport const INITIAL_MENU_DATA: MenuData = ${formatted};\n`;
+    fs.writeFileSync(INITIAL_DATA_FILE, tsContent, 'utf-8');
     
     return true;
   } catch (err) {
